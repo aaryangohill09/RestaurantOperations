@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | ARY'S CAFE</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brown: #352116;
+            --dark-brown: #24150e;
+            --gold: #a37b3f;
+            --cream: #f7f4ec;
+            --text: #30231c;
+            --muted: #73767c;
+            --border: #e3ddd3;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+        }
+
+        /* HEADER */
+
+        .top-header {
+            height: 120px;
+            background: #fffdfa;
+            border-bottom: 1px solid #e9e3d8;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-inner {
+            width: min(1280px, calc(100% - 80px));
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+            color: var(--brown);
+        }
+
+        .brand-logo {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 30px;
+            letter-spacing: 1px;
+            color: #2d1d15;
+        }
+
+        .brand-cafe {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: var(--gold);
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-link {
+            text-decoration: none;
+            color: var(--brown);
+            font-size: 16px;
+            padding: 18px 28px;
+            transition: 0.25s ease;
+        }
+
+        .header-link:hover {
+            color: var(--gold);
+        }
+
+        .header-home {
+            background: var(--brown);
+            color: white;
+            min-width: 160px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .header-home:hover {
+            background: #4a2d1e;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .register-section {
+            min-height: calc(100vh - 120px);
+            padding: 54px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at 50% 40%,
+                    rgba(255,255,255,0.95) 0%,
+                    rgba(247,244,236,0.9) 48%,
+                    rgba(238,233,222,0.95) 100%
+                );
+        }
+
+        .register-card {
+            width: min(1180px, 100%);
+            min-height: 730px;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            box-shadow:
+                0 24px 60px rgba(52, 34, 22, 0.14),
+                0 5px 18px rgba(52, 34, 22, 0.06);
+        }
+
+        /* LEFT PANEL */
+
+        .brand-panel {
+            background:
+                radial-gradient(
+                    circle at center,
+                    #40281a 0%,
+                    #2d1b11 58%,
+                    #21130d 100%
+                );
+
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            overflow: hidden;
+        }
+
+        .brand-panel::before {
+            content: "";
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            background: rgba(180, 135, 67, 0.06);
+            filter: blur(5px);
+        }
+
+        .brand-image {
+            width: 100%;
+            max-width: 510px;
+            height: auto;
+            position: relative;
+            z-index: 2;
+            display: block;
+
+            mix-blend-mode: screen;
+
+            filter:
+                brightness(0.88)
+                contrast(1.15)
+                saturate(0.9);
+        }
+
+        /* RIGHT PANEL */
+
+        .form-panel {
+            background: #ffffff;
+            padding: 55px 70px 45px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin-bottom: 20px;
+        }
+
+        .form-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 48px;
+            font-weight: 400;
+            line-height: 1.05;
+            color: #291a13;
+            margin-bottom: 16px;
+        }
+
+        .form-subtitle {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #6e7279;
+            margin-bottom: 32px;
+            max-width: 520px;
+        }
+
+        /* FORM */
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: #30231c;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 52px;
+
+            border: 1px solid var(--border);
+            background: #fcfbf8;
+
+            padding: 0 16px;
+
+            font-size: 15px;
+            color: var(--text);
+
+            outline: none;
+            border-radius: 2px;
+
+            transition: 0.2s ease;
+        }
+
+        .form-input::placeholder {
+            color: #85888e;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold);
+            background: #ffffff;
+
+            box-shadow:
+                0 0 0 3px rgba(163, 123, 63, 0.08);
+        }
+
+        /* TERMS */
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+
+            margin: 4px 0 20px;
+
+            font-size: 13px;
+            line-height: 1.5;
+            color: #6f7277;
+        }
+
+        .terms input {
+            width: 15px;
+            height: 15px;
+            margin-top: 2px;
+            accent-color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .terms a {
+            color: #98682f;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        /* BUTTON */
+
+        .register-button {
+            width: 100%;
+            height: 58px;
+
+            border: none;
+            border-radius: 3px;
+
+            background: var(--brown);
+            color: #ffffff;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.25s ease;
+        }
+
+        .register-button:hover {
+            background: #4a2d1e;
+            transform: translateY(-1px);
+        }
+
+        /* MESSAGE */
+
+        .message {
+            display: none;
+
+            padding: 12px 14px;
+            margin-bottom: 18px;
+
+            border-radius: 3px;
+
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: #f8e9e5;
+            color: #8b3025;
+            border: 1px solid #e6c8c2;
+        }
+
+        .message.success {
+            background: #edf5ed;
+            color: #356338;
+            border: 1px solid #cbdcca;
+        }
+
+        /* BOTTOM */
+
+        .login-text {
+            text-align: center;
+            margin-top: 22px;
+
+            font-size: 15px;
+            color: #72757a;
+        }
+
+        .login-link {
+            color: #98682f;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .login-link:hover {
+            color: #5c3a20;
+        }
+
+        .back-link {
+            display: block;
+            width: fit-content;
+
+            margin-top: 20px;
+
+            color: #34251d;
+            text-decoration: none;
+
+            font-size: 15px;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 950px) {
+
+            .top-header {
+                height: 95px;
+            }
+
+            .header-inner {
+                width: calc(100% - 40px);
+            }
+
+            .brand-logo {
+                width: 62px;
+                height: 62px;
+            }
+
+            .brand-name {
+                font-size: 24px;
+            }
+
+            .brand-cafe {
+                font-size: 11px;
+                letter-spacing: 4px;
+            }
+
+            .header-link {
+                padding: 14px 18px;
+            }
+
+            .register-section {
+                min-height: calc(100vh - 95px);
+                padding: 35px 20px;
+            }
+
+            .register-card {
+                grid-template-columns: 1fr;
+                max-width: 650px;
+            }
+
+            .brand-panel {
+                min-height: 390px;
+                padding: 35px;
+            }
+
+            .brand-image {
+                max-width: 390px;
+            }
+
+            .form-panel {
+                padding: 50px 45px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .top-header {
+                height: auto;
+                padding: 15px 0;
+            }
+
+            .header-inner {
+                width: calc(100% - 30px);
+            }
+
+            .brand {
+                gap: 10px;
+            }
+
+            .brand-logo {
+                width: 52px;
+                height: 52px;
+            }
+
+            .brand-name {
+                font-size: 20px;
+            }
+
+            .brand-cafe {
+                font-size: 9px;
+                letter-spacing: 3px;
+                margin-top: 5px;
+            }
+
+            .header-links {
+                gap: 0;
+            }
+
+            .header-link {
+                padding: 11px 10px;
+                font-size: 14px;
+            }
+
+            .header-home {
+                min-width: auto;
+            }
+
+            .register-section {
+                padding: 20px 12px;
+            }
+
+            .register-card {
+                border-radius: 8px;
+            }
+
+            .brand-panel {
+                min-height: 280px;
+                padding: 25px;
+            }
+
+            .brand-image {
+                max-width: 280px;
+            }
+
+            .form-panel {
+                padding: 38px 25px;
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                letter-spacing: 4px;
+            }
+
+            .form-title {
+                font-size: 38px;
+            }
+
+            .form-subtitle {
+                font-size: 15px;
+                margin-bottom: 28px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-input {
+                height: 54px;
+            }
+
+            .register-button {
+                height: 56px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+        <div class="header-inner">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY'S CAFE"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <span class="brand-name">ARY'S</span>
+                    <span class="brand-cafe">CAFE</span>
+                </div>
+
+            </a>
+
+            <nav class="header-links">
+
+                <a
+                    href="login.html"
+                    class="header-link"
+                >
+                    Login
+                </a>
+
+                <a
+                    href="index.html"
+                    class="header-link header-home"
+                >
+                    Home
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- REGISTER -->
+
+    <main class="register-section">
+
+        <div class="register-card">
+
+            <!-- LEFT -->
+
+            <section class="brand-panel">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY'S CAFE Logo"
+                    class="brand-image"
+                >
+
+            </section>
+
+
+            <!-- RIGHT -->
+
+            <section class="form-panel">
+
+                <div class="eyebrow">
+                    WELCOME TO ARY'S
+                </div>
+
+                <h1 class="form-title">
+                    Create Account
+                </h1>
+
+                <p class="form-subtitle">
+                    Create your account and start enjoying great food and great moments.
+                </p>
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+
+                <form id="registerForm">
+
+                    <!-- FIRST + LAST NAME -->
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="firstName"
+                            >
+                                First Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="firstName"
+                                class="form-input"
+                                placeholder="First name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="lastName"
+                            >
+                                Last Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="lastName"
+                                class="form-input"
+                                placeholder="Last name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="email"
+                        >
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            class="form-input"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="phone"
+                        >
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            class="form-input"
+                            placeholder="Enter your phone number"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="password"
+                            >
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                class="form-input"
+                                placeholder="Create password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="confirmPassword"
+                            >
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                class="form-input"
+                                placeholder="Confirm password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TERMS -->
+
+                    <label class="terms">
+
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            required
+                        >
+
+                        <span>
+                            I agree to the
+                            <a href="#" onclick="return false;">
+                                Terms & Conditions
+                            </a>
+                            and
+                            <a href="#" onclick="return false;">
+                                Privacy Policy
+                            </a>.
+                        </span>
+
+                    </label>
+
+
+                    <!-- BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="register-button"
+                    >
+                        Create Account
+                    </button>
+
+                </form>
+
+
+                <p class="login-text">
+
+                    Already have an account?
+
+                    <a
+                        href="login.html"
+                        class="login-link"
+                    >
+                        Login
+                    </a>
+
+                </p>
+
+
+                <a
+                    href="index.html"
+                    class="back-link"
+                >
+                    ← Back to ARY'S CAFE
+                </a>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+        const message =
+            document.getElementById("message");
+
+
+        function showMessage(text, type) {
+
+            message.textContent = text;
+
+            message.className =
+                "message show " + type;
+        }
+
+
+        registerForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const firstName =
+                    document.getElementById("firstName")
+                    .value
+                    .trim();
+
+                const lastName =
+                    document.getElementById("lastName")
+                    .value
+                    .trim();
+
+                const email =
+                    document.getElementById("email")
+                    .value
+                    .trim();
+
+                const phone =
+                    document.getElementById("phone")
+                    .value
+                    .trim();
+
+                const password =
+                    document.getElementById("password")
+                    .value;
+
+                const confirmPassword =
+                    document.getElementById("confirmPassword")
+                    .value;
+
+                const terms =
+                    document.getElementById("terms")
+                    .checked;
+
+
+                /* PASSWORD CHECK */
+
+                if (password !== confirmPassword) {
+
+                    showMessage(
+                        "Passwords do not match.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                /* TERMS CHECK */
+
+                if (!terms) {
+
+                    showMessage(
+                        "Please accept the Terms & Conditions and Privacy Policy.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                /* CHECK EXISTING USER */
+
+                const existingUser =
+                    localStorage.getItem("arysCafeUser");
+
+                if (existingUser) {
+
+                    try {
+
+                        const oldUser =
+                            JSON.parse(existingUser);
+
+                        if (
+                            oldUser.email &&
+                            oldUser.email.toLowerCase() ===
+                            email.toLowerCase()
+                        ) {
+
+                            showMessage(
+                                "An account with this email already exists.",
+                                "error"
+                            );
+
+                            return;
+                        }
+
+                    } catch (error) {
+
+                        console.log(error);
+
+                    }
+                }
+
+
+                /* CREATE USER */
+
+                const user = {
+
+                    id:
+                        "USR-" +
+                        Date.now(),
+
+                    firstName: firstName,
+
+                    lastName: lastName,
+
+                    name:
+                        firstName +
+                        " " +
+                        lastName,
+
+                    email: email,
+
+                    phone: phone,
+
+                    password: password,
+
+                    role: "customer",
+
+                    createdAt:
+                        new Date().toISOString()
+
+                };
+
+
+                localStorage.setItem(
+                    "arysCafeUser",
+                    JSON.stringify(user)
+                );
+
+
+                localStorage.setItem(
+                    "arysCafeLoggedIn",
+                    "true"
+                );
+
+
+                localStorage.setItem(
+                    "arysCafeRole",
+                    "customer"
+                );
+
+
+                showMessage(
+                    "Account created successfully. Redirecting...",
+                    "success"
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "menu.html";
+
+                    },
+                    800
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

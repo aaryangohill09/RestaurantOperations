@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tables | ARY’S CAFE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brown: #3b2418;
+            --dark-brown: #24150f;
+            --gold: #b08a55;
+            --light-gold: #d0b27a;
+            --cream: #f6f0e7;
+            --soft-cream: #fbf8f2;
+            --white: #ffffff;
+            --text: #2d211a;
+            --muted: #766c64;
+            --border: #e7ddd0;
+
+            --available: #3e7654;
+            --available-bg: #e8f4ec;
+
+            --occupied: #a85b3b;
+            --occupied-bg: #faebe5;
+
+            --reserved: #8a6a2e;
+            --reserved-bg: #f8f0d9;
+
+            --cleaning: #596f83;
+            --cleaning-bg: #e8eef3;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--soft-cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 82px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 42px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 230px;
+        }
+
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #d9c6a9;
+        }
+
+        .brand-text {
+            line-height: 1;
+        }
+
+        .brand-name {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--brown);
+        }
+
+        .brand-tagline {
+            margin-top: 4px;
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 29px;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: #655b54;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 30px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--brown);
+        }
+
+        .nav-links a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .nav-right {
+            min-width: 230px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 17px;
+        }
+
+        .role-badge {
+            background: var(--cream);
+            color: var(--brown);
+            border: 1px solid var(--border);
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            border: 1px solid #cdbda9;
+            background: transparent;
+            color: var(--brown);
+            padding: 9px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--brown);
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            border: 0;
+            background: transparent;
+            font-size: 25px;
+            color: var(--brown);
+        }
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(36, 21, 15, 0.98),
+                    rgba(59, 36, 24, 0.94)
+                ),
+                url("./home-hero.png") center / cover;
+            min-height: 245px;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-header::after {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border: 1px solid rgba(208, 178, 122, 0.16);
+            border-radius: 50%;
+            right: -100px;
+            top: -130px;
+        }
+
+        .page-header::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(208, 178, 122, 0.1);
+            border-radius: 50%;
+            right: 55px;
+            top: -60px;
+        }
+
+        .header-content {
+            width: min(1200px, calc(100% - 70px));
+            margin: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eyebrow {
+            color: var(--light-gold);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-family: "Cormorant Garamond", serif;
+            color: white;
+            font-size: clamp(42px, 5vw, 62px);
+            line-height: 0.95;
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.72);
+            max-width: 590px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main-container {
+            width: min(1200px, calc(100% - 70px));
+            margin: 0 auto;
+            padding: 45px 0 70px;
+        }
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 17px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 21px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(59, 36, 24, 0.04);
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+        }
+
+        .summary-icon.available {
+            background: var(--available-bg);
+        }
+
+        .summary-icon.occupied {
+            background: var(--occupied-bg);
+        }
+
+        .summary-icon.reserved {
+            background: var(--reserved-bg);
+        }
+
+        .summary-icon.cleaning {
+            background: var(--cleaning-bg);
+        }
+
+        .summary-info span {
+            display: block;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        .summary-info strong {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 30px;
+            color: var(--brown);
+            line-height: 1;
+        }
+
+        /* =========================
+           TOOLBAR
+        ========================= */
+
+        .section-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 31px;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        .section-description {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .filters {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .filter-btn {
+            border: 0;
+            background: transparent;
+            padding: 9px 13px;
+            border-radius: 5px;
+            color: #6d625a;
+            font-size: 11px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .filter-btn:hover {
+            color: var(--brown);
+            background: var(--cream);
+        }
+
+        .filter-btn.active {
+            background: var(--brown);
+            color: white;
+        }
+
+        /* =========================
+           LEGEND
+        ========================= */
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+            margin-bottom: 25px;
+            padding: 15px 18px;
+            background: #fffdf9;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.available {
+            background: var(--available);
+        }
+
+        .legend-dot.occupied {
+            background: var(--occupied);
+        }
+
+        .legend-dot.reserved {
+            background: var(--reserved);
+        }
+
+        .legend-dot.cleaning {
+            background: var(--cleaning);
+        }
+
+        /* =========================
+           TABLE GRID
+        ========================= */
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 19px;
+        }
+
+        .table-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.28s ease;
+            box-shadow: 0 8px 25px rgba(59, 36, 24, 0.035);
+        }
+
+        .table-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 36, 24, 0.08);
+        }
+
+        .table-card.hidden {
+            display: none;
+        }
+
+        .table-top {
+            padding: 19px 20px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #eee7dd;
+        }
+
+        .table-number {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 28px;
+            color: var(--brown);
+            font-weight: 700;
+        }
+
+        .table-seat {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 20px;
+            padding: 7px 10px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-badge.available {
+            background: var(--available-bg);
+            color: var(--available);
+        }
+
+        .status-badge.available::before {
+            background: var(--available);
+        }
+
+        .status-badge.occupied {
+            background: var(--occupied-bg);
+            color: var(--occupied);
+        }
+
+        .status-badge.occupied::before {
+            background: var(--occupied);
+        }
+
+        .status-badge.reserved {
+            background: var(--reserved-bg);
+            color: var(--reserved);
+        }
+
+        .status-badge.reserved::before {
+            background: var(--reserved);
+        }
+
+        .status-badge.cleaning {
+            background: var(--cleaning-bg);
+            color: var(--cleaning);
+        }
+
+        .status-badge.cleaning::before {
+            background: var(--cleaning);
+        }
+
+        .table-body {
+            padding: 18px 20px 20px;
+        }
+
+        .table-info {
+            min-height: 70px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 9px;
+            font-size: 11px;
+        }
+
+        .info-label {
+            color: var(--muted);
+        }
+
+        .info-value {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .order-link {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .reservation-box {
+            background: #fbf7ee;
+            border: 1px solid #eee1c9;
+            border-radius: 7px;
+            padding: 9px 10px;
+            margin-top: 5px;
+        }
+
+        .reservation-box strong {
+            display: block;
+            font-size: 11px;
+            color: var(--brown);
+            margin-bottom: 4px;
+        }
+
+        .reservation-box span {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            border: 1px solid #d9ccbd;
+            background: white;
+            color: var(--brown);
+            border-radius: 6px;
+            padding: 10px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            transition: 0.25s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--cream);
+        }
+
+        .action-btn.primary {
+            background: var(--brown);
+            color: white;
+            border-color: var(--brown);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--dark-brown);
+        }
+
+        .action-btn.warning {
+            background: #f8eee9;
+            color: var(--occupied);
+            border-color: #e8d0c5;
+        }
+
+        .action-btn.success {
+            background: var(--available-bg);
+            color: var(--available);
+            border-color: #cde1d3;
+        }
+
+        .no-results {
+            display: none;
+            grid-column: 1 / -1;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 50px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
+        .no-results-icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .no-results h3 {
+            font-family: "Cormorant Garamond", serif;
+            color: var(--brown);
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .no-results p {
+            font-size: 12px;
+        }
+
+        /* =========================
+           NOTICE
+        ========================= */
+
+        .sync-notice {
+            margin-top: 28px;
+            border: 1px solid #e2d4c2;
+            background: #fffaf3;
+            border-radius: 8px;
+            padding: 14px 17px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .sync-icon {
+            width: 29px;
+            height: 29px;
+            border-radius: 50%;
+            background: var(--cream);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .sync-notice p {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .sync-notice strong {
+            color: var(--brown);
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: var(--brown);
+            color: white;
+            padding: 13px 18px;
+            border-radius: 7px;
+            font-size: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: var(--dark-brown);
+            color: white;
+            padding: 35px 0;
+        }
+
+        .footer-inner {
+            width: min(1200px, calc(100% - 70px));
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .footer-brand {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+            letter-spacing: 2px;
+        }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            color: rgba(255,255,255,0.65);
+            font-size: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-gold);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+            .navbar {
+                padding: 0 25px;
+            }
+
+            .nav-left,
+            .nav-right {
+                min-width: 190px;
+            }
+
+            .nav-links {
+                gap: 17px;
+            }
+
+            .tables-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .navbar {
+                height: 72px;
+                padding: 0 18px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 72px;
+                background: white;
+                border-bottom: 1px solid var(--border);
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 0;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+                padding: 13px 5px;
+                border-bottom: 1px solid #f0e9df;
+            }
+
+            .nav-links a.active::after {
+                display: none;
+            }
+
+            .nav-right {
+                min-width: auto;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                margin-left: 5px;
+            }
+
+            .role-badge {
+                display: none;
+            }
+
+            .header-content,
+            .main-container,
+            .footer-inner {
+                width: min(100% - 35px, 700px);
+            }
+
+            .section-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filters {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .filter-btn {
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 580px) {
+            .brand-name {
+                font-size: 21px;
+            }
+
+            .brand-tagline {
+                font-size: 7px;
+            }
+
+            .nav-logo {
+                width: 43px;
+                height: 43px;
+            }
+
+            .nav-left {
+                min-width: 0;
+            }
+
+            .nav-right {
+                margin-left: auto;
+            }
+
+            .logout-btn {
+                padding: 8px 11px;
+                font-size: 10px;
+            }
+
+            .page-header {
+                min-height: 210px;
+            }
+
+            .page-title {
+                font-size: 45px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .summary-icon {
+                width: 39px;
+                height: 39px;
+                font-size: 17px;
+            }
+
+            .summary-info strong {
+                font-size: 25px;
+            }
+
+            .summary-info span {
+                font-size: 9px;
+            }
+
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legend {
+                gap: 13px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <header class="navbar">
+
+        <div class="nav-left">
+            <a href="admin.html">
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY’S CAFE"
+                    class="nav-logo"
+                >
+            </a>
+
+            <div class="brand-text">
+                <div class="brand-name">ARY’S CAFE</div>
+                <div class="brand-tagline">GOOD FOOD. GREAT MOMENTS.</div>
+            </div>
+        </div>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="admin.html">Dashboard</a>
+            <a href="menu.html">Menu</a>
+            <a href="kitchen.html">Kitchen</a>
+            <a href="tables.html" class="active">Tables</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="staff.html">Staff</a>
+        </nav>
+
+        <div class="nav-right">
+            <span class="role-badge">ADMIN</span>
+
+            <button class="logout-btn" onclick="logout()">
+                Logout
+            </button>
+
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE HEADER
+    ========================= -->
+
+    <section class="page-header">
+
+        <div class="header-content">
+
+            <div class="eyebrow">
+                Restaurant Operations
+            </div>
+
+            <h1 class="page-title">
+                Table Management
+            </h1>
+
+            <p class="page-subtitle">
+                Monitor table availability, seating status and reservations
+                across ARY’S CAFE in real time.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-container">
+
+        <!-- SUMMARY -->
+
+        <section class="summary-grid">
+
+            <div class="summary-card">
+                <div class="summary-icon available">
+                    🟢
+                </div>
+
+                <div class="summary-info">
+                    <span>Available</span>
+                    <strong id="availableCount">0</strong>
+                </div>
+            </div>
+
+
+            <div class="summary-card">
+                <div class="summary-icon occupied">
+                    🔴
+                </div>
+
+                <div class="summary-info">
+                    <span>Occupied</span>
+                    <strong id="occupiedCount">0</strong>
+                </div>
+            </div>
+
+
+            <div class="summary-card">
+                <div class="summary-icon reserved">
+                    🟡
+                </div>
+
+                <div class="summary-info">
+                    <span>Reserved</span>
+                    <strong id="reservedCount">0</strong>
+                </div>
+            </div>
+
+
+            <div class="summary-card">
+                <div class="summary-icon cleaning">
+                    🔵
+                </div>
+
+                <div class="summary-info">
+                    <span>Cleaning</span>
+                    <strong id="cleaningCount">0</strong>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- SECTION HEADER -->
+
+        <div class="section-top">
+
+            <div>
+                <h2 class="section-title">
+                    Floor Tables
+                </h2>
+
+                <p class="section-description">
+                    Select a table to manage its current operation.
+                </p>
+            </div>
+
+
+            <div class="filters">
+
+                <button
+                    class="filter-btn active"
+                    data-filter="all"
+                    onclick="filterTables('all', this)"
+                >
+                    All
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-filter="available"
+                    onclick="filterTables('available', this)"
+                >
+                    Available
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-filter="occupied"
+                    onclick="filterTables('occupied', this)"
+                >
+                    Occupied
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-filter="reserved"
+                    onclick="filterTables('reserved', this)"
+                >
+                    Reserved
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-filter="cleaning"
+                    onclick="filterTables('cleaning', this)"
+                >
+                    Cleaning
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- LEGEND -->
+
+        <div class="legend">
+
+            <div class="legend-item">
+                <span class="legend-dot available"></span>
+                Available
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-dot occupied"></span>
+                Occupied
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-dot reserved"></span>
+                Reserved
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-dot cleaning"></span>
+                Cleaning
+            </div>
+
+        </div>
+
+
+        <!-- TABLE GRID -->
+
+        <section class="tables-grid" id="tablesGrid">
+
+
+            <!-- TABLE 01 -->
+
+            <article class="table-card" data-status="available">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T01</div>
+                        <div class="table-seat">2 Seats</div>
+                    </div>
+
+                    <span class="status-badge available">
+                        Available
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Capacity</span>
+                            <span class="info-value">2 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Current Order</span>
+                            <span class="info-value">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn primary"
+                            onclick="seatGuests(this)"
+                        >
+                            Seat Guests
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 02 -->
+
+            <article class="table-card" data-status="occupied">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T02</div>
+                        <div class="table-seat">4 Seats</div>
+                    </div>
+
+                    <span class="status-badge occupied">
+                        Occupied
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Guests</span>
+                            <span class="info-value">3 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Order</span>
+                            <span class="info-value order-link">
+                                #ARY-1045
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn warning"
+                            onclick="releaseTable(this)"
+                        >
+                            Release Table
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 03 -->
+
+            <article class="table-card" data-status="available">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T03</div>
+                        <div class="table-seat">2 Seats</div>
+                    </div>
+
+                    <span class="status-badge available">
+                        Available
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Capacity</span>
+                            <span class="info-value">2 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Current Order</span>
+                            <span class="info-value">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn primary"
+                            onclick="seatGuests(this)"
+                        >
+                            Seat Guests
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 04 -->
+
+            <article class="table-card" data-status="occupied">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T04</div>
+                        <div class="table-seat">4 Seats</div>
+                    </div>
+
+                    <span class="status-badge occupied">
+                        Occupied
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Guests</span>
+                            <span class="info-value">2 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Order</span>
+                            <span class="info-value order-link">
+                                #ARY-1048
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn warning"
+                            onclick="releaseTable(this)"
+                        >
+                            Release Table
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 05 -->
+
+            <article class="table-card" data-status="reserved">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T05</div>
+                        <div class="table-seat">6 Seats</div>
+                    </div>
+
+                    <span class="status-badge reserved">
+                        Reserved
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="reservation-box">
+                            <strong>Aarav Shah</strong>
+                            <span>5 Guests · 1:30 PM</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn"
+                            onclick="confirmReservation(this)"
+                        >
+                            Confirm
+                        </button>
+
+                        <button
+                            class="action-btn warning"
+                            onclick="cancelReservation(this)"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 06 -->
+
+            <article class="table-card" data-status="available">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T06</div>
+                        <div class="table-seat">4 Seats</div>
+                    </div>
+
+                    <span class="status-badge available">
+                        Available
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Capacity</span>
+                            <span class="info-value">4 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Current Order</span>
+                            <span class="info-value">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn primary"
+                            onclick="seatGuests(this)"
+                        >
+                            Seat Guests
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 07 -->
+
+            <article class="table-card" data-status="available">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T07</div>
+                        <div class="table-seat">2 Seats</div>
+                    </div>
+
+                    <span class="status-badge available">
+                        Available
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Capacity</span>
+                            <span class="info-value">2 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Current Order</span>
+                            <span class="info-value">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn primary"
+                            onclick="seatGuests(this)"
+                        >
+                            Seat Guests
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 08 -->
+
+            <article class="table-card" data-status="occupied">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T08</div>
+                        <div class="table-seat">4 Seats</div>
+                    </div>
+
+                    <span class="status-badge occupied">
+                        Occupied
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Guests</span>
+                            <span class="info-value">4 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Order</span>
+                            <span class="info-value order-link">
+                                #ARY-1043
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn warning"
+                            onclick="releaseTable(this)"
+                        >
+                            Release Table
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 09 -->
+
+            <article class="table-card" data-status="available">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T09</div>
+                        <div class="table-seat">6 Seats</div>
+                    </div>
+
+                    <span class="status-badge available">
+                        Available
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Capacity</span>
+                            <span class="info-value">6 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Current Order</span>
+                            <span class="info-value">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn primary"
+                            onclick="seatGuests(this)"
+                        >
+                            Seat Guests
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- TABLE 10 -->
+
+            <article class="table-card" data-status="available">
+
+                <div class="table-top">
+                    <div>
+                        <div class="table-number">T10</div>
+                        <div class="table-seat">4 Seats</div>
+                    </div>
+
+                    <span class="status-badge available">
+                        Available
+                    </span>
+                </div>
+
+                <div class="table-body">
+
+                    <div class="table-info">
+
+                        <div class="info-row">
+                            <span class="info-label">Capacity</span>
+                            <span class="info-value">4 Guests</span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="info-label">Current Order</span>
+                            <span class="info-value">—</span>
+                        </div>
+
+                    </div>
+
+                    <div class="table-actions">
+                        <button
+                            class="action-btn primary"
+                            onclick="seatGuests(this)"
+                        >
+                            Seat Guests
+                        </button>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- NO RESULTS -->
+
+            <div class="no-results" id="noResults">
+
+                <div class="no-results-icon">
+                    🪑
+                </div>
+
+                <h3>
+                    No tables found
+                </h3>
+
+                <p>
+                    There are no tables matching the selected status.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SYNC NOTICE -->
+
+        <div class="sync-notice">
+
+            <div class="sync-icon">
+                🔄
+            </div>
+
+            <p>
+                <strong>Live operations:</strong>
+                Table status is currently managed on the frontend for
+                demonstration. In the final backend implementation, table
+                changes will sync across Admin, Kitchen and Customer screens
+                using Socket.IO in real time.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <div class="footer-inner">
+
+            <div>
+                <div class="footer-brand">
+                    ARY’S CAFE
+                </div>
+
+                <div class="footer-copy">
+                    GOOD FOOD. GREAT MOMENTS. · EST. 2026
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="admin.html">Dashboard</a>
+                <a href="kitchen.html">Kitchen</a>
+                <a href="inventory.html">Inventory</a>
+                <a href="staff.html">Staff</a>
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- TOAST -->
+
+    <div class="toast" id="toast">
+        Table updated successfully.
+    </div>
+
+
+    <script>
+
+        /* =========================
+           MOBILE MENU
+        ========================= */
+
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const navLinks = document.getElementById("navLinks");
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener("click", function () {
+                navLinks.classList.toggle("open");
+            });
+        }
+
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("open");
+            });
+        });
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        let toastTimer;
+
+        function showToast(message) {
+
+            const toast = document.getElementById("toast");
+
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2600);
+        }
+
+
+        /* =========================
+           UPDATE SUMMARY
+        ========================= */
+
+        function updateSummary() {
+
+            const cards = document.querySelectorAll(".table-card");
+
+            let available = 0;
+            let occupied = 0;
+            let reserved = 0;
+            let cleaning = 0;
+
+            cards.forEach(card => {
+
+                const status = card.dataset.status;
+
+                if (status === "available") {
+                    available++;
+                }
+
+                if (status === "occupied") {
+                    occupied++;
+                }
+
+                if (status === "reserved") {
+                    reserved++;
+                }
+
+                if (status === "cleaning") {
+                    cleaning++;
+                }
+
+            });
+
+            document.getElementById("availableCount").textContent = available;
+            document.getElementById("occupiedCount").textContent = occupied;
+            document.getElementById("reservedCount").textContent = reserved;
+            document.getElementById("cleaningCount").textContent = cleaning;
+        }
+
+
+        /* =========================
+           FILTER TABLES
+        ========================= */
+
+        function filterTables(status, button) {
+
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            const cards = document.querySelectorAll(".table-card");
+
+            let visible = 0;
+
+            cards.forEach(card => {
+
+                if (status === "all" || card.dataset.status === status) {
+
+                    card.classList.remove("hidden");
+
+                    visible++;
+
+                } else {
+
+                    card.classList.add("hidden");
+
+                }
+
+            });
+
+            const noResults = document.getElementById("noResults");
+
+            if (visible === 0) {
+                noResults.classList.add("show");
+            } else {
+                noResults.classList.remove("show");
+            }
+        }
+
+
+        /* =========================
+           SEAT GUESTS
+        ========================= */
+
+        function seatGuests(button) {
+
+            const card = button.closest(".table-card");
+
+            const tableNumber =
+                card.querySelector(".table-number").textContent;
+
+            card.dataset.status = "occupied";
+
+            const statusBadge =
+                card.querySelector(".status-badge");
+
+            statusBadge.className =
+                "status-badge occupied";
+
+            statusBadge.textContent =
+                "Occupied";
+
+            const tableInfo =
+                card.querySelector(".table-info");
+
+            tableInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Guests</span>
+                    <span class="info-value">2 Guests</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Order</span>
+                    <span class="info-value order-link">
+                        New Order
+                    </span>
+                </div>
+            `;
+
+            button.className = "action-btn warning";
+            button.textContent = "Release Table";
+            button.onclick = function () {
+                releaseTable(this);
+            };
+
+            updateSummary();
+
+            showToast(
+                tableNumber + " is now occupied."
+            );
+        }
+
+
+        /* =========================
+           RELEASE TABLE
+        ========================= */
+
+        function releaseTable(button) {
+
+            const card = button.closest(".table-card");
+
+            const tableNumber =
+                card.querySelector(".table-number").textContent;
+
+            card.dataset.status = "cleaning";
+
+            const statusBadge =
+                card.querySelector(".status-badge");
+
+            statusBadge.className =
+                "status-badge cleaning";
+
+            statusBadge.textContent =
+                "Cleaning";
+
+            const tableInfo =
+                card.querySelector(".table-info");
+
+            tableInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value">
+                        Cleaning required
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Next Step</span>
+                    <span class="info-value">
+                        Clean table
+                    </span>
+                </div>
+            `;
+
+            button.className = "action-btn success";
+            button.textContent = "Mark Available";
+            button.onclick = function () {
+                markAvailable(this);
+            };
+
+            updateSummary();
+
+            showToast(
+                tableNumber + " moved to cleaning."
+            );
+        }
+
+
+        /* =========================
+           MARK AVAILABLE
+        ========================= */
+
+        function markAvailable(button) {
+
+            const card = button.closest(".table-card");
+
+            const tableNumber =
+                card.querySelector(".table-number").textContent;
+
+            card.dataset.status = "available";
+
+            const statusBadge =
+                card.querySelector(".status-badge");
+
+            statusBadge.className =
+                "status-badge available";
+
+            statusBadge.textContent =
+                "Available";
+
+            const tableInfo =
+                card.querySelector(".table-info");
+
+            tableInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Capacity</span>
+                    <span class="info-value">4 Guests</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Current Order</span>
+                    <span class="info-value">—</span>
+                </div>
+            `;
+
+            button.className = "action-btn primary";
+            button.textContent = "Seat Guests";
+            button.onclick = function () {
+                seatGuests(this);
+            };
+
+            updateSummary();
+
+            showToast(
+                tableNumber + " is now available."
+            );
+        }
+
+
+        /* =========================
+           RESERVATION CONFIRM
+        ========================= */
+
+        function confirmReservation(button) {
+
+            const card = button.closest(".table-card");
+
+            const tableNumber =
+                card.querySelector(".table-number").textContent;
+
+            card.dataset.status = "occupied";
+
+            const statusBadge =
+                card.querySelector(".status-badge");
+
+            statusBadge.className =
+                "status-badge occupied";
+
+            statusBadge.textContent =
+                "Occupied";
+
+            const tableInfo =
+                card.querySelector(".table-info");
+
+            tableInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Guests</span>
+                    <span class="info-value">5 Guests</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Order</span>
+                    <span class="info-value order-link">
+                        Reservation
+                    </span>
+                </div>
+            `;
+
+            const actions =
+                card.querySelector(".table-actions");
+
+            actions.innerHTML = `
+                <button
+                    class="action-btn warning"
+                    onclick="releaseTable(this)"
+                >
+                    Release Table
+                </button>
+            `;
+
+            updateSummary();
+
+            showToast(
+                tableNumber + " reservation confirmed."
+            );
+        }
+
+
+        /* =========================
+           RESERVATION CANCEL
+        ========================= */
+
+        function cancelReservation(button) {
+
+            const card = button.closest(".table-card");
+
+            const tableNumber =
+                card.querySelector(".table-number").textContent;
+
+            card.dataset.status = "available";
+
+            const statusBadge =
+                card.querySelector(".status-badge");
+
+            statusBadge.className =
+                "status-badge available";
+
+            statusBadge.textContent =
+                "Available";
+
+            const tableInfo =
+                card.querySelector(".table-info");
+
+            tableInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Capacity</span>
+                    <span class="info-value">6 Guests</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Current Order</span>
+                    <span class="info-value">—</span>
+                </div>
+            `;
+
+            const actions =
+                card.querySelector(".table-actions");
+
+            actions.innerHTML = `
+                <button
+                    class="action-btn primary"
+                    onclick="seatGuests(this)"
+                >
+                    Seat Guests
+                </button>
+            `;
+
+            updateSummary();
+
+            showToast(
+                tableNumber + " reservation cancelled."
+            );
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        function logout() {
+
+            const confirmLogout =
+                confirm("Are you sure you want to logout?");
+
+            if (!confirmLogout) {
+                return;
+            }
+
+            localStorage.removeItem("arysCafeLoggedIn");
+            localStorage.removeItem("arysCafeRole");
+
+            window.location.href = "login.html";
+        }
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================= */
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            updateSummary();
+
+        });
+
+    </script>
+
+</body>
+</html>

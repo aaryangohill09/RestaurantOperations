@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | ARY'S CAFE</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brown: #352116;
+            --dark-brown: #24150e;
+            --gold: #a37b3f;
+            --light-gold: #d8c39b;
+            --cream: #f7f4ec;
+            --white: #ffffff;
+            --text: #30231c;
+            --muted: #73767c;
+            --border: #e5dfd5;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ================= HEADER ================= */
+
+        .top-header {
+            height: 90px;
+            background: #fffdfa;
+            border-bottom: 1px solid #e8e1d6;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            width: min(1180px, calc(100% - 60px));
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            color: #2d1d15;
+        }
+
+        .brand-cafe {
+            margin-top: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--gold);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            color: #4c4844;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--brown);
+        }
+
+        .nav-link.active {
+            position: relative;
+        }
+
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -12px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .orders-link {
+            font-size: 14px;
+            padding: 14px 18px;
+        }
+
+        .cart-button {
+            background: var(--brown);
+            color: white;
+            padding: 15px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-button:hover {
+            background: #4b2e1f;
+        }
+
+        .cart-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 21px;
+            height: 21px;
+            padding: 0 5px;
+            margin-left: 5px;
+            background: var(--gold);
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+        }
+
+        /* ================= HERO ================= */
+
+        .menu-hero {
+            min-height: 340px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    rgba(42, 25, 16, 0.94),
+                    rgba(42, 25, 16, 0.94)
+                ),
+                url("./home-hero.png");
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .menu-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(170, 125, 62, 0.08),
+                    transparent 55%
+                );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            color: #c59b59;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin-bottom: 18px;
+        }
+
+        .hero-title {
+            color: white;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 64px;
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 22px;
+        }
+
+        .hero-line {
+            width: 170px;
+            height: 1px;
+            margin: auto;
+            background: linear-gradient(
+                to right,
+                transparent,
+                #b98b48,
+                transparent
+            );
+            position: relative;
+        }
+
+        .hero-line::after {
+            content: "✦";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--dark-brown);
+            color: #c59b59;
+            padding: 0 12px;
+            font-size: 18px;
+        }
+
+        /* ================= MENU SECTION ================= */
+
+        .menu-section {
+            padding: 75px 30px 100px;
+            background: #f7f4ec;
+        }
+
+        .menu-container {
+            width: min(1180px, 100%);
+            margin: auto;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 30px;
+            margin-bottom: 38px;
+        }
+
+        .section-label {
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 400;
+            font-size: 46px;
+            line-height: 1.1;
+            color: #2d1d15;
+        }
+
+        .section-description {
+            max-width: 450px;
+            color: #707176;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* ================= FILTERS ================= */
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 38px;
+        }
+
+        .filter-btn {
+            border: 1px solid #d9d0c2;
+            background: transparent;
+            color: #4c443e;
+            padding: 12px 21px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--brown);
+            border-color: var(--brown);
+            color: white;
+        }
+
+        /* ================= FOOD GRID ================= */
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .food-card {
+            background: white;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: 0.25s ease;
+        }
+
+        .food-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 35px rgba(52, 34, 22, 0.10);
+        }
+
+        .food-image-wrap {
+            height: 230px;
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .food-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: 0.4s ease;
+        }
+
+        .food-card:hover .food-image {
+            transform: scale(1.04);
+        }
+
+        .food-content {
+            padding: 23px;
+        }
+
+        .food-category {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 9px;
+        }
+
+        .food-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            font-weight: 400;
+            color: #2d1d15;
+            margin-bottom: 9px;
+        }
+
+        .food-description {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.6;
+            min-height: 42px;
+            margin-bottom: 18px;
+        }
+
+        .food-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .food-price {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 21px;
+            color: #342219;
+        }
+
+        .add-button {
+            border: none;
+            background: var(--brown);
+            color: white;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .add-button:hover {
+            background: #4b2e1f;
+        }
+
+        /* ================= TOAST ================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: var(--brown);
+            color: white;
+            padding: 16px 22px;
+            font-size: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+            z-index: 999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: var(--dark-brown);
+            color: white;
+            padding: 55px 30px 30px;
+        }
+
+        .footer-container {
+            width: min(1180px, 100%);
+            margin: auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .footer-brand {
+            max-width: 380px;
+        }
+
+        .footer-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 18px;
+        }
+
+        .footer-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .footer-tagline {
+            color: #c6a66e;
+            font-size: 11px;
+            letter-spacing: 3px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 60px;
+        }
+
+        .footer-column h4 {
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            color: #d2b477;
+        }
+
+        .footer-column a {
+            display: block;
+            color: #c5c0bb;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            color: #8f8983;
+            font-size: 12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .header-inner {
+                width: calc(100% - 35px);
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-heading {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .top-header {
+                height: 75px;
+            }
+
+            .header-inner {
+                width: calc(100% - 24px);
+            }
+
+            .brand-logo {
+                width: 48px;
+                height: 48px;
+            }
+
+            .brand-name {
+                font-size: 21px;
+            }
+
+            .brand-cafe {
+                font-size: 8px;
+                letter-spacing: 4px;
+            }
+
+            .orders-link {
+                display: none;
+            }
+
+            .cart-button {
+                padding: 11px 13px;
+                font-size: 12px;
+            }
+
+            .menu-hero {
+                min-height: 270px;
+            }
+
+            .hero-title {
+                font-size: 47px;
+            }
+
+            .menu-section {
+                padding: 55px 18px 75px;
+            }
+
+            .section-title {
+                font-size: 38px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .food-image-wrap {
+                height: 245px;
+            }
+
+            .footer-links {
+                gap: 35px;
+                flex-wrap: wrap;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="top-header">
+
+        <div class="header-inner">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY'S CAFE"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <span class="brand-name">ARY'S</span>
+                    <span class="brand-cafe">CAFE</span>
+                </div>
+
+            </a>
+
+
+            <nav class="nav">
+
+                <a href="index.html" class="nav-link">
+                    Home
+                </a>
+
+                <a href="menu.html" class="nav-link active">
+                    Menu
+                </a>
+
+                <a href="orders.html" class="nav-link">
+                    My Orders
+                </a>
+
+            </nav>
+
+
+            <div class="header-actions">
+
+                <a
+                    href="orders.html"
+                    class="orders-link"
+                >
+                    Orders
+                </a>
+
+                <a
+                    href="cart.html"
+                    class="cart-button"
+                >
+                    Cart
+                    <span
+                        id="cartCount"
+                        class="cart-count"
+                    >
+                        0
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="menu-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                ARY'S CAFE
+            </div>
+
+            <h1 class="hero-title">
+                Our Menu
+            </h1>
+
+            <div class="hero-line"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= MENU ================= -->
+
+    <main class="menu-section">
+
+        <div class="menu-container">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <div class="section-label">
+                        FRESH FROM OUR KITCHEN
+                    </div>
+
+                    <h2 class="section-title">
+                        Choose something<br>
+                        you'll love.
+                    </h2>
+
+                </div>
+
+                <p class="section-description">
+                    Explore our selection of freshly prepared food,
+                    handcrafted drinks and delicious desserts.
+                    Choose your favourites and add them to your cart.
+                </p>
+
+            </div>
+
+
+            <!-- FILTERS -->
+
+            <div class="filters">
+
+                <button
+                    class="filter-btn active"
+                    data-category="All"
+                >
+                    All
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-category="Starters"
+                >
+                    Starters
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-category="Main Course"
+                >
+                    Main Course
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-category="Pizza"
+                >
+                    Pizza
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-category="Burgers"
+                >
+                    Burgers
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-category="Desserts"
+                >
+                    Desserts
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-category="Drinks"
+                >
+                    Drinks
+                </button>
+
+            </div>
+
+
+            <!-- FOOD GRID -->
+
+            <div
+                id="menuGrid"
+                class="menu-grid"
+            ></div>
+
+        </div>
+
+    </main>
+
+
+    <!-- TOAST -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+        Added to cart
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-top">
+
+                <div class="footer-brand">
+
+                    <img
+                        src="./arys-cafe-logo.png"
+                        alt="ARY'S CAFE"
+                        class="footer-logo"
+                    >
+
+                    <div class="footer-name">
+                        ARY'S CAFE
+                    </div>
+
+                    <div class="footer-tagline">
+                        GOOD FOOD. GREAT MOMENTS.
+                    </div>
+
+                </div>
+
+
+                <div class="footer-links">
+
+                    <div class="footer-column">
+
+                        <h4>EXPLORE</h4>
+
+                        <a href="index.html">
+                            Home
+                        </a>
+
+                        <a href="menu.html">
+                            Menu
+                        </a>
+
+                        <a href="orders.html">
+                            My Orders
+                        </a>
+
+                    </div>
+
+
+                    <div class="footer-column">
+
+                        <h4>ORDER</h4>
+
+                        <a href="cart.html">
+                            Cart
+                        </a>
+
+                        <a href="checkout.html">
+                            Checkout
+                        </a>
+
+                        <a href="index.html#contact">
+                            Contact
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <span>
+                    © 2026 ARY'S CAFE. All rights reserved.
+                </span>
+
+                <span>
+                    Good Food. Great Moments.
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script>
+
+        /* ================= FOOD DATA ================= */
+
+        const menuItems = [
+
+            {
+                id: 1,
+                name: "Classic Bruschetta",
+                category: "Starters",
+                price: 180,
+                description: "Toasted bread topped with tomato, basil and olive oil.",
+                image: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 2,
+                name: "Crispy Fries",
+                category: "Starters",
+                price: 140,
+                description: "Golden crispy fries served with our signature dip.",
+                image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 3,
+                name: "Creamy Alfredo Pasta",
+                category: "Main Course",
+                price: 320,
+                description: "Creamy parmesan sauce tossed with perfectly cooked pasta.",
+                image: "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 4,
+                name: "Paneer Tikka",
+                category: "Main Course",
+                price: 290,
+                description: "Soft paneer marinated with aromatic Indian spices.",
+                image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 5,
+                name: "Margherita Pizza",
+                category: "Pizza",
+                price: 350,
+                description: "Classic pizza with tomato, mozzarella and fresh basil.",
+                image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 6,
+                name: "Farmhouse Pizza",
+                category: "Pizza",
+                price: 420,
+                description: "Loaded with fresh vegetables and melted mozzarella.",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 7,
+                name: "Classic Cafe Burger",
+                category: "Burgers",
+                price: 280,
+                description: "Juicy patty, fresh lettuce, tomato and house sauce.",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 8,
+                name: "Cheese Burger",
+                category: "Burgers",
+                price: 320,
+                description: "Classic burger topped with melted cheddar cheese.",
+                image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 9,
+                name: "Chocolate Cake",
+                category: "Desserts",
+                price: 220,
+                description: "Rich chocolate cake with a soft and moist centre.",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 10,
+                name: "Classic Cheesecake",
+                category: "Desserts",
+                price: 240,
+                description: "Creamy cheesecake with a buttery biscuit base.",
+                image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 11,
+                name: "Cappuccino",
+                category: "Drinks",
+                price: 160,
+                description: "Freshly brewed espresso with steamed milk and foam.",
+                image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=80"
+            },
+
+            {
+                id: 12,
+                name: "Iced Coffee",
+                category: "Drinks",
+                price: 180,
+                description: "Chilled coffee blended with milk and ice.",
+                image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80"
+            }
+
+        ];
+
+
+        const menuGrid =
+            document.getElementById("menuGrid");
+
+        const cartCount =
+            document.getElementById("cartCount");
+
+        const toast =
+            document.getElementById("toast");
+
+
+        /* ================= CART ================= */
+
+        function getCart() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem("arysCafeCart")
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+        }
+
+
+        function saveCart(cart) {
+
+            localStorage.setItem(
+                "arysCafeCart",
+                JSON.stringify(cart)
+            );
+
+        }
+
+
+        function updateCartCount() {
+
+            const cart = getCart();
+
+            const count =
+                cart.reduce(
+                    (total, item) =>
+                        total + Number(item.quantity || 0),
+                    0
+                );
+
+            cartCount.textContent = count;
+
+        }
+
+
+        /* ================= TOAST ================= */
+
+        let toastTimer;
+
+        function showToast(text) {
+
+            toast.textContent = text;
+
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(
+                function() {
+                    toast.classList.remove("show");
+                },
+                2200
+            );
+
+        }
+
+
+        /* ================= ADD TO CART ================= */
+
+        function addToCart(id) {
+
+            const item =
+                menuItems.find(
+                    product => product.id === id
+                );
+
+            if (!item) {
+                return;
+            }
+
+
+            const cart = getCart();
+
+            const existing =
+                cart.find(
+                    product => product.id === id
+                );
+
+
+            if (existing) {
+
+                existing.quantity =
+                    Number(existing.quantity || 0) + 1;
+
+            } else {
+
+                cart.push({
+                    id: item.id,
+                    name: item.name,
+                    category: item.category,
+                    price: item.price,
+                    image: item.image,
+                    quantity: 1
+                });
+
+            }
+
+
+            saveCart(cart);
+
+            updateCartCount();
+
+            showToast(
+                item.name + " added to cart"
+            );
+
+        }
+
+
+        /* ================= RENDER MENU ================= */
+
+        function renderMenu(category = "All") {
+
+            menuGrid.innerHTML = "";
+
+            const filtered =
+                category === "All"
+                    ? menuItems
+                    : menuItems.filter(
+                        item =>
+                            item.category === category
+                    );
+
+
+            filtered.forEach(item => {
+
+                const card =
+                    document.createElement("article");
+
+                card.className = "food-card";
+
+                card.innerHTML = `
+
+                    <div class="food-image-wrap">
+
+                        <img
+                            src="${item.image}"
+                            alt="${item.name}"
+                            class="food-image"
+                            loading="lazy"
+                        >
+
+                    </div>
+
+                    <div class="food-content">
+
+                        <div class="food-category">
+                            ${item.category}
+                        </div>
+
+                        <h3 class="food-name">
+                            ${item.name}
+                        </h3>
+
+                        <p class="food-description">
+                            ${item.description}
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="food-price">
+                                ₹${item.price}
+                            </div>
+
+                            <button
+                                class="add-button"
+                                onclick="addToCart(${item.id})"
+                            >
+                                Add to Cart
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+                menuGrid.appendChild(card);
+
+            });
+
+        }
+
+
+        /* ================= FILTER ================= */
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        document
+                            .querySelectorAll(".filter-btn")
+                            .forEach(btn =>
+                                btn.classList.remove("active")
+                            );
+
+                        this.classList.add("active");
+
+                        renderMenu(
+                            this.dataset.category
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /* ================= START ================= */
+
+        renderMenu();
+
+        updateCartCount();
+
+    </script>
+
+</body>
+</html>

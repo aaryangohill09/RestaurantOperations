@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | ARY’S CAFE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #f7f2e8;
+            --cream-light: #fbf8f1;
+            --white: #ffffff;
+            --brown: #3a2117;
+            --brown-dark: #24130d;
+            --brown-light: #5b3828;
+            --gold: #a47c42;
+            --gold-light: #c6a66a;
+            --border: #e3d9c8;
+            --text: #2d211b;
+            --muted: #796d63;
+            --success: #4e7658;
+            --danger: #a84d43;
+            --shadow: 0 18px 50px rgba(54, 34, 22, 0.10);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--cream);
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 86px;
+            background: rgba(255, 255, 255, 0.97);
+            border-bottom: 1px solid rgba(58, 33, 23, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav-container {
+            width: min(1200px, calc(100% - 40px));
+            height: 100%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: max-content;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(164, 124, 66, 0.45);
+            box-shadow: 0 4px 12px rgba(58, 33, 23, 0.12);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-name {
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 1.6px;
+        }
+
+        .brand-tagline {
+            margin-top: 5px;
+            color: var(--gold);
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 1.7px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            position: relative;
+            color: #5d5149;
+            font-size: 13px;
+            font-weight: 600;
+            transition: color 0.25s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--brown);
+        }
+
+        .nav-links a.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -9px;
+            width: 18px;
+            height: 2px;
+            margin: auto;
+            background: var(--gold);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 10px 17px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .nav-btn.login {
+            color: var(--brown);
+            border: 1px solid var(--border);
+            background: var(--white);
+        }
+
+        .nav-btn.login:hover {
+            border-color: var(--gold);
+        }
+
+        .nav-btn.order {
+            color: var(--white);
+            background: var(--brown);
+            border: 1px solid var(--brown);
+        }
+
+        .nav-btn.order:hover {
+            background: var(--brown-dark);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--white);
+            color: var(--brown);
+            font-size: 20px;
+        }
+
+        /* =========================
+           PAGE HERO
+        ========================= */
+
+        .page-hero {
+            position: relative;
+            min-height: 265px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(35, 19, 13, 0.95) 0%,
+                    rgba(58, 33, 23, 0.88) 55%,
+                    rgba(35, 19, 13, 0.92) 100%
+                ),
+                url("./home-hero.png") center / cover no-repeat;
+        }
+
+        .page-hero::after {
+            content: "";
+            position: absolute;
+            right: -50px;
+            top: -100px;
+            width: 420px;
+            height: 420px;
+            border: 1px solid rgba(198, 166, 106, 0.18);
+            border-radius: 50%;
+        }
+
+        .page-hero-content {
+            position: relative;
+            z-index: 2;
+            width: min(1200px, calc(100% - 40px));
+            margin: auto;
+        }
+
+        .eyebrow {
+            margin-bottom: 9px;
+            color: var(--gold-light);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .page-hero h1 {
+            color: var(--white);
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(48px, 6vw, 72px);
+            line-height: 0.95;
+            font-weight: 600;
+        }
+
+        .page-hero p {
+            max-width: 520px;
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           CHECKOUT WRAPPER
+        ========================= */
+
+        .checkout-section {
+            padding: 65px 0 85px;
+        }
+
+        .checkout-container {
+            width: min(1200px, calc(100% - 40px));
+            margin: auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.8fr);
+            gap: 30px;
+            align-items: start;
+        }
+
+        .checkout-card,
+        .summary-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .checkout-card {
+            padding: 34px;
+        }
+
+        .summary-card {
+            position: sticky;
+            top: 110px;
+            overflow: hidden;
+        }
+
+        .section-heading {
+            margin-bottom: 27px;
+        }
+
+        .section-heading h2 {
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 34px;
+            font-weight: 700;
+        }
+
+        .section-heading p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* =========================
+           ORDER TYPE
+        ========================= */
+
+        .order-type-section {
+            margin-bottom: 34px;
+        }
+
+        .form-title {
+            margin-bottom: 14px;
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .order-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .type-option {
+            position: relative;
+        }
+
+        .type-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .type-label {
+            min-height: 105px;
+            padding: 17px 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 7px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--cream-light);
+            color: var(--brown);
+            transition: 0.25s ease;
+        }
+
+        .type-icon {
+            font-size: 25px;
+        }
+
+        .type-label strong {
+            font-size: 13px;
+        }
+
+        .type-label span {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .type-option input:checked + .type-label {
+            border-color: var(--gold);
+            background: #f8f0df;
+            box-shadow: inset 0 0 0 1px rgba(164, 124, 66, 0.2);
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-section {
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #eee5d8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            color: var(--brown);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            outline: none;
+            background: #fffdf9;
+            color: var(--text);
+            transition: 0.25s ease;
+        }
+
+        .form-group input,
+        .form-group select {
+            height: 46px;
+            padding: 0 13px;
+        }
+
+        .form-group textarea {
+            min-height: 105px;
+            padding: 12px 13px;
+            resize: vertical;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #aaa096;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(164, 124, 66, 0.09);
+        }
+
+        .conditional-section {
+            display: none;
+        }
+
+        .conditional-section.show {
+            display: block;
+        }
+
+        .info-box {
+            padding: 13px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #e7dccb;
+            border-radius: 7px;
+            background: #fbf6eb;
+            color: #6d5d50;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           PAYMENT
+        ========================= */
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .payment-option {
+            position: relative;
+        }
+
+        .payment-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .payment-label {
+            min-height: 72px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: var(--cream-light);
+            color: var(--brown);
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .payment-option input:checked + .payment-label {
+            border-color: var(--gold);
+            background: #f8f0df;
+        }
+
+        .payment-icon {
+            font-size: 20px;
+        }
+
+        /* =========================
+           CHECKBOX
+        ========================= */
+
+        .terms-row {
+            margin-top: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+        }
+
+        .terms-row input {
+            margin-top: 3px;
+            accent-color: var(--brown);
+        }
+
+        .terms-row label {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .checkout-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee5d8;
+        }
+
+        .back-btn {
+            min-height: 48px;
+            padding: 0 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--white);
+            color: var(--brown);
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .back-btn:hover {
+            border-color: var(--gold);
+            background: var(--cream-light);
+        }
+
+        .place-order-btn {
+            min-height: 48px;
+            padding: 0 28px;
+            border: 1px solid var(--brown);
+            border-radius: 6px;
+            background: var(--brown);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            transition: 0.25s ease;
+        }
+
+        .place-order-btn:hover {
+            background: var(--brown-dark);
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-header {
+            padding: 25px 25px 21px;
+            background: var(--brown);
+        }
+
+        .summary-header h3 {
+            color: var(--white);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 28px;
+        }
+
+        .summary-header p {
+            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 10px;
+        }
+
+        .summary-body {
+            padding: 23px;
+        }
+
+        .summary-items {
+            max-height: 330px;
+            overflow-y: auto;
+            padding-right: 3px;
+        }
+
+        .summary-item {
+            padding: 13px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid #eee5d8;
+        }
+
+        .summary-item:first-child {
+            padding-top: 0;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item-name {
+            color: var(--brown);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .summary-item-meta {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .summary-item-price {
+            color: var(--brown);
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .summary-empty {
+            padding: 25px 0;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .summary-divider {
+            height: 1px;
+            margin: 10px 0 18px;
+            background: var(--border);
+        }
+
+        .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .summary-row strong {
+            color: var(--brown);
+            font-weight: 700;
+        }
+
+        .summary-row.total {
+            margin-top: 18px;
+            margin-bottom: 0;
+            padding-top: 17px;
+            border-top: 1px solid var(--border);
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .delivery-note {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            background: #f8f2e6;
+            color: #6d5d50;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            z-index: 3000;
+            min-width: 280px;
+            max-width: 380px;
+            padding: 15px 18px;
+            border-radius: 7px;
+            background: var(--brown);
+            color: var(--white);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+            line-height: 1.5;
+            transform: translateY(120px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: var(--brown-dark);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-main {
+            width: min(1200px, calc(100% - 40px));
+            margin: auto;
+            padding: 48px 0 38px;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 50px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .footer-brand img {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 13px;
+        }
+
+        .footer-brand h3 {
+            color: var(--white);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 27px;
+        }
+
+        .footer-brand p {
+            max-width: 300px;
+            margin-top: 9px;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .footer-column h4 {
+            margin-bottom: 15px;
+            color: var(--white);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 20px;
+        }
+
+        .footer-column a {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 11px;
+            transition: 0.2s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--gold-light);
+        }
+
+        .footer-column p {
+            margin-bottom: 9px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 17px 20px;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+            .nav-links {
+                gap: 17px;
+            }
+
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+
+            .summary-items {
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .site-header {
+                height: 75px;
+            }
+
+            .nav-links,
+            .nav-actions {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-container.menu-open {
+                position: relative;
+            }
+
+            .nav-container.menu-open .nav-links {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 75px;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 10px;
+                background: var(--white);
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+
+            .nav-container.menu-open .nav-links a {
+                padding: 13px 15px;
+            }
+
+            .nav-container.menu-open .nav-links a.active::after {
+                display: none;
+            }
+
+            .nav-container.menu-open .nav-actions {
+                position: absolute;
+                top: calc(75px + 220px);
+                left: 10px;
+                right: 10px;
+                display: flex;
+                padding: 10px;
+                background: var(--white);
+                border: 1px solid var(--border);
+                border-top: 0;
+            }
+
+            .page-hero {
+                min-height: 230px;
+            }
+
+            .checkout-section {
+                padding: 45px 0 60px;
+            }
+
+            .checkout-card {
+                padding: 25px;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container,
+            .page-hero-content,
+            .checkout-container,
+            .footer-main {
+                width: min(100% - 28px, 1200px);
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .brand-logo {
+                width: 45px;
+                height: 45px;
+            }
+
+            .page-hero h1 {
+                font-size: 48px;
+            }
+
+            .page-hero p {
+                font-size: 12px;
+            }
+
+            .order-type-grid,
+            .payment-options,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .checkout-card {
+                padding: 20px;
+            }
+
+            .checkout-actions {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+
+            .back-btn,
+            .place-order-btn {
+                width: 100%;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .toast {
+                left: 14px;
+                right: 14px;
+                bottom: 14px;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="site-header">
+        <div class="nav-container" id="navContainer">
+
+            <a href="index.html" class="brand">
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY’S CAFE Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <span class="brand-name">ARY’S CAFE</span>
+                    <span class="brand-tagline">GOOD FOOD. GREAT MOMENTS.</span>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="orders.html">My Orders</a>
+                <a href="cart.html">Cart</a>
+                <a href="checkout.html" class="active">Checkout</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="login.html" class="nav-btn login">Login</a>
+                <a href="menu.html" class="nav-btn order">Order Now</a>
+            </div>
+
+            <button
+                type="button"
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                aria-label="Open navigation"
+            >
+                ☰
+            </button>
+
+        </div>
+    </header>
+
+
+    <!-- =========================
+         PAGE HERO
+    ========================= -->
+
+    <section class="page-hero">
+        <div class="page-hero-content">
+
+            <div class="eyebrow">ARY’S CAFE</div>
+
+            <h1>Checkout</h1>
+
+            <p>
+                Complete your order details and choose how you would like
+                to enjoy your meal.
+            </p>
+
+        </div>
+    </section>
+
+
+    <!-- =========================
+         CHECKOUT
+    ========================= -->
+
+    <main class="checkout-section">
+
+        <div class="checkout-container">
+
+            <!-- =========================
+                 CHECKOUT FORM
+            ========================= -->
+
+            <form class="checkout-card" id="checkoutForm">
+
+                <div class="section-heading">
+                    <h2>Complete Your Order</h2>
+                    <p>
+                        Please provide the required details before placing
+                        your order.
+                    </p>
+                </div>
+
+
+                <!-- ORDER TYPE -->
+
+                <section class="order-type-section">
+
+                    <h3 class="form-title">Choose Order Type</h3>
+
+                    <div class="order-type-grid">
+
+                        <div class="type-option">
+                            <input
+                                type="radio"
+                                id="dineIn"
+                                name="orderType"
+                                value="Dine-In"
+                            >
+
+                            <label for="dineIn" class="type-label">
+                                <span class="type-icon">🍽️</span>
+                                <strong>Dine-In</strong>
+                                <span>Enjoy at our cafe</span>
+                            </label>
+                        </div>
+
+
+                        <div class="type-option">
+                            <input
+                                type="radio"
+                                id="takeaway"
+                                name="orderType"
+                                value="Takeaway"
+                            >
+
+                            <label for="takeaway" class="type-label">
+                                <span class="type-icon">🥡</span>
+                                <strong>Takeaway</strong>
+                                <span>Pick up your order</span>
+                            </label>
+                        </div>
+
+
+                        <div class="type-option">
+                            <input
+                                type="radio"
+                                id="delivery"
+                                name="orderType"
+                                value="Delivery"
+                            >
+
+                            <label for="delivery" class="type-label">
+                                <span class="type-icon">🛵</span>
+                                <strong>Delivery</strong>
+                                <span>Delivered to your door</span>
+                            </label>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- CUSTOMER DETAILS -->
+
+                <section class="form-section">
+
+                    <h3 class="form-title">Customer Details</h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="firstName">
+                                First Name <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="firstName"
+                                name="firstName"
+                                placeholder="Enter first name"
+                                autocomplete="given-name"
+                                required
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="lastName">
+                                Last Name <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                placeholder="Enter last name"
+                                autocomplete="family-name"
+                                required
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="email">
+                                Email Address <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="phone">
+                                Phone Number <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="10 digit mobile number"
+                                maxlength="10"
+                                autocomplete="tel"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- DINE-IN -->
+
+                <section
+                    class="form-section conditional-section"
+                    id="dineInSection"
+                >
+
+                    <h3 class="form-title">Dine-In Details</h3>
+
+                    <div class="info-box">
+                        Select your table number and let our staff know how
+                        many guests will be joining you.
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="tableNumber">
+                                Table Number <span class="required">*</span>
+                            </label>
+
+                            <select id="tableNumber" name="tableNumber">
+                                <option value="">Select table</option>
+                                <option value="T01">T01 — 2 Seats</option>
+                                <option value="T02">T02 — 4 Seats</option>
+                                <option value="T03">T03 — 2 Seats</option>
+                                <option value="T04">T04 — 4 Seats</option>
+                                <option value="T05">T05 — 6 Seats</option>
+                                <option value="T06">T06 — 4 Seats</option>
+                                <option value="T07">T07 — 2 Seats</option>
+                                <option value="T08">T08 — 4 Seats</option>
+                                <option value="T09">T09 — 6 Seats</option>
+                                <option value="T10">T10 — 4 Seats</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="guests">
+                                Number of Guests <span class="required">*</span>
+                            </label>
+
+                            <select id="guests" name="guests">
+                                <option value="">Select guests</option>
+                                <option value="1">1 Guest</option>
+                                <option value="2">2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                                <option value="5">5 Guests</option>
+                                <option value="6">6 Guests</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- TAKEAWAY -->
+
+                <section
+                    class="form-section conditional-section"
+                    id="takeawaySection"
+                >
+
+                    <h3 class="form-title">Takeaway Details</h3>
+
+                    <div class="info-box">
+                        Select a convenient pickup time. Your order will be
+                        prepared before your selected time.
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="pickupTime">
+                                Pickup Time <span class="required">*</span>
+                            </label>
+
+                            <select id="pickupTime" name="pickupTime">
+                                <option value="">Select pickup time</option>
+                                <option value="12:00 PM">12:00 PM</option>
+                                <option value="12:30 PM">12:30 PM</option>
+                                <option value="01:00 PM">01:00 PM</option>
+                                <option value="01:30 PM">01:30 PM</option>
+                                <option value="02:00 PM">02:00 PM</option>
+                                <option value="05:00 PM">05:00 PM</option>
+                                <option value="05:30 PM">05:30 PM</option>
+                                <option value="06:00 PM">06:00 PM</option>
+                                <option value="06:30 PM">06:30 PM</option>
+                                <option value="07:00 PM">07:00 PM</option>
+                                <option value="07:30 PM">07:30 PM</option>
+                                <option value="08:00 PM">08:00 PM</option>
+                                <option value="08:30 PM">08:30 PM</option>
+                                <option value="09:00 PM">09:00 PM</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- DELIVERY -->
+
+                <section
+                    class="form-section conditional-section"
+                    id="deliverySection"
+                >
+
+                    <h3 class="form-title">Delivery Details</h3>
+
+                    <div class="info-box">
+                        Please provide the complete delivery address so our
+                        delivery team can reach you easily.
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="address">
+                                Full Address <span class="required">*</span>
+                            </label>
+
+                            <textarea
+                                id="address"
+                                name="address"
+                                placeholder="House / Flat No., Street, Area, Landmark..."
+                            ></textarea>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="city">
+                                City <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                placeholder="Enter city"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="pincode">
+                                Pincode <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="pincode"
+                                name="pincode"
+                                placeholder="6 digit pincode"
+                                maxlength="6"
+                            >
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- SPECIAL INSTRUCTIONS -->
+
+                <section class="form-section">
+
+                    <h3 class="form-title">Special Instructions</h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+
+                            <label for="instructions">
+                                Instructions
+                            </label>
+
+                            <textarea
+                                id="instructions"
+                                name="instructions"
+                                placeholder="Any special request for your order? (Optional)"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- PAYMENT -->
+
+                <section class="form-section">
+
+                    <h3 class="form-title">Payment Method</h3>
+
+                    <div class="payment-options">
+
+                        <div class="payment-option">
+
+                            <input
+                                type="radio"
+                                id="cash"
+                                name="paymentMethod"
+                                value="Cash"
+                                checked
+                            >
+
+                            <label for="cash" class="payment-label">
+                                <span class="payment-icon">💵</span>
+                                Cash
+                            </label>
+
+                        </div>
+
+
+                        <div class="payment-option">
+
+                            <input
+                                type="radio"
+                                id="upi"
+                                name="paymentMethod"
+                                value="UPI"
+                            >
+
+                            <label for="upi" class="payment-label">
+                                <span class="payment-icon">📱</span>
+                                UPI
+                            </label>
+
+                        </div>
+
+
+                        <div class="payment-option">
+
+                            <input
+                                type="radio"
+                                id="card"
+                                name="paymentMethod"
+                                value="Card"
+                            >
+
+                            <label for="card" class="payment-label">
+                                <span class="payment-icon">💳</span>
+                                Card
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- TERMS -->
+
+                <div class="terms-row">
+
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        required
+                    >
+
+                    <label for="terms">
+                        I confirm that the order details provided above are
+                        correct and I agree to the restaurant's order
+                        processing terms.
+                    </label>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="checkout-actions">
+
+                    <a href="cart.html" class="back-btn">
+                        ← Back to Cart
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="place-order-btn"
+                    >
+                        Place Order
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- =========================
+                 ORDER SUMMARY
+            ========================= -->
+
+            <aside class="summary-card">
+
+                <div class="summary-header">
+                    <h3>Your Order</h3>
+                    <p>ARY’S CAFE • GOOD FOOD. GREAT MOMENTS.</p>
+                </div>
+
+                <div class="summary-body">
+
+                    <div
+                        class="summary-items"
+                        id="summaryItems"
+                    ></div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <strong id="subtotal">₹0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>GST (5%)</span>
+                        <strong id="gst">₹0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Delivery Fee</span>
+                        <strong id="deliveryFee">₹0</strong>
+                    </div>
+
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <strong id="total">₹0</strong>
+                    </div>
+
+                    <div class="delivery-note" id="deliveryNote">
+                        Select your order type to see applicable charges.
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <div class="footer-main">
+
+            <div class="footer-brand">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY’S CAFE Logo"
+                >
+
+                <h3>ARY’S CAFE</h3>
+
+                <p>
+                    Good food, warm coffee and great moments.
+                    Thank you for choosing ARY’S CAFE.
+                </p>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>Quick Links</h4>
+
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="cart.html">Cart</a>
+                <a href="orders.html">My Orders</a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>Contact</h4>
+
+                <p>📍 Vadodara, Gujarat</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ hello@aryscafe.com</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+            © <span id="footerYear"></span> ARY’S CAFE. All Rights Reserved.
+        </div>
+
+    </footer>
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast"
+    ></div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /* ==========================================
+           STORAGE KEYS
+        ========================================== */
+
+        const CART_KEY = "arysCafeCart";
+        const CHECKOUT_KEY = "arysCafeCheckout";
+        const ORDERS_KEY = "arysCafeOrders";
+        const ORDER_TYPE_KEY = "arysCafeOrderType";
+
+
+        /* ==========================================
+           ELEMENTS
+        ========================================== */
+
+        const checkoutForm = document.getElementById("checkoutForm");
+
+        const dineInRadio = document.getElementById("dineIn");
+        const takeawayRadio = document.getElementById("takeaway");
+        const deliveryRadio = document.getElementById("delivery");
+
+        const dineInSection = document.getElementById("dineInSection");
+        const takeawaySection = document.getElementById("takeawaySection");
+        const deliverySection = document.getElementById("deliverySection");
+
+        const tableNumber = document.getElementById("tableNumber");
+        const guests = document.getElementById("guests");
+
+        const pickupTime = document.getElementById("pickupTime");
+
+        const address = document.getElementById("address");
+        const city = document.getElementById("city");
+        const pincode = document.getElementById("pincode");
+
+        const summaryItems = document.getElementById("summaryItems");
+
+        const subtotalElement = document.getElementById("subtotal");
+        const gstElement = document.getElementById("gst");
+        const deliveryFeeElement = document.getElementById("deliveryFee");
+        const totalElement = document.getElementById("total");
+
+        const deliveryNote = document.getElementById("deliveryNote");
+
+        const toast = document.getElementById("toast");
+
+
+        /* ==========================================
+           HELPERS
+        ========================================== */
+
+        function getCart() {
+            try {
+                const cart = JSON.parse(
+                    localStorage.getItem(CART_KEY)
+                );
+
+                return Array.isArray(cart) ? cart : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+
+        function saveCart(cart) {
+            localStorage.setItem(
+                CART_KEY,
+                JSON.stringify(cart)
+            );
+        }
+
+
+        function getOrders() {
+            try {
+                const orders = JSON.parse(
+                    localStorage.getItem(ORDERS_KEY)
+                );
+
+                return Array.isArray(orders) ? orders : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+
+        function saveOrders(orders) {
+            localStorage.setItem(
+                ORDERS_KEY,
+                JSON.stringify(orders)
+            );
+        }
+
+
+        function formatCurrency(amount) {
+            return "₹" + Number(amount || 0).toLocaleString("en-IN");
+        }
+
+
+        function showToast(message, type = "success") {
+
+            toast.textContent = message;
+
+            toast.classList.remove("show", "error");
+
+            if (type === "error") {
+                toast.classList.add("error");
+            }
+
+            requestAnimationFrame(() => {
+                toast.classList.add("show");
+            });
+
+            clearTimeout(window.toastTimer);
+
+            window.toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3500);
+        }
+
+
+        /* ==========================================
+           GET CART TOTAL
+        ========================================== */
+
+        function getCartSubtotal() {
+
+            const cart = getCart();
+
+            return cart.reduce((total, item) => {
+
+                const price = Number(item.price) || 0;
+                const quantity = Number(item.quantity) || 0;
+
+                return total + price * quantity;
+
+            }, 0);
+        }
+
+
+        /* ==========================================
+           UPDATE CONDITIONAL SECTIONS
+        ========================================== */
+
+        function updateOrderTypeSections() {
+
+            dineInSection.classList.remove("show");
+            takeawaySection.classList.remove("show");
+            deliverySection.classList.remove("show");
+
+            tableNumber.required = false;
+            guests.required = false;
+
+            pickupTime.required = false;
+
+            address.required = false;
+            city.required = false;
+            pincode.required = false;
+
+
+            let selectedType = "";
+
+            const selected = document.querySelector(
+                'input[name="orderType"]:checked'
+            );
+
+            if (selected) {
+                selectedType = selected.value;
+            }
+
+
+            if (selectedType === "Dine-In") {
+
+                dineInSection.classList.add("show");
+
+                tableNumber.required = true;
+                guests.required = true;
+
+                deliveryNote.textContent =
+                    "Dine-In orders do not include a delivery charge.";
+
+            } else if (selectedType === "Takeaway") {
+
+                takeawaySection.classList.add("show");
+
+                pickupTime.required = true;
+
+                deliveryNote.textContent =
+                    "Takeaway orders can be collected from ARY’S CAFE at your selected time.";
+
+            } else if (selectedType === "Delivery") {
+
+                deliverySection.classList.add("show");
+
+                address.required = true;
+                city.required = true;
+                pincode.required = true;
+
+                deliveryNote.textContent =
+                    "A ₹50 delivery fee is added to delivery orders.";
+
+            } else {
+
+                deliveryNote.textContent =
+                    "Select your order type to see applicable charges.";
+            }
+
+
+            updateSummary();
+        }
+
+
+        /* ==========================================
+           UPDATE SUMMARY
+        ========================================== */
+
+        function updateSummary() {
+
+            const cart = getCart();
+
+            summaryItems.innerHTML = "";
+
+            if (cart.length === 0) {
+
+                summaryItems.innerHTML = `
+                    <div class="summary-empty">
+                        Your cart is empty.
+                        <br><br>
+                        <a
+                            href="menu.html"
+                            style="color:#a47c42;font-weight:700;"
+                        >
+                            Browse Menu →
+                        </a>
+                    </div>
+                `;
+
+                subtotalElement.textContent = "₹0";
+                gstElement.textContent = "₹0";
+                deliveryFeeElement.textContent = "₹0";
+                totalElement.textContent = "₹0";
+
+                return;
+            }
+
+
+            cart.forEach(item => {
+
+                const quantity = Number(item.quantity) || 1;
+                const price = Number(item.price) || 0;
+
+                const itemTotal = price * quantity;
+
+                const itemElement = document.createElement("div");
+
+                itemElement.className = "summary-item";
+
+                itemElement.innerHTML = `
+                    <div>
+                        <div class="summary-item-name">
+                            ${escapeHtml(item.name || "Menu Item")}
+                        </div>
+
+                        <div class="summary-item-meta">
+                            ${quantity} × ${formatCurrency(price)}
+                        </div>
+                    </div>
+
+                    <div class="summary-item-price">
+                        ${formatCurrency(itemTotal)}
+                    </div>
+                `;
+
+                summaryItems.appendChild(itemElement);
+
+            });
+
+
+            const subtotal = getCartSubtotal();
+
+            const gst = Math.round(subtotal * 0.05);
+
+            const selectedType = document.querySelector(
+                'input[name="orderType"]:checked'
+            );
+
+            const orderType = selectedType
+                ? selectedType.value
+                : "";
+
+            const deliveryFee =
+                orderType === "Delivery" ? 50 : 0;
+
+            const total =
+                subtotal +
+                gst +
+                deliveryFee;
+
+
+            subtotalElement.textContent =
+                formatCurrency(subtotal);
+
+            gstElement.textContent =
+                formatCurrency(gst);
+
+            deliveryFeeElement.textContent =
+                formatCurrency(deliveryFee);
+
+            totalElement.textContent =
+                formatCurrency(total);
+        }
+
+
+        /* ==========================================
+           ESCAPE HTML
+        ========================================== */
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        /* ==========================================
+           LOAD SAVED CHECKOUT DATA
+        ========================================== */
+
+        function loadSavedData() {
+
+            let savedCheckout = null;
+
+            try {
+
+                savedCheckout = JSON.parse(
+                    localStorage.getItem(CHECKOUT_KEY)
+                );
+
+            } catch (error) {
+
+                savedCheckout = null;
+            }
+
+
+            let savedUser = null;
+
+            try {
+
+                savedUser = JSON.parse(
+                    localStorage.getItem("arysCafeUser")
+                );
+
+            } catch (error) {
+
+                savedUser = null;
+            }
+
+
+            const customer =
+                savedCheckout?.customer ||
+                savedCheckout?.customerDetails ||
+                {};
+
+
+            document.getElementById("firstName").value =
+                customer.firstName ||
+                savedUser?.firstName ||
+                "";
+
+            document.getElementById("lastName").value =
+                customer.lastName ||
+                savedUser?.lastName ||
+                "";
+
+            document.getElementById("email").value =
+                customer.email ||
+                savedUser?.email ||
+                "";
+
+            document.getElementById("phone").value =
+                customer.phone ||
+                savedUser?.phone ||
+                "";
+
+
+            const savedOrderType =
+                savedCheckout?.orderType ||
+                localStorage.getItem(ORDER_TYPE_KEY) ||
+                "";
+
+
+            if (savedOrderType === "Dine-In") {
+
+                dineInRadio.checked = true;
+
+            } else if (savedOrderType === "Takeaway") {
+
+                takeawayRadio.checked = true;
+
+            } else if (savedOrderType === "Delivery") {
+
+                deliveryRadio.checked = true;
+            }
+
+
+            if (savedCheckout) {
+
+                tableNumber.value =
+                    savedCheckout.tableNumber || "";
+
+                guests.value =
+                    savedCheckout.guests || "";
+
+                pickupTime.value =
+                    savedCheckout.pickupTime || "";
+
+                address.value =
+                    savedCheckout.address || "";
+
+                city.value =
+                    savedCheckout.city || "";
+
+                pincode.value =
+                    savedCheckout.pincode || "";
+
+                document.getElementById("instructions").value =
+                    savedCheckout.instructions || "";
+
+                if (savedCheckout.paymentMethod) {
+
+                    const paymentRadio =
+                        document.querySelector(
+                            `input[name="paymentMethod"][value="${CSS.escape(savedCheckout.paymentMethod)}"]`
+                        );
+
+                    if (paymentRadio) {
+                        paymentRadio.checked = true;
+                    }
+                }
+            }
+
+
+            updateOrderTypeSections();
+        }
+
+
+        /* ==========================================
+           GENERATE ORDER NUMBER
+        ========================================== */
+
+        function generateOrderNumber() {
+
+            const now = new Date();
+
+            const random =
+                Math.floor(100 + Math.random() * 900);
+
+            return (
+                "ARY-" +
+                String(now.getHours()).padStart(2, "0") +
+                String(now.getMinutes()).padStart(2, "0") +
+                random
+            );
+        }
+
+
+        /* ==========================================
+           SUBMIT ORDER
+        ========================================== */
+
+        checkoutForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const cart = getCart();
+
+
+                if (cart.length === 0) {
+
+                    showToast(
+                        "Your cart is empty. Please add items first.",
+                        "error"
+                    );
+
+                    setTimeout(() => {
+                        window.location.href = "menu.html";
+                    }, 1200);
+
+                    return;
+                }
+
+
+                const selectedType =
+                    document.querySelector(
+                        'input[name="orderType"]:checked'
+                    );
+
+
+                if (!selectedType) {
+
+                    showToast(
+                        "Please select an order type.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                if (!checkoutForm.checkValidity()) {
+
+                    checkoutForm.reportValidity();
+
+                    return;
+                }
+
+
+                const orderType =
+                    selectedType.value;
+
+
+                const firstName =
+                    document.getElementById("firstName").value.trim();
+
+                const lastName =
+                    document.getElementById("lastName").value.trim();
+
+                const email =
+                    document.getElementById("email").value.trim();
+
+                const phone =
+                    document.getElementById("phone").value.trim();
+
+
+                const subtotal =
+                    getCartSubtotal();
+
+                const gst =
+                    Math.round(subtotal * 0.05);
+
+                const deliveryFee =
+                    orderType === "Delivery" ? 50 : 0;
+
+                const total =
+                    subtotal +
+                    gst +
+                    deliveryFee;
+
+
+                const paymentMethod =
+                    document.querySelector(
+                        'input[name="paymentMethod"]:checked'
+                    )?.value || "Cash";
+
+
+                const orderNumber =
+                    generateOrderNumber();
+
+
+                const now =
+                    new Date();
+
+
+                const order = {
+
+                    id:
+                        "order_" +
+                        Date.now(),
+
+                    orderNumber:
+
+                        orderNumber,
+
+                    createdAt:
+                        now.toISOString(),
+
+                    updatedAt:
+                        now.toISOString(),
+
+                    status:
+                        "PLACED",
+
+                    orderType:
+                        orderType,
+
+                    customer: {
+
+                        firstName:
+                            firstName,
+
+                        lastName:
+                            lastName,
+
+                        name:
+                            `${firstName} ${lastName}`.trim(),
+
+                        email:
+                            email,
+
+                        phone:
+                            phone
+                    },
+
+                    tableNumber:
+                        orderType === "Dine-In"
+                            ? tableNumber.value
+                            : "",
+
+                    guests:
+                        orderType === "Dine-In"
+                            ? Number(guests.value)
+                            : 0,
+
+                    pickupTime:
+                        orderType === "Takeaway"
+                            ? pickupTime.value
+                            : "",
+
+                    address:
+                        orderType === "Delivery"
+                            ? address.value.trim()
+                            : "",
+
+                    city:
+                        orderType === "Delivery"
+                            ? city.value.trim()
+                            : "",
+
+                    pincode:
+                        orderType === "Delivery"
+                            ? pincode.value.trim()
+                            : "",
+
+                    instructions:
+                        document
+                            .getElementById("instructions")
+                            .value
+                            .trim(),
+
+                    paymentMethod:
+                        paymentMethod,
+
+                    paymentStatus:
+                        "PENDING",
+
+                    items:
+                        cart.map(item => ({
+
+                            id:
+                                item.id || "",
+
+                            name:
+                                item.name || "Menu Item",
+
+                            price:
+                                Number(item.price) || 0,
+
+                            quantity:
+                                Number(item.quantity) || 1,
+
+                            image:
+                                item.image || "",
+
+                            category:
+                                item.category || ""
+                        })),
+
+                    pricing: {
+
+                        subtotal:
+                            subtotal,
+
+                        gst:
+                            gst,
+
+                        deliveryFee:
+                            deliveryFee,
+
+                        total:
+                            total
+                    },
+
+                    subtotal:
+                        subtotal,
+
+                    tax:
+                        gst,
+
+                    deliveryFee:
+                        deliveryFee,
+
+                    total:
+                        total
+                };
+
+
+                /* SAVE ORDER */
+
+                const orders =
+                    getOrders();
+
+                orders.unshift(order);
+
+                saveOrders(orders);
+
+
+                /* SAVE LAST ORDER */
+
+                localStorage.setItem(
+                    "arysCafeLastOrder",
+                    JSON.stringify(order)
+                );
+
+
+                /* SAVE CURRENT USER */
+
+                localStorage.setItem(
+                    "arysCafeLoggedIn",
+                    "true"
+                );
+
+                localStorage.setItem(
+                    "arysCafeRole",
+                    "customer"
+                );
+
+
+                /* SAVE ORDER TYPE */
+
+                localStorage.setItem(
+                    ORDER_TYPE_KEY,
+                    orderType
+                );
+
+
+                /* CLEAR CART */
+
+                saveCart([]);
+
+
+                /* CLEAR CHECKOUT DATA */
+
+                localStorage.removeItem(
+                    CHECKOUT_KEY
+                );
+
+
+                showToast(
+                    `Order ${orderNumber} placed successfully!`
+                );
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "orders.html";
+
+                }, 900);
+
+            }
+        );
+
+
+        /* ==========================================
+           ORDER TYPE EVENTS
+        ========================================== */
+
+        dineInRadio.addEventListener(
+            "change",
+            updateOrderTypeSections
+        );
+
+        takeawayRadio.addEventListener(
+            "change",
+            updateOrderTypeSections
+        );
+
+        deliveryRadio.addEventListener(
+            "change",
+            updateOrderTypeSections
+        );
+
+
+        /* ==========================================
+           PHONE VALIDATION
+        ========================================== */
+
+        document
+            .getElementById("phone")
+            .addEventListener(
+                "input",
+                function() {
+
+                    this.value =
+                        this.value
+                            .replace(/\D/g, "")
+                            .slice(0, 10);
+                }
+            );
+
+
+        /* ==========================================
+           PINCODE VALIDATION
+        ========================================== */
+
+        document
+            .getElementById("pincode")
+            .addEventListener(
+                "input",
+                function() {
+
+                    this.value =
+                        this.value
+                            .replace(/\D/g, "")
+                            .slice(0, 6);
+                }
+            );
+
+
+        /* ==========================================
+           MOBILE MENU
+        ========================================== */
+
+        const mobileMenuBtn =
+            document.getElementById("mobileMenuBtn");
+
+        const navContainer =
+            document.getElementById("navContainer");
+
+
+        mobileMenuBtn.addEventListener(
+            "click",
+            function() {
+
+                navContainer.classList.toggle(
+                    "menu-open"
+                );
+
+                this.textContent =
+                    navContainer.classList.contains("menu-open")
+                        ? "✕"
+                        : "☰";
+            }
+        );
+
+
+        document
+            .querySelectorAll(".nav-links a")
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        navContainer.classList.remove(
+                            "menu-open"
+                        );
+
+                        mobileMenuBtn.textContent =
+                            "☰";
+                    }
+                );
+
+            });
+
+
+        /* ==========================================
+           FOOTER YEAR
+        ========================================== */
+
+        document.getElementById(
+            "footerYear"
+        ).textContent =
+            new Date().getFullYear();
+
+
+        /* ==========================================
+           INITIAL LOAD
+        ========================================== */
+
+        loadSavedData();
+
+        updateSummary();
+
+    </script>
+
+</body>
+</html>

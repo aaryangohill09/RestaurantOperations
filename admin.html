@@ -1,0 +1,2421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | ARY’S CAFE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #f7f2e8;
+            --cream-light: #fbf8f1;
+            --white: #ffffff;
+            --brown: #3a2117;
+            --brown-dark: #24130d;
+            --brown-light: #5b3828;
+            --gold: #a47c42;
+            --gold-light: #c6a66a;
+            --border: #e3d9c8;
+            --text: #2d211b;
+            --muted: #796d63;
+            --green: #4e7658;
+            --red: #a84d43;
+            --blue: #526d87;
+            --orange: #9b6d27;
+            --shadow: 0 15px 45px rgba(54, 34, 22, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--cream);
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 82px;
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid rgba(58, 33, 23, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav-container {
+            width: min(1250px, calc(100% - 40px));
+            height: 100%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(164, 124, 66, 0.45);
+            box-shadow: 0 4px 12px rgba(58, 33, 23, 0.12);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .brand-name {
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .brand-tagline {
+            margin-top: 5px;
+            color: var(--gold);
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .admin-nav a {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            color: var(--brown);
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding-left: 18px;
+            border-left: 1px solid var(--border);
+        }
+
+        .admin-avatar {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--brown);
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .admin-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-user-name {
+            color: var(--brown);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .admin-user-role {
+            margin-top: 2px;
+            color: var(--gold);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            min-height: 34px;
+            padding: 0 12px;
+            border: 1px solid #e0cbc5;
+            border-radius: 5px;
+            background: var(--white);
+            color: var(--red);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            background: #fff5f3;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--white);
+            color: var(--brown);
+            font-size: 19px;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .dashboard {
+            padding: 45px 0 75px;
+        }
+
+        .dashboard-container {
+            width: min(1250px, calc(100% - 40px));
+            margin: auto;
+        }
+
+        .dashboard-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            margin-bottom: 6px;
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .dashboard-heading h1 {
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 46px;
+            line-height: 1;
+        }
+
+        .dashboard-heading p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .date-box {
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: var(--white);
+            color: var(--brown);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            padding: 22px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #f1e7d6;
+            font-size: 17px;
+        }
+
+        .stat-value {
+            margin-top: 13px;
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-note {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .stat-note.green {
+            color: var(--green);
+        }
+
+        .stat-note.orange {
+            color: var(--orange);
+        }
+
+        .stat-note.red {
+            color: var(--red);
+        }
+
+        /* =========================
+           MANAGEMENT
+        ========================= */
+
+        .section-title {
+            margin-bottom: 15px;
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .management-card {
+            min-height: 145px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            box-shadow: var(--shadow);
+            transition: 0.25s ease;
+        }
+
+        .management-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold);
+            box-shadow: 0 18px 45px rgba(54, 34, 22, 0.12);
+        }
+
+        .management-icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            background: #f3eadb;
+            font-size: 20px;
+        }
+
+        .management-card h3 {
+            margin-top: 15px;
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 21px;
+        }
+
+        .management-card p {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+            line-height: 1.5;
+        }
+
+        .manage-arrow {
+            margin-top: 12px;
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           CONTENT GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 0.9fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .panel {
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-header {
+            padding: 19px 21px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid var(--border);
+            background: #fcfaf6;
+        }
+
+        .panel-header h2 {
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+        }
+
+        .view-all {
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .panel-body {
+            padding: 0 21px;
+        }
+
+        /* =========================
+           RECENT ORDERS
+        ========================= */
+
+        .recent-order {
+            padding: 17px 0;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 18px;
+            border-bottom: 1px solid #eee8de;
+        }
+
+        .recent-order:last-child {
+            border-bottom: none;
+        }
+
+        .recent-order-main {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .recent-order-icon {
+            width: 39px;
+            height: 39px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            background: #f2e9da;
+            font-size: 17px;
+        }
+
+        .recent-order-number {
+            color: var(--brown);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .recent-order-customer {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .recent-order-type {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .recent-order-total {
+            color: var(--brown);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .small-status {
+            padding: 6px 9px;
+            border-radius: 15px;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .small-status.placed {
+            color: #896536;
+            background: #f3eadb;
+        }
+
+        .small-status.confirmed {
+            color: var(--blue);
+            background: #e8eef5;
+        }
+
+        .small-status.preparing {
+            color: var(--orange);
+            background: #fff0d6;
+        }
+
+        .small-status.ready {
+            color: var(--green);
+            background: #e6f1e8;
+        }
+
+        .small-status.completed {
+            color: #626262;
+            background: #e8e8e8;
+        }
+
+        .small-status.cancelled {
+            color: var(--red);
+            background: #f7e5e2;
+        }
+
+        /* =========================
+           INVENTORY
+        ========================= */
+
+        .inventory-row {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee8de;
+        }
+
+        .inventory-row:last-child {
+            border-bottom: none;
+        }
+
+        .inventory-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 7px;
+        }
+
+        .inventory-name {
+            color: var(--brown);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .inventory-count {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .stock-bar {
+            width: 100%;
+            height: 6px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #eee7dc;
+        }
+
+        .stock-progress {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .stock-progress.good {
+            width: 82%;
+            background: var(--green);
+        }
+
+        .stock-progress.medium {
+            width: 51%;
+            background: var(--gold);
+        }
+
+        .stock-progress.low {
+            width: 24%;
+            background: var(--red);
+        }
+
+        .stock-status {
+            margin-top: 5px;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .stock-status.good {
+            color: var(--green);
+        }
+
+        .stock-status.medium {
+            color: var(--orange);
+        }
+
+        .stock-status.low {
+            color: var(--red);
+        }
+
+        /* =========================
+           TABLES
+        ========================= */
+
+        .tables-panel {
+            margin-bottom: 25px;
+        }
+
+        .tables-grid {
+            padding: 21px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .table-card {
+            padding: 17px 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--cream-light);
+        }
+
+        .table-number {
+            color: var(--brown);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .table-status {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 5px 8px;
+            border-radius: 12px;
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .table-status.available {
+            color: var(--green);
+            background: #e6f1e8;
+        }
+
+        .table-status.occupied {
+            color: var(--red);
+            background: #f7e5e2;
+        }
+
+        .table-status.reserved {
+            color: var(--orange);
+            background: #fff0d6;
+        }
+
+        .table-seats {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 8px;
+        }
+
+        /* =========================
+           SYSTEM STATUS
+        ========================= */
+
+        .system-panel {
+            padding: 21px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .system-item {
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: var(--cream-light);
+        }
+
+        .system-item-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .system-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 0 4px rgba(78, 118, 88, 0.10);
+        }
+
+        .system-item strong {
+            color: var(--brown);
+            font-size: 10px;
+        }
+
+        .system-item p {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 8px;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 3000;
+            min-width: 270px;
+            padding: 14px 17px;
+            border-radius: 7px;
+            background: var(--brown);
+            color: var(--white);
+            font-size: 11px;
+            line-height: 1.5;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+            .management-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tables-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .admin-nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-container.menu-open {
+                position: relative;
+            }
+
+            .nav-container.menu-open .admin-nav {
+                position: absolute;
+                top: 82px;
+                left: 0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 10px;
+                background: var(--white);
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+
+            .nav-container.menu-open .admin-nav > a {
+                padding: 12px 14px;
+            }
+
+            .nav-container.menu-open .admin-user {
+                padding: 12px 14px;
+                border-left: none;
+                border-top: 1px solid var(--border);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tables-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .system-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .nav-container,
+            .dashboard-container {
+                width: calc(100% - 28px);
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .dashboard {
+                padding-top: 32px;
+            }
+
+            .dashboard-heading {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-heading h1 {
+                font-size: 40px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .management-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tables-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .recent-order {
+                grid-template-columns: 1fr auto;
+            }
+
+            .recent-order-type {
+                display: none;
+            }
+
+            .system-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .toast {
+                left: 14px;
+                right: 14px;
+                bottom: 14px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .management-card {
+                min-height: 125px;
+            }
+
+            .panel-body {
+                padding: 0 15px;
+            }
+
+            .tables-grid {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="site-header">
+
+        <div class="nav-container" id="navContainer">
+
+            <a href="admin.html" class="brand">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY’S CAFE Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <span class="brand-name">
+                        ARY’S CAFE
+                    </span>
+
+                    <span class="brand-tagline">
+                        GOOD FOOD. GREAT MOMENTS.
+                    </span>
+                </div>
+
+            </a>
+
+
+            <nav class="admin-nav">
+
+                <a
+                    href="admin.html"
+                    class="active"
+                >
+                    Dashboard
+                </a>
+
+                <a href="menu.html">
+                    Menu
+                </a>
+
+                <a href="kitchen.html">
+                    Kitchen
+                </a>
+
+                <a href="tables.html">
+                    Tables
+                </a>
+
+                <a href="inventory.html">
+                    Inventory
+                </a>
+
+                <a href="staff.html">
+                    Staff
+                </a>
+
+
+                <div class="admin-user">
+
+                    <div class="admin-avatar">
+                        A
+                    </div>
+
+                    <div class="admin-user-info">
+
+                        <span class="admin-user-name">
+                            Admin
+                        </span>
+
+                        <span class="admin-user-role">
+                            Administrator
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="logout-btn"
+                        id="logoutBtn"
+                    >
+                        Logout
+                    </button>
+
+                </div>
+
+            </nav>
+
+
+            <button
+                type="button"
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         DASHBOARD
+    ========================= -->
+
+    <main class="dashboard">
+
+        <div class="dashboard-container">
+
+
+            <!-- HEADING -->
+
+            <div class="dashboard-heading">
+
+                <div>
+
+                    <div class="eyebrow">
+                        ARY’S CAFE • OPERATIONS
+                    </div>
+
+                    <h1>
+                        Admin Dashboard
+                    </h1>
+
+                    <p>
+                        Manage restaurant operations, orders,
+                        kitchen, tables, inventory and staff.
+                    </p>
+
+                </div>
+
+
+                <div class="date-box" id="currentDate">
+                    Loading date...
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 STATS
+            ========================= -->
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Today's Orders
+                        </span>
+
+                        <div class="stat-icon">
+                            🧾
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="todayOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-note green">
+                        Orders received today
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Active Orders
+                        </span>
+
+                        <div class="stat-icon">
+                            🔥
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="activeOrders"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-note orange">
+                        Currently in progress
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Available Tables
+                        </span>
+
+                        <div class="stat-icon">
+                            🪑
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="availableTables"
+                    >
+                        7
+                    </div>
+
+                    <div class="stat-note green">
+                        Ready for guests
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Low Stock Items
+                        </span>
+
+                        <div class="stat-icon">
+                            📦
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="lowStockItems"
+                    >
+                        2
+                    </div>
+
+                    <div class="stat-note red">
+                        Need attention
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 MANAGEMENT
+            ========================= -->
+
+            <section>
+
+                <h2 class="section-title">
+                    Quick Management
+                </h2>
+
+
+                <div class="management-grid">
+
+                    <a
+                        href="menu.html"
+                        class="management-card"
+                    >
+
+                        <div>
+
+                            <div class="management-icon">
+                                🍽️
+                            </div>
+
+                            <h3>
+                                Menu
+                            </h3>
+
+                            <p>
+                                Manage food items,
+                                prices and categories.
+                            </p>
+
+                        </div>
+
+                        <div class="manage-arrow">
+                            Manage Menu →
+                        </div>
+
+                    </a>
+
+
+                    <a
+                        href="kitchen.html"
+                        class="management-card"
+                    >
+
+                        <div>
+
+                            <div class="management-icon">
+                                👨‍🍳
+                            </div>
+
+                            <h3>
+                                Kitchen
+                            </h3>
+
+                            <p>
+                                Control preparation and
+                                order workflow.
+                            </p>
+
+                        </div>
+
+                        <div class="manage-arrow">
+                            Open Kitchen →
+                        </div>
+
+                    </a>
+
+
+                    <a
+                        href="tables.html"
+                        class="management-card"
+                    >
+
+                        <div>
+
+                            <div class="management-icon">
+                                🪑
+                            </div>
+
+                            <h3>
+                                Tables
+                            </h3>
+
+                            <p>
+                                Monitor seating and
+                                table availability.
+                            </p>
+
+                        </div>
+
+                        <div class="manage-arrow">
+                            Manage Tables →
+                        </div>
+
+                    </a>
+
+
+                    <a
+                        href="inventory.html"
+                        class="management-card"
+                    >
+
+                        <div>
+
+                            <div class="management-icon">
+                                📦
+                            </div>
+
+                            <h3>
+                                Inventory
+                            </h3>
+
+                            <p>
+                                Track ingredients,
+                                stock and availability.
+                            </p>
+
+                        </div>
+
+                        <div class="manage-arrow">
+                            Manage Inventory →
+                        </div>
+
+                    </a>
+
+
+                    <a
+                        href="staff.html"
+                        class="management-card"
+                    >
+
+                        <div>
+
+                            <div class="management-icon">
+                                👥
+                            </div>
+
+                            <h3>
+                                Staff
+                            </h3>
+
+                            <p>
+                                Manage restaurant staff
+                                and their roles.
+                            </p>
+
+                        </div>
+
+                        <div class="manage-arrow">
+                            Manage Staff →
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 CONTENT
+            ========================= -->
+
+            <div class="content-grid">
+
+
+                <!-- RECENT ORDERS -->
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <h2>
+                            Recent Orders
+                        </h2>
+
+                        <a
+                            href="kitchen.html"
+                            class="view-all"
+                        >
+                            Kitchen →
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="panel-body"
+                        id="recentOrders"
+                    ></div>
+
+                </section>
+
+
+                <!-- INVENTORY -->
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <h2>
+                            Inventory Status
+                        </h2>
+
+                        <a
+                            href="inventory.html"
+                            class="view-all"
+                        >
+                            View All →
+                        </a>
+
+                    </div>
+
+
+                    <div class="panel-body">
+
+                        <div class="inventory-row">
+
+                            <div class="inventory-top">
+
+                                <span class="inventory-name">
+                                    Coffee Beans
+                                </span>
+
+                                <span class="inventory-count">
+                                    82%
+                                </span>
+
+                            </div>
+
+                            <div class="stock-bar">
+                                <div class="stock-progress good"></div>
+                            </div>
+
+                            <div class="stock-status good">
+                                Good Stock
+                            </div>
+
+                        </div>
+
+
+                        <div class="inventory-row">
+
+                            <div class="inventory-top">
+
+                                <span class="inventory-name">
+                                    Fresh Milk
+                                </span>
+
+                                <span class="inventory-count">
+                                    51%
+                                </span>
+
+                            </div>
+
+                            <div class="stock-bar">
+                                <div class="stock-progress medium"></div>
+                            </div>
+
+                            <div class="stock-status medium">
+                                Medium Stock
+                            </div>
+
+                        </div>
+
+
+                        <div class="inventory-row">
+
+                            <div class="inventory-top">
+
+                                <span class="inventory-name">
+                                    Mozzarella Cheese
+                                </span>
+
+                                <span class="inventory-count">
+                                    24%
+                                </span>
+
+                            </div>
+
+                            <div class="stock-bar">
+                                <div class="stock-progress low"></div>
+                            </div>
+
+                            <div class="stock-status low">
+                                Low Stock
+                            </div>
+
+                        </div>
+
+
+                        <div class="inventory-row">
+
+                            <div class="inventory-top">
+
+                                <span class="inventory-name">
+                                    Burger Buns
+                                </span>
+
+                                <span class="inventory-count">
+                                    38%
+                                </span>
+
+                            </div>
+
+                            <div class="stock-bar">
+                                <div class="stock-progress low"></div>
+                            </div>
+
+                            <div class="stock-status low">
+                                Low Stock
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =========================
+                 TABLE OVERVIEW
+            ========================= -->
+
+            <section class="panel tables-panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        Table Overview
+                    </h2>
+
+                    <a
+                        href="tables.html"
+                        class="view-all"
+                    >
+                        Manage Tables →
+                    </a>
+
+                </div>
+
+
+                <div class="tables-grid">
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T01
+                        </div>
+
+                        <div class="table-status available">
+                            Available
+                        </div>
+
+                        <div class="table-seats">
+                            2 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T02
+                        </div>
+
+                        <div class="table-status occupied">
+                            Occupied
+                        </div>
+
+                        <div class="table-seats">
+                            4 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T03
+                        </div>
+
+                        <div class="table-status available">
+                            Available
+                        </div>
+
+                        <div class="table-seats">
+                            2 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T04
+                        </div>
+
+                        <div class="table-status occupied">
+                            Occupied
+                        </div>
+
+                        <div class="table-seats">
+                            4 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T05
+                        </div>
+
+                        <div class="table-status reserved">
+                            Reserved
+                        </div>
+
+                        <div class="table-seats">
+                            6 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T06
+                        </div>
+
+                        <div class="table-status available">
+                            Available
+                        </div>
+
+                        <div class="table-seats">
+                            4 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T07
+                        </div>
+
+                        <div class="table-status available">
+                            Available
+                        </div>
+
+                        <div class="table-seats">
+                            2 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T08
+                        </div>
+
+                        <div class="table-status occupied">
+                            Occupied
+                        </div>
+
+                        <div class="table-seats">
+                            4 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T09
+                        </div>
+
+                        <div class="table-status available">
+                            Available
+                        </div>
+
+                        <div class="table-seats">
+                            6 Seats
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-card">
+
+                        <div class="table-number">
+                            T10
+                        </div>
+
+                        <div class="table-status available">
+                            Available
+                        </div>
+
+                        <div class="table-seats">
+                            4 Seats
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 SYSTEM STATUS
+            ========================= -->
+
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        System Status
+                    </h2>
+
+                    <span class="view-all">
+                        LIVE
+                    </span>
+
+                </div>
+
+
+                <div class="system-panel">
+
+                    <div class="system-item">
+
+                        <div class="system-item-top">
+
+                            <span class="system-dot"></span>
+
+                            <strong>
+                                Ordering System
+                            </strong>
+
+                        </div>
+
+                        <p>
+                            Online and accepting orders
+                        </p>
+
+                    </div>
+
+
+                    <div class="system-item">
+
+                        <div class="system-item-top">
+
+                            <span class="system-dot"></span>
+
+                            <strong>
+                                Kitchen
+                            </strong>
+
+                        </div>
+
+                        <p>
+                            Kitchen operations online
+                        </p>
+
+                    </div>
+
+
+                    <div class="system-item">
+
+                        <div class="system-item-top">
+
+                            <span class="system-dot"></span>
+
+                            <strong>
+                                Table Management
+                            </strong>
+
+                        </div>
+
+                        <p>
+                            Table status synchronized
+                        </p>
+
+                    </div>
+
+
+                    <div class="system-item">
+
+                        <div class="system-item-top">
+
+                            <span class="system-dot"></span>
+
+                            <strong>
+                                Inventory
+                            </strong>
+
+                        </div>
+
+                        <p>
+                            Stock monitoring active
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast"
+    ></div>
+
+
+    <script>
+
+        /* ==========================================
+           STORAGE
+        ========================================== */
+
+        const ORDERS_KEY =
+            "arysCafeOrders";
+
+
+        /* ==========================================
+           ELEMENTS
+        ========================================== */
+
+        const todayOrdersElement =
+            document.getElementById(
+                "todayOrders"
+            );
+
+        const activeOrdersElement =
+            document.getElementById(
+                "activeOrders"
+            );
+
+        const availableTablesElement =
+            document.getElementById(
+                "availableTables"
+            );
+
+        const recentOrdersElement =
+            document.getElementById(
+                "recentOrders"
+            );
+
+        const currentDateElement =
+            document.getElementById(
+                "currentDate"
+            );
+
+        const toast =
+            document.getElementById(
+                "toast"
+            );
+
+
+        /* ==========================================
+           STORAGE HELPERS
+        ========================================== */
+
+        function getOrders() {
+
+            try {
+
+                const orders =
+                    JSON.parse(
+                        localStorage.getItem(
+                            ORDERS_KEY
+                        )
+                    );
+
+                return Array.isArray(orders)
+                    ? orders
+                    : [];
+
+            } catch (error) {
+
+                return [];
+            }
+        }
+
+
+        /* ==========================================
+           FORMAT
+        ========================================== */
+
+        function formatCurrency(amount) {
+
+            return "₹" +
+                Number(amount || 0)
+                    .toLocaleString("en-IN");
+        }
+
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        function normalizeStatus(status) {
+
+            return String(
+                status || "PLACED"
+            )
+                .toUpperCase()
+                .replace(/-/g, "_")
+                .replace(/\s+/g, "_");
+        }
+
+
+        function readableStatus(status) {
+
+            return String(
+                status || "PLACED"
+            )
+                .replace(/_/g, " ")
+                .toLowerCase()
+                .replace(
+                    /\b\w/g,
+                    letter =>
+                        letter.toUpperCase()
+                );
+        }
+
+
+        function formatDate(dateValue) {
+
+            const date =
+                new Date(dateValue);
+
+            if (
+                !dateValue ||
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+                return "Today";
+            }
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short"
+                }
+            );
+        }
+
+
+        /* ==========================================
+           DATE
+        ========================================== */
+
+        function updateDate() {
+
+            const now =
+                new Date();
+
+            currentDateElement.textContent =
+                now.toLocaleDateString(
+                    "en-IN",
+                    {
+                        weekday: "short",
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    }
+                );
+        }
+
+
+        /* ==========================================
+           TODAY ORDERS
+        ========================================== */
+
+        function isToday(dateValue) {
+
+            if (!dateValue) {
+                return false;
+            }
+
+            const date =
+                new Date(dateValue);
+
+            const now =
+                new Date();
+
+            return (
+                date.getDate() ===
+                    now.getDate() &&
+                date.getMonth() ===
+                    now.getMonth() &&
+                date.getFullYear() ===
+                    now.getFullYear()
+            );
+        }
+
+
+        /* ==========================================
+           ACTIVE STATUS
+        ========================================== */
+
+        function isActiveStatus(status) {
+
+            const activeStatuses = [
+                "PLACED",
+                "CONFIRMED",
+                "PREPARING",
+                "READY",
+                "SERVED",
+                "PICKED_UP",
+                "OUT_FOR_DELIVERY",
+                "DELIVERED"
+            ];
+
+            return activeStatuses.includes(
+                normalizeStatus(status)
+            );
+        }
+
+
+        /* ==========================================
+           DASHBOARD STATS
+        ========================================== */
+
+        function updateStats() {
+
+            const orders =
+                getOrders();
+
+
+            const todayOrders =
+                orders.filter(
+                    order =>
+                        isToday(
+                            order.createdAt ||
+                            order.date
+                        )
+                );
+
+
+            const activeOrders =
+                orders.filter(
+                    order =>
+                        isActiveStatus(
+                            order.status
+                        )
+                );
+
+
+            todayOrdersElement.textContent =
+                todayOrders.length;
+
+
+            activeOrdersElement.textContent =
+                activeOrders.length;
+
+
+            /*
+             * Current sample table layout:
+             * T01, T03, T06, T07, T09, T10
+             * are available = 6.
+             *
+             * Keep 7 as fallback for initial
+             * dashboard state if no orders exist.
+             */
+
+            availableTablesElement.textContent =
+                orders.length > 0
+                    ? "6"
+                    : "7";
+        }
+
+
+        /* ==========================================
+           RECENT ORDERS
+        ========================================== */
+
+        function renderRecentOrders() {
+
+            const orders =
+                getOrders();
+
+
+            if (orders.length === 0) {
+
+                recentOrdersElement.innerHTML = `
+
+                    <div style="
+                        padding:35px 0;
+                        text-align:center;
+                        color:#796d63;
+                        font-size:11px;
+                    ">
+
+                        <div style="
+                            font-size:28px;
+                            margin-bottom:10px;
+                        ">
+                            🧾
+                        </div>
+
+                        No orders yet.
+
+                        <div style="
+                            margin-top:6px;
+                            font-size:9px;
+                        ">
+                            New customer orders will appear here.
+                        </div>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            recentOrdersElement.innerHTML = "";
+
+
+            orders
+                .slice(0, 6)
+                .forEach(
+                    order => {
+
+                        const status =
+                            normalizeStatus(
+                                order.status
+                            );
+
+
+                        const customer =
+                            order.customer?.name ||
+                            (
+                                `${order.customer?.firstName || ""}
+                                ${order.customer?.lastName || ""}`
+                            ).trim() ||
+                            "Customer";
+
+
+                        const orderNumber =
+                            order.orderNumber ||
+                            order.id ||
+                            "ARY-ORDER";
+
+
+                        const total =
+                            order.total ??
+                            order.pricing?.total ??
+                            0;
+
+
+                        let icon =
+                            "🛵";
+
+                        if (
+                            order.orderType ===
+                            "Dine-In"
+                        ) {
+                            icon = "🍽️";
+                        }
+
+                        if (
+                            order.orderType ===
+                            "Takeaway"
+                        ) {
+                            icon = "🥡";
+                        }
+
+
+                        recentOrdersElement
+                            .insertAdjacentHTML(
+                                "beforeend",
+                                `
+
+                                    <div class="recent-order">
+
+                                        <div class="recent-order-main">
+
+                                            <div class="recent-order-icon">
+                                                ${icon}
+                                            </div>
+
+                                            <div>
+
+                                                <div class="recent-order-number">
+                                                    ${escapeHtml(
+                                                        orderNumber
+                                                    )}
+                                                </div>
+
+                                                <div class="recent-order-customer">
+                                                    ${escapeHtml(
+                                                        customer
+                                                    )}
+                                                    •
+                                                    ${formatDate(
+                                                        order.createdAt
+                                                    )}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="recent-order-type">
+                                            ${escapeHtml(
+                                                order.orderType ||
+                                                "Delivery"
+                                            )}
+                                        </div>
+
+
+                                        <div style="
+                                            display:flex;
+                                            align-items:center;
+                                            gap:10px;
+                                        ">
+
+                                            <div class="recent-order-total">
+                                                ${formatCurrency(
+                                                    total
+                                                )}
+                                            </div>
+
+                                            <div class="
+                                                small-status
+                                                ${status.toLowerCase()}
+                                            ">
+                                                ${escapeHtml(
+                                                    readableStatus(
+                                                        status
+                                                    )
+                                                )}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                `
+                            );
+                    }
+                );
+        }
+
+
+        /* ==========================================
+           LOW STOCK
+        ========================================== */
+
+        function updateLowStockCount() {
+
+            /*
+             * Sample inventory currently contains
+             * two low-stock products.
+             *
+             * This will be connected to the backend
+             * inventory API later.
+             */
+
+            const lowStock =
+                document.getElementById(
+                    "lowStockItems"
+                );
+
+            lowStock.textContent = "2";
+        }
+
+
+        /* ==========================================
+           LOGOUT
+        ========================================== */
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                function() {
+
+                    localStorage.removeItem(
+                        "arysCafeLoggedIn"
+                    );
+
+                    localStorage.removeItem(
+                        "arysCafeRole"
+                    );
+
+
+                    showToast(
+                        "Logged out successfully."
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            window.location.href =
+                                "login.html";
+
+                        },
+                        700
+                    );
+                }
+            );
+
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+
+        function showToast(message) {
+
+            toast.textContent =
+                message;
+
+            toast.classList.add(
+                "show"
+            );
+
+            clearTimeout(
+                window.toastTimer
+            );
+
+            window.toastTimer =
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2800
+                );
+        }
+
+
+        /* ==========================================
+           MOBILE MENU
+        ========================================== */
+
+        const mobileMenuBtn =
+            document.getElementById(
+                "mobileMenuBtn"
+            );
+
+        const navContainer =
+            document.getElementById(
+                "navContainer"
+            );
+
+
+        mobileMenuBtn.addEventListener(
+            "click",
+            function() {
+
+                navContainer.classList.toggle(
+                    "menu-open"
+                );
+
+                this.textContent =
+                    navContainer.classList.contains(
+                        "menu-open"
+                    )
+                        ? "✕"
+                        : "☰";
+            }
+        );
+
+
+        document
+            .querySelectorAll(".admin-nav > a")
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        () => {
+
+                            navContainer.classList.remove(
+                                "menu-open"
+                            );
+
+                            mobileMenuBtn.textContent =
+                                "☰";
+                        }
+                    );
+
+                }
+            );
+
+
+        /* ==========================================
+           INITIALIZE
+        ========================================== */
+
+        updateDate();
+
+        updateStats();
+
+        updateLowStockCount();
+
+        renderRecentOrders();
+
+
+        /* ==========================================
+           REFRESH DASHBOARD
+        ========================================== */
+
+        window.addEventListener(
+            "storage",
+            function(event) {
+
+                if (
+                    event.key ===
+                    ORDERS_KEY
+                ) {
+
+                    updateStats();
+
+                    renderRecentOrders();
+                }
+            }
+        );
+
+    </script>
+
+</body>
+</html>

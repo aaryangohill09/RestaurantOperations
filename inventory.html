@@ -1,0 +1,3464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventory | ARY’S CAFE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brown: #3b2418;
+            --dark-brown: #24150f;
+            --gold: #b08a55;
+            --light-gold: #d0b27a;
+            --cream: #f6f0e7;
+            --soft-cream: #fbf8f2;
+            --white: #ffffff;
+            --text: #2d211a;
+            --muted: #766c64;
+            --border: #e7ddd0;
+
+            --good: #3e7654;
+            --good-bg: #e8f4ec;
+
+            --low: #a87524;
+            --low-bg: #faf1dc;
+
+            --out: #a64f3d;
+            --out-bg: #fae9e5;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--soft-cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 82px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 42px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 230px;
+        }
+
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #d9c6a9;
+        }
+
+        .brand-text {
+            line-height: 1;
+        }
+
+        .brand-name {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--brown);
+        }
+
+        .brand-tagline {
+            margin-top: 4px;
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 29px;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: #655b54;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 30px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--brown);
+        }
+
+        .nav-links a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .nav-right {
+            min-width: 230px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 17px;
+        }
+
+        .role-badge {
+            background: var(--cream);
+            color: var(--brown);
+            border: 1px solid var(--border);
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            border: 1px solid #cdbda9;
+            background: transparent;
+            color: var(--brown);
+            padding: 9px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--brown);
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            border: 0;
+            background: transparent;
+            font-size: 25px;
+            color: var(--brown);
+        }
+
+        /* =========================
+           PAGE HERO
+        ========================= */
+
+        .page-header {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(36, 21, 15, 0.98),
+                    rgba(59, 36, 24, 0.94)
+                ),
+                url("./home-hero.png") center / cover;
+            min-height: 245px;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-header::after {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border: 1px solid rgba(208, 178, 122, 0.16);
+            border-radius: 50%;
+            right: -100px;
+            top: -130px;
+        }
+
+        .page-header::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(208, 178, 122, 0.1);
+            border-radius: 50%;
+            right: 55px;
+            top: -60px;
+        }
+
+        .header-content {
+            width: min(1200px, calc(100% - 70px));
+            margin: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eyebrow {
+            color: var(--light-gold);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-family: "Cormorant Garamond", serif;
+            color: white;
+            font-size: clamp(42px, 5vw, 62px);
+            line-height: 0.95;
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.72);
+            max-width: 650px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main-container {
+            width: min(1200px, calc(100% - 70px));
+            margin: 0 auto;
+            padding: 45px 0 70px;
+        }
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 17px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 21px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(59, 36, 24, 0.04);
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            flex-shrink: 0;
+        }
+
+        .summary-icon.total {
+            background: #eee8df;
+        }
+
+        .summary-icon.available {
+            background: var(--good-bg);
+        }
+
+        .summary-icon.low {
+            background: var(--low-bg);
+        }
+
+        .summary-icon.out {
+            background: var(--out-bg);
+        }
+
+        .summary-info span {
+            display: block;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        .summary-info strong {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 30px;
+            color: var(--brown);
+            line-height: 1;
+        }
+
+        /* =========================
+           TOOLBAR
+        ========================= */
+
+        .toolbar {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 430px;
+        }
+
+        .search-box span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #95897f;
+            font-size: 14px;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 14px 0 39px;
+            outline: none;
+            color: var(--text);
+            background: #fffdfa;
+            font-size: 12px;
+        }
+
+        .search-box input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(176, 138, 85, 0.09);
+        }
+
+        .category-select {
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 34px 0 12px;
+            background: #fffdfa;
+            color: var(--brown);
+            outline: none;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .add-stock-btn {
+            height: 42px;
+            padding: 0 18px;
+            border: 1px solid var(--brown);
+            border-radius: 6px;
+            background: var(--brown);
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            transition: 0.25s ease;
+        }
+
+        .add-stock-btn:hover {
+            background: var(--dark-brown);
+        }
+
+        /* =========================
+           SECTION TITLE
+        ========================= */
+
+        .section-heading {
+            margin: 32px 0 18px;
+        }
+
+        .section-title {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 31px;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* =========================
+           INVENTORY TABLE
+        ========================= */
+
+        .inventory-wrapper {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(59, 36, 24, 0.035);
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inventory-table thead {
+            background: #f7f1e8;
+        }
+
+        .inventory-table th {
+            padding: 14px 17px;
+            text-align: left;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #776b61;
+            font-weight: 800;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .inventory-table td {
+            padding: 17px;
+            border-bottom: 1px solid #eee8df;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .inventory-table tbody tr {
+            transition: 0.2s ease;
+        }
+
+        .inventory-table tbody tr:hover {
+            background: #fffdf9;
+        }
+
+        .inventory-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .item-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 7px;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .item-name {
+            color: var(--brown);
+            font-weight: 800;
+            margin-bottom: 3px;
+        }
+
+        .item-category {
+            color: #9a8e83;
+            font-size: 9px;
+        }
+
+        .quantity {
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .unit {
+            color: var(--muted);
+            font-size: 9px;
+            margin-left: 3px;
+        }
+
+        .progress-area {
+            min-width: 130px;
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .progress-top span {
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        .progress-bar {
+            height: 5px;
+            width: 100%;
+            background: #eee8df;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-fill.good {
+            background: var(--good);
+        }
+
+        .progress-fill.low {
+            background: var(--low);
+        }
+
+        .progress-fill.out {
+            background: var(--out);
+        }
+
+        .stock-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 20px;
+            padding: 7px 10px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .stock-badge.good {
+            background: var(--good-bg);
+            color: var(--good);
+        }
+
+        .stock-badge.low {
+            background: var(--low-bg);
+            color: var(--low);
+        }
+
+        .stock-badge.out {
+            background: var(--out-bg);
+            color: var(--out);
+        }
+
+        .stock-badge::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .stock-badge.good::before {
+            background: var(--good);
+        }
+
+        .stock-badge.low::before {
+            background: var(--low);
+        }
+
+        .stock-badge.out::before {
+            background: var(--out);
+        }
+
+        .reorder-btn {
+            border: 1px solid #d8c9b9;
+            background: white;
+            color: var(--brown);
+            padding: 8px 11px;
+            border-radius: 5px;
+            font-size: 9px;
+            font-weight: 800;
+            transition: 0.2s ease;
+        }
+
+        .reorder-btn:hover {
+            background: var(--brown);
+            color: white;
+            border-color: var(--brown);
+        }
+
+        .reorder-btn.disabled {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .empty-row {
+            display: none;
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .empty-row h3 {
+            font-family: "Cormorant Garamond", serif;
+            color: var(--brown);
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .empty-row p {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================
+           LOW STOCK PANEL
+        ========================= */
+
+        .low-stock-section {
+            margin-top: 32px;
+        }
+
+        .alert-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 17px;
+        }
+
+        .alert-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 7px;
+            background: var(--low-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-content strong {
+            display: block;
+            color: var(--brown);
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .alert-content p {
+            color: var(--muted);
+            font-size: 9px;
+            line-height: 1.6;
+        }
+
+        .alert-action {
+            margin-top: 9px;
+            border: 0;
+            background: transparent;
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 800;
+            padding: 0;
+        }
+
+        .alert-action:hover {
+            color: var(--brown);
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(25, 15, 10, 0.62);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: min(520px, 100%);
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+            animation: modalIn 0.25s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: var(--brown);
+            color: white;
+            padding: 20px 23px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 27px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            border: 0;
+            background: transparent;
+            color: white;
+            font-size: 23px;
+            opacity: 0.75;
+        }
+
+        .close-modal:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 23px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            color: var(--brown);
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .form-group input,
+        .form-group select {
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 12px;
+            outline: none;
+            color: var(--text);
+            background: #fffdfa;
+            font-size: 11px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(176, 138, 85, 0.08);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            padding: 16px 23px;
+            border-top: 1px solid var(--border);
+            background: #fcfaf6;
+        }
+
+        .modal-btn {
+            padding: 10px 16px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .modal-btn.cancel {
+            border: 1px solid #d8cbbb;
+            background: white;
+            color: var(--brown);
+        }
+
+        .modal-btn.save {
+            border: 1px solid var(--brown);
+            background: var(--brown);
+            color: white;
+        }
+
+        .modal-btn.save:hover {
+            background: var(--dark-brown);
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: var(--brown);
+            color: white;
+            padding: 13px 18px;
+            border-radius: 7px;
+            font-size: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: var(--dark-brown);
+            color: white;
+            padding: 35px 0;
+        }
+
+        .footer-inner {
+            width: min(1200px, calc(100% - 70px));
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .footer-brand {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+            letter-spacing: 2px;
+        }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            color: rgba(255,255,255,0.65);
+            font-size: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-gold);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            .navbar {
+                padding: 0 25px;
+            }
+
+            .nav-left,
+            .nav-right {
+                min-width: 190px;
+            }
+
+            .nav-links {
+                gap: 17px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .alert-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 850px) {
+
+            .inventory-wrapper {
+                overflow-x: auto;
+            }
+
+            .inventory-table {
+                min-width: 850px;
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                height: 72px;
+                padding: 0 18px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 72px;
+                background: white;
+                border-bottom: 1px solid var(--border);
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 0;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+                padding: 13px 5px;
+                border-bottom: 1px solid #f0e9df;
+            }
+
+            .nav-links a.active::after {
+                display: none;
+            }
+
+            .nav-right {
+                min-width: auto;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                margin-left: 5px;
+            }
+
+            .role-badge {
+                display: none;
+            }
+
+            .header-content,
+            .main-container,
+            .footer-inner {
+                width: min(100% - 35px, 700px);
+            }
+
+            .toolbar {
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                max-width: none;
+                flex-basis: 100%;
+            }
+
+            .category-select {
+                flex: 1;
+            }
+
+            .add-stock-btn {
+                flex: 1;
+            }
+
+        }
+
+        @media (max-width: 580px) {
+
+            .brand-name {
+                font-size: 21px;
+            }
+
+            .brand-tagline {
+                font-size: 7px;
+            }
+
+            .nav-logo {
+                width: 43px;
+                height: 43px;
+            }
+
+            .nav-left {
+                min-width: 0;
+            }
+
+            .nav-right {
+                margin-left: auto;
+            }
+
+            .logout-btn {
+                padding: 8px 11px;
+                font-size: 10px;
+            }
+
+            .page-header {
+                min-height: 210px;
+            }
+
+            .page-title {
+                font-size: 45px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .summary-icon {
+                width: 39px;
+                height: 39px;
+                font-size: 17px;
+            }
+
+            .summary-info strong {
+                font-size: 25px;
+            }
+
+            .summary-info span {
+                font-size: 9px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                text-align: center;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <header class="navbar">
+
+        <div class="nav-left">
+
+            <a href="admin.html">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY’S CAFE"
+                    class="nav-logo"
+                >
+
+            </a>
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    ARY’S CAFE
+                </div>
+
+                <div class="brand-tagline">
+                    GOOD FOOD. GREAT MOMENTS.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav-links" id="navLinks">
+
+            <a href="admin.html">
+                Dashboard
+            </a>
+
+            <a href="menu.html">
+                Menu
+            </a>
+
+            <a href="kitchen.html">
+                Kitchen
+            </a>
+
+            <a href="tables.html">
+                Tables
+            </a>
+
+            <a href="inventory.html" class="active">
+                Inventory
+            </a>
+
+            <a href="staff.html">
+                Staff
+            </a>
+
+        </nav>
+
+
+        <div class="nav-right">
+
+            <span class="role-badge">
+                ADMIN
+            </span>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE HEADER
+    ========================= -->
+
+    <section class="page-header">
+
+        <div class="header-content">
+
+            <div class="eyebrow">
+                Restaurant Operations
+            </div>
+
+            <h1 class="page-title">
+                Inventory Management
+            </h1>
+
+            <p class="page-subtitle">
+                Track ingredients, monitor stock levels and identify
+                low-stock items before they affect restaurant operations.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main-container">
+
+
+        <!-- SUMMARY -->
+
+        <section class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-icon total">
+                    📦
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        Total Items
+                    </span>
+
+                    <strong id="totalItems">
+                        12
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon available">
+                    🟢
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        In Stock
+                    </span>
+
+                    <strong id="inStockItems">
+                        8
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon low">
+                    🟡
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        Low Stock
+                    </span>
+
+                    <strong id="lowStockItems">
+                        3
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon out">
+                    🔴
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        Out of Stock
+                    </span>
+
+                    <strong id="outStockItems">
+                        1
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <div class="search-box">
+
+                <span>
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search inventory items..."
+                    oninput="searchInventory()"
+                >
+
+            </div>
+
+
+            <select
+                class="category-select"
+                id="categoryFilter"
+                onchange="filterInventory()"
+            >
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="vegetables">
+                    Vegetables
+                </option>
+
+                <option value="dairy">
+                    Dairy
+                </option>
+
+                <option value="meat">
+                    Meat
+                </option>
+
+                <option value="bakery">
+                    Bakery
+                </option>
+
+                <option value="beverages">
+                    Beverages
+                </option>
+
+                <option value="grocery">
+                    Grocery
+                </option>
+
+            </select>
+
+
+            <button
+                class="add-stock-btn"
+                onclick="openModal()"
+            >
+                + Add Stock
+            </button>
+
+        </div>
+
+
+        <!-- INVENTORY -->
+
+        <div class="section-heading">
+
+            <h2 class="section-title">
+                Stock Overview
+            </h2>
+
+            <p class="section-description">
+                Current ingredient availability across the restaurant.
+            </p>
+
+        </div>
+
+
+        <div class="inventory-wrapper">
+
+            <table class="inventory-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Item
+                        </th>
+
+                        <th>
+                            Current Stock
+                        </th>
+
+                        <th>
+                            Stock Level
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Last Updated
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="inventoryBody">
+
+
+                    <!-- TOMATO -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Tomatoes"
+                        data-category="vegetables"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🍅
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Tomatoes
+                                    </div>
+
+                                    <div class="item-category">
+                                        Vegetables
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                18
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        72%
+                                    </span>
+
+                                    <span>
+                                        Min. 8 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:72%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 10:32 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Tomatoes')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- CHEESE -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Mozzarella Cheese"
+                        data-category="dairy"
+                        data-status="low"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🧀
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Mozzarella Cheese
+                                    </div>
+
+                                    <div class="item-category">
+                                        Dairy
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                4.5
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        30%
+                                    </span>
+
+                                    <span>
+                                        Min. 5 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill low"
+                                        style="width:30%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge low">
+                                Low Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 09:45 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn"
+                                onclick="reorderItem('Mozzarella Cheese')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- CHICKEN -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Chicken Breast"
+                        data-category="meat"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🍗
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Chicken Breast
+                                    </div>
+
+                                    <div class="item-category">
+                                        Meat
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                12
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        68%
+                                    </span>
+
+                                    <span>
+                                        Min. 6 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:68%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 09:20 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Chicken Breast')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- BURGER BUNS -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Burger Buns"
+                        data-category="bakery"
+                        data-status="low"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🍔
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Burger Buns
+                                    </div>
+
+                                    <div class="item-category">
+                                        Bakery
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                28
+                            </span>
+
+                            <span class="unit">
+                                pcs
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        28%
+                                    </span>
+
+                                    <span>
+                                        Min. 40 pcs
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill low"
+                                        style="width:28%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge low">
+                                Low Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Yesterday, 06:30 PM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn"
+                                onclick="reorderItem('Burger Buns')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- COFFEE BEANS -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Coffee Beans"
+                        data-category="beverages"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    ☕
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Coffee Beans
+                                    </div>
+
+                                    <div class="item-category">
+                                        Beverages
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                8.2
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        82%
+                                    </span>
+
+                                    <span>
+                                        Min. 3 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:82%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 08:15 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Coffee Beans')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- FLOUR -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="All Purpose Flour"
+                        data-category="grocery"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🌾
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        All Purpose Flour
+                                    </div>
+
+                                    <div class="item-category">
+                                        Grocery
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                24
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        80%
+                                    </span>
+
+                                    <span>
+                                        Min. 10 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:80%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Yesterday, 05:40 PM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('All Purpose Flour')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- LETTUCE -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Fresh Lettuce"
+                        data-category="vegetables"
+                        data-status="low"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🥬
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Fresh Lettuce
+                                    </div>
+
+                                    <div class="item-category">
+                                        Vegetables
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                3.2
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        24%
+                                    </span>
+
+                                    <span>
+                                        Min. 5 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill low"
+                                        style="width:24%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge low">
+                                Low Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 07:50 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn"
+                                onclick="reorderItem('Fresh Lettuce')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- OLIVE OIL -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Olive Oil"
+                        data-category="grocery"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🫒
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Olive Oil
+                                    </div>
+
+                                    <div class="item-category">
+                                        Grocery
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                9.5
+                            </span>
+
+                            <span class="unit">
+                                L
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        76%
+                                    </span>
+
+                                    <span>
+                                        Min. 4 L
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:76%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Yesterday, 04:20 PM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Olive Oil')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- MILK -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Fresh Milk"
+                        data-category="dairy"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🥛
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Fresh Milk
+                                    </div>
+
+                                    <div class="item-category">
+                                        Dairy
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                15
+                            </span>
+
+                            <span class="unit">
+                                L
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        75%
+                                    </span>
+
+                                    <span>
+                                        Min. 6 L
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:75%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 06:50 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Fresh Milk')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- BEEF -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Beef Patty"
+                        data-category="meat"
+                        data-status="out"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🥩
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Beef Patty
+                                    </div>
+
+                                    <div class="item-category">
+                                        Meat
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                0
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        0%
+                                    </span>
+
+                                    <span>
+                                        Min. 5 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill out"
+                                        style="width:0%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge out">
+                                Out of Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Today, 11:10 AM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn"
+                                onclick="reorderItem('Beef Patty')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- CHOCOLATE -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Dark Chocolate"
+                        data-category="grocery"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🍫
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Dark Chocolate
+                                    </div>
+
+                                    <div class="item-category">
+                                        Grocery
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                6.8
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        64%
+                                    </span>
+
+                                    <span>
+                                        Min. 3 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:64%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Yesterday, 03:30 PM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Dark Chocolate')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- SUGAR -->
+
+                    <tr
+                        class="inventory-row"
+                        data-name="Sugar"
+                        data-category="grocery"
+                        data-status="good"
+                    >
+
+                        <td>
+
+                            <div class="item-info">
+
+                                <div class="item-icon">
+                                    🍚
+                                </div>
+
+                                <div>
+
+                                    <div class="item-name">
+                                        Sugar
+                                    </div>
+
+                                    <div class="item-category">
+                                        Grocery
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="quantity">
+                                20
+                            </span>
+
+                            <span class="unit">
+                                kg
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="progress-area">
+
+                                <div class="progress-top">
+
+                                    <span>
+                                        78%
+                                    </span>
+
+                                    <span>
+                                        Min. 8 kg
+                                    </span>
+
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill good"
+                                        style="width:78%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="stock-badge good">
+                                In Stock
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            Yesterday, 02:10 PM
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="reorder-btn disabled"
+                                onclick="reorderItem('Sugar')"
+                            >
+                                Reorder
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- EMPTY -->
+
+                    <tr
+                        class="empty-row"
+                        id="emptyRow"
+                    >
+
+                        <td colspan="6">
+
+                            <div class="empty-icon">
+                                📦
+                            </div>
+
+                            <h3>
+                                No inventory items found
+                            </h3>
+
+                            <p>
+                                Try changing your search or category filter.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <section class="low-stock-section">
+
+            <div class="section-heading">
+
+                <h2 class="section-title">
+                    Stock Alerts
+                </h2>
+
+                <p class="section-description">
+                    Items that may require attention before the next service.
+                </p>
+
+            </div>
+
+
+            <div class="alert-grid">
+
+
+                <div class="alert-card">
+
+                    <div class="alert-icon">
+                        🧀
+                    </div>
+
+                    <div class="alert-content">
+
+                        <strong>
+                            Mozzarella Cheese
+                        </strong>
+
+                        <p>
+                            Current stock is 4.5 kg. Recommended minimum
+                            level is 5 kg.
+                        </p>
+
+                        <button
+                            class="alert-action"
+                            onclick="reorderItem('Mozzarella Cheese')"
+                        >
+                            Reorder Now →
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="alert-card">
+
+                    <div class="alert-icon">
+                        🍔
+                    </div>
+
+                    <div class="alert-content">
+
+                        <strong>
+                            Burger Buns
+                        </strong>
+
+                        <p>
+                            Only 28 pieces are available. Current demand
+                            may require a fresh delivery.
+                        </p>
+
+                        <button
+                            class="alert-action"
+                            onclick="reorderItem('Burger Buns')"
+                        >
+                            Reorder Now →
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="alert-card">
+
+                    <div class="alert-icon">
+                        🥩
+                    </div>
+
+                    <div class="alert-content">
+
+                        <strong>
+                            Beef Patty
+                        </strong>
+
+                        <p>
+                            This item is currently out of stock and should
+                            be replenished before accepting related orders.
+                        </p>
+
+                        <button
+                            class="alert-action"
+                            onclick="reorderItem('Beef Patty')"
+                        >
+                            Reorder Now →
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <div class="footer-inner">
+
+            <div>
+
+                <div class="footer-brand">
+                    ARY’S CAFE
+                </div>
+
+                <div class="footer-copy">
+                    GOOD FOOD. GREAT MOMENTS. · EST. 2026
+                </div>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <a href="admin.html">
+                    Dashboard
+                </a>
+
+                <a href="kitchen.html">
+                    Kitchen
+                </a>
+
+                <a href="tables.html">
+                    Tables
+                </a>
+
+                <a href="staff.html">
+                    Staff
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         ADD STOCK MODAL
+    ========================= -->
+
+    <div
+        class="modal-overlay"
+        id="stockModal"
+        onclick="closeModalOutside(event)"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h2>
+                    Add Inventory Stock
+                </h2>
+
+                <button
+                    class="close-modal"
+                    onclick="closeModal()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="stockForm"
+                onsubmit="addStock(event)"
+            >
+
+                <div class="modal-body">
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label for="itemName">
+                                ITEM NAME
+                            </label>
+
+                            <input
+                                type="text"
+                                id="itemName"
+                                placeholder="e.g. Tomatoes"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="itemCategory">
+                                CATEGORY
+                            </label>
+
+                            <select
+                                id="itemCategory"
+                                required
+                            >
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                                <option value="vegetables">
+                                    Vegetables
+                                </option>
+
+                                <option value="dairy">
+                                    Dairy
+                                </option>
+
+                                <option value="meat">
+                                    Meat
+                                </option>
+
+                                <option value="bakery">
+                                    Bakery
+                                </option>
+
+                                <option value="beverages">
+                                    Beverages
+                                </option>
+
+                                <option value="grocery">
+                                    Grocery
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="itemQuantity">
+                                QUANTITY
+                            </label>
+
+                            <input
+                                type="number"
+                                id="itemQuantity"
+                                min="0"
+                                step="0.1"
+                                placeholder="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="itemUnit">
+                                UNIT
+                            </label>
+
+                            <select
+                                id="itemUnit"
+                                required
+                            >
+
+                                <option value="">
+                                    Select unit
+                                </option>
+
+                                <option value="kg">
+                                    Kilogram (kg)
+                                </option>
+
+                                <option value="L">
+                                    Liter (L)
+                                </option>
+
+                                <option value="pcs">
+                                    Pieces (pcs)
+                                </option>
+
+                                <option value="box">
+                                    Box
+                                </option>
+
+                                <option value="pack">
+                                    Pack
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group full">
+
+                            <label for="minimumStock">
+                                MINIMUM STOCK LEVEL
+                            </label>
+
+                            <input
+                                type="number"
+                                id="minimumStock"
+                                min="0"
+                                step="0.1"
+                                placeholder="Minimum quantity before alert"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="modal-btn cancel"
+                        onclick="closeModal()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="modal-btn save"
+                    >
+                        Add Stock
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        Inventory updated successfully.
+    </div>
+
+
+    <script>
+
+        /* =========================
+           MOBILE MENU
+        ========================= */
+
+        const mobileMenuBtn =
+            document.getElementById("mobileMenuBtn");
+
+        const navLinks =
+            document.getElementById("navLinks");
+
+
+        if (mobileMenuBtn) {
+
+            mobileMenuBtn.addEventListener("click", function () {
+
+                navLinks.classList.toggle("open");
+
+            });
+
+        }
+
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", function () {
+
+                navLinks.classList.remove("open");
+
+            });
+
+        });
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById("toast");
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+
+                toast.classList.remove("show");
+
+            }, 2600);
+
+        }
+
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        function searchInventory() {
+
+            const searchValue =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            const category =
+                document
+                    .getElementById("categoryFilter")
+                    .value;
+
+            filterRows(searchValue, category);
+
+        }
+
+
+        /* =========================
+           CATEGORY FILTER
+        ========================= */
+
+        function filterInventory() {
+
+            const searchValue =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            const category =
+                document
+                    .getElementById("categoryFilter")
+                    .value;
+
+            filterRows(searchValue, category);
+
+        }
+
+
+        /* =========================
+           FILTER ROWS
+        ========================= */
+
+        function filterRows(searchValue, category) {
+
+            const rows =
+                document.querySelectorAll(".inventory-row");
+
+            let visibleCount = 0;
+
+
+            rows.forEach(row => {
+
+                const name =
+                    row.dataset.name.toLowerCase();
+
+                const rowCategory =
+                    row.dataset.category;
+
+                const matchesSearch =
+                    name.includes(searchValue);
+
+                const matchesCategory =
+                    category === "all" ||
+                    rowCategory === category;
+
+
+                if (
+                    matchesSearch &&
+                    matchesCategory
+                ) {
+
+                    row.style.display = "";
+
+                    visibleCount++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            const emptyRow =
+                document.getElementById("emptyRow");
+
+
+            if (visibleCount === 0) {
+
+                emptyRow.style.display = "table-row";
+
+            } else {
+
+                emptyRow.style.display = "none";
+
+            }
+
+        }
+
+
+        /* =========================
+           REORDER
+        ========================= */
+
+        function reorderItem(itemName) {
+
+            showToast(
+                "Reorder request created for " +
+                itemName
+            );
+
+        }
+
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        function openModal() {
+
+            document
+                .getElementById("stockModal")
+                .classList.add("show");
+
+            document
+                .getElementById("itemName")
+                .focus();
+
+        }
+
+
+        function closeModal() {
+
+            document
+                .getElementById("stockModal")
+                .classList.remove("show");
+
+            document
+                .getElementById("stockForm")
+                .reset();
+
+        }
+
+
+        function closeModalOutside(event) {
+
+            if (
+                event.target ===
+                document.getElementById("stockModal")
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+
+
+        /* =========================
+           ADD STOCK
+        ========================= */
+
+        function addStock(event) {
+
+            event.preventDefault();
+
+
+            const itemName =
+                document
+                    .getElementById("itemName")
+                    .value
+                    .trim();
+
+            const quantity =
+                document
+                    .getElementById("itemQuantity")
+                    .value;
+
+            const unit =
+                document
+                    .getElementById("itemUnit")
+                    .value;
+
+
+            if (!itemName || !quantity || !unit) {
+
+                showToast(
+                    "Please complete all required fields."
+                );
+
+                return;
+
+            }
+
+
+            closeModal();
+
+
+            showToast(
+                itemName +
+                " stock added successfully."
+            );
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        function logout() {
+
+            const confirmLogout =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+
+            if (!confirmLogout) {
+                return;
+            }
+
+
+            localStorage.removeItem(
+                "arysCafeLoggedIn"
+            );
+
+            localStorage.removeItem(
+                "arysCafeRole"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                filterInventory();
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

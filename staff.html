@@ -1,0 +1,3608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff | ARY’S CAFE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brown: #3b2418;
+            --dark-brown: #24150f;
+            --gold: #b08a55;
+            --light-gold: #d0b27a;
+
+            --cream: #f6f0e7;
+            --soft-cream: #fbf8f2;
+            --white: #ffffff;
+
+            --text: #2d211a;
+            --muted: #766c64;
+            --border: #e7ddd0;
+
+            --active: #3e7654;
+            --active-bg: #e8f4ec;
+
+            --offline: #a64f3d;
+            --offline-bg: #fae9e5;
+
+            --break: #8a6a2e;
+            --break-bg: #f8f0d9;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--soft-cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 82px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 42px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            min-width: 230px;
+        }
+
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 1px solid #d9c6a9;
+        }
+
+        .brand-text {
+            line-height: 1;
+        }
+
+        .brand-name {
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 25px;
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            color: var(--brown);
+        }
+
+        .brand-tagline {
+            margin-top: 4px;
+
+            font-size: 8px;
+            letter-spacing: 2px;
+
+            color: var(--gold);
+
+            font-weight: 600;
+        }
+
+        .nav-links {
+            flex: 1;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 29px;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 600;
+
+            color: #655b54;
+
+            transition: 0.25s ease;
+
+            position: relative;
+
+            padding: 30px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--brown);
+        }
+
+        .nav-links a.active::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 20px;
+
+            left: 0;
+            right: 0;
+
+            height: 2px;
+
+            background: var(--gold);
+        }
+
+        .nav-right {
+            min-width: 230px;
+
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            gap: 17px;
+        }
+
+        .role-badge {
+            background: var(--cream);
+
+            color: var(--brown);
+
+            border: 1px solid var(--border);
+
+            padding: 8px 13px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            border: 1px solid #cdbda9;
+
+            background: transparent;
+
+            color: var(--brown);
+
+            padding: 9px 15px;
+
+            border-radius: 5px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition: 0.25s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--brown);
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+
+            border: 0;
+
+            background: transparent;
+
+            font-size: 25px;
+
+            color: var(--brown);
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(36, 21, 15, 0.98),
+                    rgba(59, 36, 24, 0.94)
+                ),
+                url("./home-hero.png") center / cover;
+
+            min-height: 245px;
+
+            display: flex;
+            align-items: center;
+        }
+
+        .page-header::after {
+            content: "";
+
+            position: absolute;
+
+            width: 420px;
+            height: 420px;
+
+            border: 1px solid rgba(208, 178, 122, 0.16);
+
+            border-radius: 50%;
+
+            right: -100px;
+            top: -130px;
+        }
+
+        .page-header::before {
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+            height: 280px;
+
+            border: 1px solid rgba(208, 178, 122, 0.1);
+
+            border-radius: 50%;
+
+            right: 55px;
+            top: -60px;
+        }
+
+        .header-content {
+            width: min(1200px, calc(100% - 70px));
+
+            margin: auto;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .eyebrow {
+            color: var(--light-gold);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-family: "Cormorant Garamond", serif;
+
+            color: white;
+
+            font-size: clamp(42px, 5vw, 62px);
+
+            line-height: 0.95;
+
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            margin-top: 15px;
+
+            color: rgba(255, 255, 255, 0.72);
+
+            max-width: 650px;
+
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main-container {
+            width: min(1200px, calc(100% - 70px));
+
+            margin: 0 auto;
+
+            padding: 45px 0 70px;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 17px;
+
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 10px;
+
+            padding: 21px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            box-shadow: 0 8px 25px rgba(59, 36, 24, 0.04);
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+
+            flex-shrink: 0;
+        }
+
+        .summary-icon.total {
+            background: #eee8df;
+        }
+
+        .summary-icon.active {
+            background: var(--active-bg);
+        }
+
+        .summary-icon.break {
+            background: var(--break-bg);
+        }
+
+        .summary-icon.offline {
+            background: var(--offline-bg);
+        }
+
+        .summary-info span {
+            display: block;
+
+            font-size: 11px;
+
+            color: var(--muted);
+
+            margin-bottom: 5px;
+        }
+
+        .summary-info strong {
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 30px;
+
+            color: var(--brown);
+
+            line-height: 1;
+        }
+
+
+        /* =========================
+           TOOLBAR
+        ========================= */
+
+        .toolbar {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 10px;
+
+            padding: 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            position: relative;
+
+            flex: 1;
+
+            max-width: 430px;
+        }
+
+        .search-box span {
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #95897f;
+
+            font-size: 14px;
+        }
+
+        .search-box input {
+            width: 100%;
+
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 6px;
+
+            padding: 0 14px 0 39px;
+
+            outline: none;
+
+            color: var(--text);
+
+            background: #fffdfa;
+
+            font-size: 12px;
+        }
+
+        .search-box input:focus {
+            border-color: var(--gold);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(176, 138, 85, 0.09);
+        }
+
+        .filter-select {
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 6px;
+
+            padding: 0 35px 0 12px;
+
+            background: #fffdfa;
+
+            color: var(--brown);
+
+            outline: none;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .add-staff-btn {
+            height: 42px;
+
+            padding: 0 18px;
+
+            border: 1px solid var(--brown);
+
+            border-radius: 6px;
+
+            background: var(--brown);
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            transition: 0.25s ease;
+        }
+
+        .add-staff-btn:hover {
+            background: var(--dark-brown);
+        }
+
+
+        /* =========================
+           SECTION HEADING
+        ========================= */
+
+        .section-heading {
+            margin: 30px 0 18px;
+        }
+
+        .section-title {
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 31px;
+
+            color: var(--brown);
+
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 4px;
+        }
+
+
+        /* =========================
+           STAFF GRID
+        ========================= */
+
+        .staff-grid {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .staff-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 25px
+                rgba(59, 36, 24, 0.035);
+
+            transition: 0.28s ease;
+        }
+
+        .staff-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(59, 36, 24, 0.08);
+        }
+
+        .staff-card.hidden {
+            display: none;
+        }
+
+        .staff-top {
+            padding: 19px 19px 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            border-bottom: 1px solid #eee7dd;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            background: var(--cream);
+
+            color: var(--brown);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            border: 1px solid #e2d3bf;
+
+            flex-shrink: 0;
+        }
+
+        .staff-name {
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 23px;
+
+            color: var(--brown);
+
+            font-weight: 700;
+
+            line-height: 1;
+        }
+
+        .staff-role {
+            color: var(--muted);
+
+            font-size: 9px;
+
+            margin-top: 5px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+
+            font-weight: 700;
+        }
+
+        .staff-body {
+            padding: 17px 19px 19px;
+        }
+
+        .staff-info {
+            margin-bottom: 14px;
+        }
+
+        .info-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 9px;
+
+            font-size: 10px;
+        }
+
+        .info-label {
+            color: var(--muted);
+        }
+
+        .info-value {
+            color: var(--text);
+
+            font-weight: 700;
+
+            text-align: right;
+        }
+
+        .status-line {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-top: 12px;
+
+            padding-top: 12px;
+
+            border-top: 1px solid #eee7dd;
+        }
+
+        .staff-status {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 7px 10px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+        }
+
+        .staff-status::before {
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+        }
+
+        .staff-status.active {
+            background: var(--active-bg);
+
+            color: var(--active);
+        }
+
+        .staff-status.active::before {
+            background: var(--active);
+        }
+
+        .staff-status.break {
+            background: var(--break-bg);
+
+            color: var(--break);
+        }
+
+        .staff-status.break::before {
+            background: var(--break);
+        }
+
+        .staff-status.offline {
+            background: var(--offline-bg);
+
+            color: var(--offline);
+        }
+
+        .staff-status.offline::before {
+            background: var(--offline);
+        }
+
+        .view-btn {
+            border: 1px solid #d8c9b9;
+
+            background: white;
+
+            color: var(--brown);
+
+            padding: 7px 11px;
+
+            border-radius: 5px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            transition: 0.2s ease;
+        }
+
+        .view-btn:hover {
+            background: var(--brown);
+
+            color: white;
+
+            border-color: var(--brown);
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            display: none;
+
+            grid-column: 1 / -1;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 10px;
+
+            padding: 55px 20px;
+
+            text-align: center;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+
+            margin-bottom: 10px;
+        }
+
+        .empty-state h3 {
+            font-family: "Cormorant Garamond", serif;
+
+            color: var(--brown);
+
+            font-size: 25px;
+
+            margin-bottom: 5px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           SHIFT OVERVIEW
+        ========================= */
+
+        .shift-section {
+            margin-top: 34px;
+        }
+
+        .shift-grid {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 17px;
+        }
+
+        .shift-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            padding: 19px;
+        }
+
+        .shift-card-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 14px;
+        }
+
+        .shift-card-header strong {
+            font-family: "Cormorant Garamond", serif;
+
+            color: var(--brown);
+
+            font-size: 23px;
+        }
+
+        .shift-time {
+            color: var(--gold);
+
+            font-size: 9px;
+
+            font-weight: 800;
+        }
+
+        .shift-progress {
+            height: 7px;
+
+            background: #eee8df;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin-bottom: 9px;
+        }
+
+        .shift-progress-fill {
+            height: 100%;
+
+            width: 70%;
+
+            background: var(--gold);
+
+            border-radius: 20px;
+        }
+
+        .shift-details {
+            display: flex;
+
+            justify-content: space-between;
+
+            color: var(--muted);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(25, 15, 10, 0.62);
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 2000;
+
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: min(560px, 100%);
+
+            background: white;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 80px
+                rgba(0, 0, 0, 0.25);
+
+            animation: modalIn 0.25s ease;
+        }
+
+        @keyframes modalIn {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(15px)
+                    scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+        }
+
+        .modal-header {
+            background: var(--brown);
+
+            color: white;
+
+            padding: 20px 23px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 27px;
+
+            font-weight: 600;
+        }
+
+        .close-modal {
+            border: 0;
+
+            background: transparent;
+
+            color: white;
+
+            font-size: 23px;
+
+            opacity: 0.75;
+        }
+
+        .close-modal:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 23px;
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            color: var(--brown);
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+        .form-group input,
+        .form-group select {
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 6px;
+
+            padding: 0 12px;
+
+            outline: none;
+
+            color: var(--text);
+
+            background: #fffdfa;
+
+            font-size: 11px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--gold);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(176, 138, 85, 0.08);
+        }
+
+        .modal-footer {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 9px;
+
+            padding: 16px 23px;
+
+            border-top: 1px solid var(--border);
+
+            background: #fcfaf6;
+        }
+
+        .modal-btn {
+            padding: 10px 16px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+        .modal-btn.cancel {
+            border: 1px solid #d8cbbb;
+
+            background: white;
+
+            color: var(--brown);
+        }
+
+        .modal-btn.save {
+            border: 1px solid var(--brown);
+
+            background: var(--brown);
+
+            color: white;
+        }
+
+        .modal-btn.save:hover {
+            background: var(--dark-brown);
+        }
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 25px;
+
+            background: var(--brown);
+
+            color: white;
+
+            padding: 13px 18px;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.18);
+
+            transform: translateY(100px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: 0.3s ease;
+
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: var(--dark-brown);
+
+            color: white;
+
+            padding: 35px 0;
+        }
+
+        .footer-inner {
+            width: min(1200px, calc(100% - 70px));
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 25px;
+        }
+
+        .footer-brand {
+            font-family: "Cormorant Garamond", serif;
+
+            font-size: 25px;
+
+            letter-spacing: 2px;
+        }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.5);
+
+            font-size: 10px;
+
+            margin-top: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+
+            gap: 20px;
+
+            color: rgba(255,255,255,0.65);
+
+            font-size: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-gold);
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            .navbar {
+                padding: 0 25px;
+            }
+
+            .nav-left,
+            .nav-right {
+                min-width: 190px;
+            }
+
+            .nav-links {
+                gap: 17px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .staff-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .shift-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                height: 72px;
+
+                padding: 0 18px;
+            }
+
+            .nav-links {
+                display: none;
+
+                position: absolute;
+
+                left: 0;
+                right: 0;
+
+                top: 72px;
+
+                background: white;
+
+                border-bottom: 1px solid var(--border);
+
+                flex-direction: column;
+
+                padding: 15px 20px;
+
+                gap: 0;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+
+                padding: 13px 5px;
+
+                border-bottom: 1px solid #f0e9df;
+            }
+
+            .nav-links a.active::after {
+                display: none;
+            }
+
+            .nav-right {
+                min-width: auto;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+
+                margin-left: 5px;
+            }
+
+            .role-badge {
+                display: none;
+            }
+
+            .header-content,
+            .main-container,
+            .footer-inner {
+                width: min(100% - 35px, 700px);
+            }
+
+            .toolbar {
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                max-width: none;
+
+                flex-basis: 100%;
+            }
+
+            .filter-select,
+            .add-staff-btn {
+                flex: 1;
+            }
+
+        }
+
+
+        @media (max-width: 580px) {
+
+            .brand-name {
+                font-size: 21px;
+            }
+
+            .brand-tagline {
+                font-size: 7px;
+            }
+
+            .nav-logo {
+                width: 43px;
+                height: 43px;
+            }
+
+            .nav-left {
+                min-width: 0;
+            }
+
+            .nav-right {
+                margin-left: auto;
+            }
+
+            .logout-btn {
+                padding: 8px 11px;
+
+                font-size: 10px;
+            }
+
+            .page-header {
+                min-height: 210px;
+            }
+
+            .page-title {
+                font-size: 45px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 15px;
+
+                gap: 10px;
+            }
+
+            .summary-icon {
+                width: 39px;
+                height: 39px;
+
+                font-size: 17px;
+            }
+
+            .summary-info strong {
+                font-size: 25px;
+            }
+
+            .summary-info span {
+                font-size: 9px;
+            }
+
+            .staff-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+
+                bottom: 15px;
+
+                text-align: center;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <header class="navbar">
+
+
+        <div class="nav-left">
+
+            <a href="admin.html">
+
+                <img
+                    src="./arys-cafe-logo.png"
+                    alt="ARY’S CAFE"
+                    class="nav-logo"
+                >
+
+            </a>
+
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    ARY’S CAFE
+                </div>
+
+                <div class="brand-tagline">
+                    GOOD FOOD. GREAT MOMENTS.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav-links" id="navLinks">
+
+            <a href="admin.html">
+                Dashboard
+            </a>
+
+            <a href="menu.html">
+                Menu
+            </a>
+
+            <a href="kitchen.html">
+                Kitchen
+            </a>
+
+            <a href="tables.html">
+                Tables
+            </a>
+
+            <a href="inventory.html">
+                Inventory
+            </a>
+
+            <a href="staff.html" class="active">
+                Staff
+            </a>
+
+        </nav>
+
+
+        <div class="nav-right">
+
+            <span class="role-badge">
+                ADMIN
+            </span>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         PAGE HEADER
+    ========================= -->
+
+    <section class="page-header">
+
+        <div class="header-content">
+
+            <div class="eyebrow">
+                Restaurant Operations
+            </div>
+
+            <h1 class="page-title">
+                Staff Management
+            </h1>
+
+            <p class="page-subtitle">
+                Manage restaurant staff, roles, shifts and current
+                availability from one centralized operations panel.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main-container">
+
+
+        <!-- =========================
+             SUMMARY
+        ========================= -->
+
+        <section class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon total">
+                    👥
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        Total Staff
+                    </span>
+
+                    <strong id="totalStaff">
+                        10
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon active">
+                    🟢
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        Active Now
+                    </span>
+
+                    <strong id="activeStaff">
+                        7
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon break">
+                    🟡
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        On Break
+                    </span>
+
+                    <strong id="breakStaff">
+                        2
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon offline">
+                    🔴
+                </div>
+
+                <div class="summary-info">
+
+                    <span>
+                        Offline
+                    </span>
+
+                    <strong id="offlineStaff">
+                        1
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             TOOLBAR
+        ========================= -->
+
+        <div class="toolbar">
+
+
+            <div class="search-box">
+
+                <span>
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search staff by name..."
+                    oninput="filterStaff()"
+                >
+
+            </div>
+
+
+            <select
+                class="filter-select"
+                id="roleFilter"
+                onchange="filterStaff()"
+            >
+
+                <option value="all">
+                    All Roles
+                </option>
+
+                <option value="manager">
+                    Manager
+                </option>
+
+                <option value="chef">
+                    Chef
+                </option>
+
+                <option value="kitchen">
+                    Kitchen Staff
+                </option>
+
+                <option value="waiter">
+                    Waiter
+                </option>
+
+                <option value="cashier">
+                    Cashier
+                </option>
+
+            </select>
+
+
+            <select
+                class="filter-select"
+                id="statusFilter"
+                onchange="filterStaff()"
+            >
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="break">
+                    On Break
+                </option>
+
+                <option value="offline">
+                    Offline
+                </option>
+
+            </select>
+
+
+            <button
+                class="add-staff-btn"
+                onclick="openModal()"
+            >
+                + Add Staff
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             STAFF HEADING
+        ========================= -->
+
+        <div class="section-heading">
+
+            <h2 class="section-title">
+                Team Members
+            </h2>
+
+            <p class="section-description">
+                Current staff members and their operational status.
+            </p>
+
+        </div>
+
+
+
+        <!-- =========================
+             STAFF GRID
+        ========================= -->
+
+        <section
+            class="staff-grid"
+            id="staffGrid"
+        >
+
+
+            <!-- STAFF 01 -->
+
+            <article
+                class="staff-card"
+                data-name="Rohan Mehta"
+                data-role="manager"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        RM
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Rohan Mehta
+                        </div>
+
+                        <div class="staff-role">
+                            Restaurant Manager
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-001
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                09:00 AM – 06:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 98XXXXXX21
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Rohan Mehta')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 02 -->
+
+            <article
+                class="staff-card"
+                data-name="Amit Patel"
+                data-role="chef"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        AP
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Amit Patel
+                        </div>
+
+                        <div class="staff-role">
+                            Head Chef
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-002
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                10:00 AM – 07:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 97XXXXXX42
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Amit Patel')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 03 -->
+
+            <article
+                class="staff-card"
+                data-name="Neha Shah"
+                data-role="kitchen"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        NS
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Neha Shah
+                        </div>
+
+                        <div class="staff-role">
+                            Kitchen Staff
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-003
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                11:00 AM – 08:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 96XXXXXX53
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Neha Shah')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 04 -->
+
+            <article
+                class="staff-card"
+                data-name="Priya Joshi"
+                data-role="waiter"
+                data-status="break"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        PJ
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Priya Joshi
+                        </div>
+
+                        <div class="staff-role">
+                            Waiter
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-004
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                12:00 PM – 09:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 95XXXXXX64
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status break">
+                            On Break
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Priya Joshi')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 05 -->
+
+            <article
+                class="staff-card"
+                data-name="Kunal Shah"
+                data-role="cashier"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        KS
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Kunal Shah
+                        </div>
+
+                        <div class="staff-role">
+                            Cashier
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-005
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                09:30 AM – 06:30 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 94XXXXXX75
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Kunal Shah')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 06 -->
+
+            <article
+                class="staff-card"
+                data-name="Meera Patel"
+                data-role="waiter"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        MP
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Meera Patel
+                        </div>
+
+                        <div class="staff-role">
+                            Waiter
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-006
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                12:00 PM – 09:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 93XXXXXX86
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Meera Patel')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 07 -->
+
+            <article
+                class="staff-card"
+                data-name="Dev Mehta"
+                data-role="kitchen"
+                data-status="break"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        DM
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Dev Mehta
+                        </div>
+
+                        <div class="staff-role">
+                            Kitchen Staff
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-007
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                01:00 PM – 10:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 92XXXXXX97
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status break">
+                            On Break
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Dev Mehta')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 08 -->
+
+            <article
+                class="staff-card"
+                data-name="Riya Desai"
+                data-role="waiter"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        RD
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Riya Desai
+                        </div>
+
+                        <div class="staff-role">
+                            Waiter
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-008
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                02:00 PM – 11:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 91XXXXXX18
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Riya Desai')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 09 -->
+
+            <article
+                class="staff-card"
+                data-name="Kabir Shah"
+                data-role="chef"
+                data-status="active"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        KS
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Kabir Shah
+                        </div>
+
+                        <div class="staff-role">
+                            Sous Chef
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-009
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                10:00 AM – 07:00 PM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 90XXXXXX29
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status active">
+                            Active
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Kabir Shah')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- STAFF 10 -->
+
+            <article
+                class="staff-card"
+                data-name="Aarav Shah"
+                data-role="kitchen"
+                data-status="offline"
+            >
+
+                <div class="staff-top">
+
+                    <div class="avatar">
+                        AS
+                    </div>
+
+                    <div>
+
+                        <div class="staff-name">
+                            Aarav Shah
+                        </div>
+
+                        <div class="staff-role">
+                            Kitchen Staff
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="staff-body">
+
+                    <div class="staff-info">
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Employee ID
+                            </span>
+
+                            <span class="info-value">
+                                ARY-010
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Shift
+                            </span>
+
+                            <span class="info-value">
+                                03:00 PM – 12:00 AM
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Contact
+                            </span>
+
+                            <span class="info-value">
+                                +91 89XXXXXX30
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-line">
+
+                        <span class="staff-status offline">
+                            Offline
+                        </span>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewStaff('Aarav Shah')"
+                        >
+                            View Profile
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- EMPTY -->
+
+            <div
+                class="empty-state"
+                id="emptyState"
+            >
+
+                <div class="empty-icon">
+                    👥
+                </div>
+
+                <h3>
+                    No staff members found
+                </h3>
+
+                <p>
+                    Try changing the search or filter options.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             SHIFT OVERVIEW
+        ========================= -->
+
+        <section class="shift-section">
+
+
+            <div class="section-heading">
+
+                <h2 class="section-title">
+                    Shift Overview
+                </h2>
+
+                <p class="section-description">
+                    Today's staff coverage across restaurant operations.
+                </p>
+
+            </div>
+
+
+            <div class="shift-grid">
+
+
+                <div class="shift-card">
+
+                    <div class="shift-card-header">
+
+                        <strong>
+                            Morning
+                        </strong>
+
+                        <span class="shift-time">
+                            08:00 AM – 02:00 PM
+                        </span>
+
+                    </div>
+
+
+                    <div class="shift-progress">
+
+                        <div
+                            class="shift-progress-fill"
+                            style="width:85%"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="shift-details">
+
+                        <span>
+                            6 of 7 staff
+                        </span>
+
+                        <span>
+                            85% coverage
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="shift-card">
+
+                    <div class="shift-card-header">
+
+                        <strong>
+                            Afternoon
+                        </strong>
+
+                        <span class="shift-time">
+                            12:00 PM – 07:00 PM
+                        </span>
+
+                    </div>
+
+
+                    <div class="shift-progress">
+
+                        <div
+                            class="shift-progress-fill"
+                            style="width:100%"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="shift-details">
+
+                        <span>
+                            7 of 7 staff
+                        </span>
+
+                        <span>
+                            Full coverage
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="shift-card">
+
+                    <div class="shift-card-header">
+
+                        <strong>
+                            Evening
+                        </strong>
+
+                        <span class="shift-time">
+                            06:00 PM – 12:00 AM
+                        </span>
+
+                    </div>
+
+
+                    <div class="shift-progress">
+
+                        <div
+                            class="shift-progress-fill"
+                            style="width:71%"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="shift-details">
+
+                        <span>
+                            5 of 7 staff
+                        </span>
+
+                        <span>
+                            71% coverage
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <div class="footer-inner">
+
+            <div>
+
+                <div class="footer-brand">
+                    ARY’S CAFE
+                </div>
+
+                <div class="footer-copy">
+                    GOOD FOOD. GREAT MOMENTS. · EST. 2026
+                </div>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <a href="admin.html">
+                    Dashboard
+                </a>
+
+                <a href="kitchen.html">
+                    Kitchen
+                </a>
+
+                <a href="tables.html">
+                    Tables
+                </a>
+
+                <a href="inventory.html">
+                    Inventory
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================
+         ADD STAFF MODAL
+    ========================= -->
+
+    <div
+        class="modal-overlay"
+        id="staffModal"
+        onclick="closeModalOutside(event)"
+    >
+
+        <div class="modal">
+
+
+            <div class="modal-header">
+
+                <h2>
+                    Add Staff Member
+                </h2>
+
+                <button
+                    class="close-modal"
+                    onclick="closeModal()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="staffForm"
+                onsubmit="addStaff(event)"
+            >
+
+                <div class="modal-body">
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label for="staffFirstName">
+                                FIRST NAME
+                            </label>
+
+                            <input
+                                type="text"
+                                id="staffFirstName"
+                                placeholder="First name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="staffLastName">
+                                LAST NAME
+                            </label>
+
+                            <input
+                                type="text"
+                                id="staffLastName"
+                                placeholder="Last name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="staffRole">
+                                ROLE
+                            </label>
+
+                            <select
+                                id="staffRole"
+                                required
+                            >
+
+                                <option value="">
+                                    Select role
+                                </option>
+
+                                <option value="manager">
+                                    Manager
+                                </option>
+
+                                <option value="chef">
+                                    Chef
+                                </option>
+
+                                <option value="kitchen">
+                                    Kitchen Staff
+                                </option>
+
+                                <option value="waiter">
+                                    Waiter
+                                </option>
+
+                                <option value="cashier">
+                                    Cashier
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="staffShift">
+                                SHIFT
+                            </label>
+
+                            <select
+                                id="staffShift"
+                                required
+                            >
+
+                                <option value="">
+                                    Select shift
+                                </option>
+
+                                <option value="morning">
+                                    Morning
+                                </option>
+
+                                <option value="afternoon">
+                                    Afternoon
+                                </option>
+
+                                <option value="evening">
+                                    Evening
+                                </option>
+
+                                <option value="night">
+                                    Night
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group full">
+
+                            <label for="staffPhone">
+                                CONTACT NUMBER
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="staffPhone"
+                                placeholder="+91 XXXXX XXXXX"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group full">
+
+                            <label for="staffEmail">
+                                EMAIL ADDRESS
+                            </label>
+
+                            <input
+                                type="email"
+                                id="staffEmail"
+                                placeholder="staff@aryscafe.com"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="modal-btn cancel"
+                        onclick="closeModal()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="modal-btn save"
+                    >
+                        Add Staff
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         TOAST
+    ========================= -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        Staff updated successfully.
+    </div>
+
+
+
+    <script>
+
+
+        /* =========================
+           MOBILE MENU
+        ========================= */
+
+        const mobileMenuBtn =
+            document.getElementById("mobileMenuBtn");
+
+        const navLinks =
+            document.getElementById("navLinks");
+
+
+        if (mobileMenuBtn) {
+
+            mobileMenuBtn.addEventListener(
+                "click",
+                function () {
+
+                    navLinks.classList.toggle("open");
+
+                }
+            );
+
+        }
+
+
+        document
+            .querySelectorAll(".nav-links a")
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        navLinks.classList.remove("open");
+
+                    }
+                );
+
+            });
+
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById("toast");
+
+            toast.textContent =
+                message;
+
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer =
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2600
+                );
+
+        }
+
+
+
+        /* =========================
+           FILTER STAFF
+        ========================= */
+
+        function filterStaff() {
+
+            const searchValue =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            const role =
+                document
+                    .getElementById("roleFilter")
+                    .value;
+
+
+            const status =
+                document
+                    .getElementById("statusFilter")
+                    .value;
+
+
+            const cards =
+                document.querySelectorAll(
+                    ".staff-card"
+                );
+
+
+            let visibleCount = 0;
+
+
+            cards.forEach(card => {
+
+                const name =
+                    card.dataset.name
+                        .toLowerCase();
+
+
+                const cardRole =
+                    card.dataset.role;
+
+
+                const cardStatus =
+                    card.dataset.status;
+
+
+                const matchesSearch =
+                    name.includes(
+                        searchValue
+                    );
+
+
+                const matchesRole =
+                    role === "all" ||
+                    cardRole === role;
+
+
+                const matchesStatus =
+                    status === "all" ||
+                    cardStatus === status;
+
+
+                if (
+                    matchesSearch &&
+                    matchesRole &&
+                    matchesStatus
+                ) {
+
+                    card.classList.remove(
+                        "hidden"
+                    );
+
+                    visibleCount++;
+
+                } else {
+
+                    card.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+            });
+
+
+            const emptyState =
+                document.getElementById(
+                    "emptyState"
+                );
+
+
+            if (visibleCount === 0) {
+
+                emptyState.classList.add(
+                    "show"
+                );
+
+            } else {
+
+                emptyState.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================
+           VIEW STAFF
+        ========================= */
+
+        function viewStaff(name) {
+
+            showToast(
+                "Opening profile for " +
+                name
+            );
+
+        }
+
+
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        function openModal() {
+
+            document
+                .getElementById("staffModal")
+                .classList.add("show");
+
+
+            document
+                .getElementById(
+                    "staffFirstName"
+                )
+                .focus();
+
+        }
+
+
+        function closeModal() {
+
+            document
+                .getElementById("staffModal")
+                .classList.remove("show");
+
+
+            document
+                .getElementById("staffForm")
+                .reset();
+
+        }
+
+
+        function closeModalOutside(event) {
+
+            if (
+                event.target ===
+                document.getElementById(
+                    "staffModal"
+                )
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+
+
+
+        /* =========================
+           ADD STAFF
+        ========================= */
+
+        function addStaff(event) {
+
+            event.preventDefault();
+
+
+            const firstName =
+                document
+                    .getElementById(
+                        "staffFirstName"
+                    )
+                    .value
+                    .trim();
+
+
+            const lastName =
+                document
+                    .getElementById(
+                        "staffLastName"
+                    )
+                    .value
+                    .trim();
+
+
+            const role =
+                document
+                    .getElementById(
+                        "staffRole"
+                    )
+                    .value;
+
+
+            if (
+                !firstName ||
+                !lastName ||
+                !role
+            ) {
+
+                showToast(
+                    "Please complete all required fields."
+                );
+
+                return;
+
+            }
+
+
+            const fullName =
+                firstName +
+                " " +
+                lastName;
+
+
+            closeModal();
+
+
+            showToast(
+                fullName +
+                " added successfully."
+            );
+
+        }
+
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        function logout() {
+
+            const confirmLogout =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+
+            if (!confirmLogout) {
+                return;
+            }
+
+
+            localStorage.removeItem(
+                "arysCafeLoggedIn"
+            );
+
+
+            localStorage.removeItem(
+                "arysCafeRole"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+
+        /* =========================
+           INITIAL LOAD
+        ========================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                filterStaff();
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
