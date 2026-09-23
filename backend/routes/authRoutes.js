@@ -1,29 +1,17 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const User = require("../models/User");
 
 const router = express.Router();
 
+/*
+|--------------------------------------------------------------------------
+| REGISTER
+|--------------------------------------------------------------------------
+*/
 
-// Generate JWT Token
-const generateToken = (user) => {
-    return jwt.sign(
-        {
-            id: user._id,
-            role: user.role
-        },
-        process.env.JWT_SECRET,
-        {
-            expiresIn: "7d"
-        }
-    );
-};
-
-
-// ===============================
-// REGISTER
-// ===============================
 router.post("/register", async (req, res) => {
     try {
         const {
@@ -35,15 +23,30 @@ router.post("/register", async (req, res) => {
             role
         } = req.body;
 
-        if (!firstName || !lastName || !email || !password) {
+        if (
+            !firstName ||
+            !lastName ||
+            !email ||
+            !phone ||
+            !password
+        ) {
             return res.status(400).json({
                 success: false,
-                message: "First name, last name, email and password are required."
+                message: "All required fields are required."
             });
         }
 
+        if (password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 6 characters."
+            });
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+
         const existingUser = await User.findOne({
-            email: email.toLowerCase().trim()
+            email: normalizedEmail
         });
 
         if (existingUser) {
@@ -53,22 +56,32 @@ router.post("/register", async (req, res) => {
             });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = await User.create({
             firstName: firstName.trim(),
             lastName: lastName.trim(),
-            email: email.toLowerCase().trim(),
-            phone: phone ? phone.trim() : "",
+            email: normalizedEmail,
+            phone: phone.trim(),
             password: hashedPassword,
             role: role || "customer"
         });
 
-        const token = generateToken(user);
+        const token = jwt.sign(
+            {
+                id: user._id,
+                role: user.role,
+                email: user.email
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "7d"
+            }
+        );
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
-            message: "Registration successful.",
+            message: "Account created successfully.",
             token,
             user: {
                 id: user._id,
@@ -81,9 +94,10 @@ router.post("/register", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Register Error:", error);
 
-        res.status(500).json({
+        console.error("REGISTER ERROR:", error);
+
+        return res.status(500).json({
             success: false,
             message: "Server error during registration."
         });
@@ -91,12 +105,18 @@ router.post("/register", async (req, res) => {
 });
 
 
-// ===============================
-// LOGIN
-// ===============================
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
+
 router.post("/login", async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const {
+            email,
+            password
+        } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({
@@ -105,8 +125,10 @@ router.post("/login", async (req, res) => {
             });
         }
 
+        const normalizedEmail = email.toLowerCase().trim();
+
         const user = await User.findOne({
-            email: email.toLowerCase().trim()
+            email: normalizedEmail
         });
 
         if (!user) {
@@ -119,7 +141,7 @@ router.post("/login", async (req, res) => {
         if (!user.isActive) {
             return res.status(403).json({
                 success: false,
-                message: "Your account has been deactivated."
+                message: "Your account is inactive."
             });
         }
 
@@ -135,9 +157,19 @@ router.post("/login", async (req, res) => {
             });
         }
 
-        const token = generateToken(user);
+        const token = jwt.sign(
+            {
+                id: user._id,
+                role: user.role,
+                email: user.email
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "7d"
+            }
+        );
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Login successful.",
             token,
@@ -152,9 +184,10 @@ router.post("/login", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Login Error:", error);
 
-        res.status(500).json({
+        console.error("LOGIN ERROR:", error);
+
+        return res.status(500).json({
             success: false,
             message: "Server error during login."
         });
@@ -162,32 +195,54 @@ router.post("/login", async (req, res) => {
 });
 
 
-// ===============================
-// GET CURRENT USER
-// ===============================
-const { protect } = require("../middleware/authMiddleware");
+/*
+|--------------------------------------------------------------------------
+| GET CURRENT USER
+|--------------------------------------------------------------------------
+*/
 
-router.get("/me", protect, async (req, res) => {
+router.get("/me", async (req, res) => {
     try {
-        res.status(200).json({
+
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                success: false,
+                message: "Authentication token required."
+            });
+        }
+
+        const token = authHeader.split(" ")[1];
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        const user = await User.findById(decoded.id).select(
+            "-password"
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        return res.status(200).json({
             success: true,
-            user: {
-                id: req.user._id,
-                firstName: req.user.firstName,
-                lastName: req.user.lastName,
-                email: req.user.email,
-                phone: req.user.phone,
-                role: req.user.role,
-                isActive: req.user.isActive
-            }
+            user
         });
 
     } catch (error) {
-        console.error("Current User Error:", error);
 
-        res.status(500).json({
+        console.error("GET USER ERROR:", error);
+
+        return res.status(401).json({
             success: false,
-            message: "Unable to fetch user information."
+            message: "Invalid or expired token."
         });
     }
 });

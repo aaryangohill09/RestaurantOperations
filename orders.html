@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Orders | ARY’S CAFE</title>
+    <script src="api.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1283,34 +1284,12 @@
            STORAGE
         ========================================== */
 
-        function getOrders() {
-
+        function getLocalOrders() {
             try {
-
-                const orders =
-                    JSON.parse(
-                        localStorage.getItem(ORDERS_KEY)
-                    );
-
-                return Array.isArray(orders)
-                    ? orders
-                    : [];
-
-            } catch (error) {
-
-                return [];
-            }
+                const orders = JSON.parse(localStorage.getItem(ORDERS_KEY));
+                return Array.isArray(orders) ? orders : [];
+            } catch (error) { return []; }
         }
-
-
-        function saveOrders(orders) {
-
-            localStorage.setItem(
-                ORDERS_KEY,
-                JSON.stringify(orders)
-            );
-        }
-
 
         function getCart() {
 
@@ -2067,43 +2046,37 @@
            RENDER ORDERS
         ========================================== */
 
-        function renderOrders() {
+        async function renderOrders() {
+            ordersList.innerHTML = `<div style="padding:30px;text-align:center;color:#796d63;font-size:12px;">Loading your orders...</div>`;
+            emptyOrders.classList.remove("show");
 
-            const orders =
-                getOrders();
-
-
-            ordersList.innerHTML = "";
-
-
-            if (orders.length === 0) {
-
-                emptyOrders.classList.add(
-                    "show"
-                );
-
-                return;
-            }
-
-
-            emptyOrders.classList.remove(
-                "show"
-            );
-
-
-            orders.forEach(
-                (order, index) => {
-
-                    ordersList.insertAdjacentHTML(
-                        "beforeend",
-                        createOrderCard(
-                            order,
-                            index
-                        )
-                    );
-
+            try {
+                if (typeof getAuthToken !== "function" || !getAuthToken()) {
+                    ordersList.innerHTML = "";
+                    emptyOrders.classList.add("show");
+                    showToast("Please login to view your orders.", "error");
+                    return;
                 }
-            );
+
+                const response = await getOrders();
+                const orders = response?.orders || response?.data || response?.result || [];
+                ordersList.innerHTML = "";
+
+                if (!Array.isArray(orders) || orders.length === 0) {
+                    emptyOrders.classList.add("show");
+                    return;
+                }
+
+                emptyOrders.classList.remove("show");
+                orders.forEach((order, index) => {
+                    ordersList.insertAdjacentHTML("beforeend", createOrderCard(order, index));
+                });
+            } catch (error) {
+                console.error("Orders load error:", error);
+                ordersList.innerHTML = "";
+                emptyOrders.classList.add("show");
+                showToast(error.message || "Unable to load your orders.", "error");
+            }
         }
 
 
@@ -2111,121 +2084,52 @@
            REORDER
         ========================================== */
 
-        function reorder(orderId) {
+        async function reorder(orderId) {
+            try {
+                if (!getAuthToken()) {
+                    showToast("Please login to reorder.", "error");
+                    return;
+                }
 
-            const orders =
-                getOrders();
+                const response = await getOrder(orderId);
+                const order = response?.order || response?.data || response?.result;
+                if (!order) throw new Error("Order could not be found.");
 
+                const existingCart = getCart();
+                const orderItems = Array.isArray(order.items) ? order.items : [];
 
-            const order =
-                orders.find(
-                    item =>
-                        String(item.id) ===
-                        String(orderId) ||
-                        String(item.orderNumber) ===
-                        String(orderId)
-                );
-
-
-            if (!order) {
-
-                showToast(
-                    "Order could not be found.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const existingCart =
-                getCart();
-
-
-            const orderItems =
-                Array.isArray(order.items)
-                    ? order.items
-                    : [];
-
-
-            orderItems.forEach(
-                item => {
-
-                    const itemId =
-                        item.id ||
-                        item.name;
-
-
-                    const existing =
-                        existingCart.find(
-                            cartItem =>
-                                String(
-                                    cartItem.id ||
-                                    cartItem.name
-                                ) ===
-                                String(itemId)
-                        );
-
+                orderItems.forEach(item => {
+                    const itemId = item.itemId || item.id || item.name;
+                    const existing = existingCart.find(cartItem =>
+                        String(cartItem.id || cartItem.itemId || cartItem.name) === String(itemId)
+                    );
 
                     if (existing) {
-
-                        existing.quantity =
-                            Number(existing.quantity || 0) +
-                            Number(item.quantity || 1);
-
+                        existing.quantity = Number(existing.quantity || 0) + Number(item.quantity || 1);
                     } else {
-
                         existingCart.push({
-
-                            id:
-                                item.id ||
-                                Date.now() +
-                                Math.random(),
-
-                            name:
-                                item.name ||
-                                "Menu Item",
-
-                            price:
-                                Number(item.price) || 0,
-
-                            quantity:
-                                Number(item.quantity) || 1,
-
-                            image:
-                                item.image || "",
-
-                            category:
-                                item.category || ""
-
+                            id: itemId,
+                            name: item.name || "Menu Item",
+                            price: Number(item.price) || 0,
+                            quantity: Number(item.quantity) || 1,
+                            image: item.image || "",
+                            category: item.category || ""
                         });
                     }
+                });
 
-                }
-            );
+                saveCart(existingCart);
+                localStorage.setItem("arysCafeOrderType",
+                    order.orderType === "DINE_IN" ? "Dine-In" :
+                    order.orderType === "TAKEAWAY" ? "Takeaway" : "Delivery"
+                );
 
-
-            saveCart(existingCart);
-
-
-            localStorage.setItem(
-                "arysCafeOrderType",
-                order.orderType ||
-                "Delivery"
-            );
-
-
-            showToast(
-                "Items added to your cart."
-            );
-
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "cart.html";
-
-            }, 700);
+                showToast("Items added to your cart.");
+                setTimeout(() => { window.location.href = "cart.html"; }, 700);
+            } catch (error) {
+                console.error("Reorder error:", error);
+                showToast(error.message || "Unable to reorder this order.", "error");
+            }
         }
 
 
@@ -2233,87 +2137,26 @@
            CANCEL ORDER
         ========================================== */
 
-        function cancelOrder(orderId) {
+        async function cancelOrder(orderId) {
+            try {
+                if (!getAuthToken()) {
+                    showToast("Please login to cancel this order.", "error");
+                    return;
+                }
 
-            const orders =
-                getOrders();
+                if (!window.confirm("Are you sure you want to cancel this order?")) return;
 
+                await apiRequest(`/orders/${encodeURIComponent(orderId)}/cancel`, {
+                    method: "PATCH",
+                    token: getAuthToken()
+                });
 
-            const index =
-                orders.findIndex(
-                    order =>
-                        String(order.id) ===
-                        String(orderId) ||
-                        String(order.orderNumber) ===
-                        String(orderId)
-                );
-
-
-            if (index === -1) {
-
-                showToast(
-                    "Order could not be found.",
-                    "error"
-                );
-
-                return;
+                showToast("Order cancelled successfully.");
+                await renderOrders();
+            } catch (error) {
+                console.error("Cancel order error:", error);
+                showToast(error.message || "Unable to cancel this order.", "error");
             }
-
-
-            const order =
-                orders[index];
-
-
-            const status =
-                normalizeStatus(order.status);
-
-
-            if (
-                status !== "PLACED" &&
-                status !== "CONFIRMED"
-            ) {
-
-                showToast(
-                    "This order can no longer be cancelled.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const confirmed =
-                window.confirm(
-                    `Are you sure you want to cancel order ${
-                        order.orderNumber || ""
-                    }?`
-                );
-
-
-            if (!confirmed) {
-                return;
-            }
-
-
-            orders[index].status =
-                "CANCELLED";
-
-            orders[index].updatedAt =
-                new Date().toISOString();
-
-            orders[index].cancelledAt =
-                new Date().toISOString();
-
-
-            saveOrders(orders);
-
-
-            renderOrders();
-
-
-            showToast(
-                "Order cancelled successfully."
-            );
         }
 
 
@@ -2385,6 +2228,12 @@
         ========================================== */
 
         renderOrders();
+
+        setInterval(() => {
+            if (document.visibilityState === "visible" && getAuthToken()) {
+                renderOrders();
+            }
+        }, 15000);
 
     </script>
 

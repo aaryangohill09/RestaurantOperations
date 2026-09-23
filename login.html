@@ -694,176 +694,126 @@
     ========================== -->
 
     <script>
+    const loginForm = document.getElementById("loginForm");
+    const message = document.getElementById("message");
 
-        const loginForm = document.getElementById("loginForm");
-        const message = document.getElementById("message");
-        const forgotPassword = document.getElementById("forgotPassword");
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "message show " + type;
+    }
 
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-        function showMessage(text, type) {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-            message.textContent = text;
-
-            message.className = "message show " + type;
+        if (!email || !password) {
+            showMessage("Please enter email and password.", "error");
+            return;
         }
 
+        const button = loginForm.querySelector(".login-button");
 
-        /* LOGIN */
+        button.disabled = true;
+        button.textContent = "Signing In...";
 
-        loginForm.addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-            const email =
-                document.getElementById("email").value.trim();
-
-            const password =
-                document.getElementById("password").value;
-
-
-            /* ADMIN LOGIN */
-
-            if (
-                email === "admin@aryscafe.com" &&
-                password === "admin123"
-            ) {
-
-                localStorage.setItem(
-                    "arysCafeLoggedIn",
-                    "true"
-                );
-
-                localStorage.setItem(
-                    "arysCafeRole",
-                    "admin"
-                );
-
-                localStorage.setItem(
-                    "arysCafeUser",
-                    JSON.stringify({
-                        name: "Admin",
+        try {
+            const response = await fetch(
+                "http://localhost:5000/api/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
                         email: email,
-                        role: "admin"
+                        password: password
                     })
-                );
-
-                window.location.href = "admin.html";
-
-                return;
-            }
-
-
-            /* KITCHEN LOGIN */
-
-            if (
-                email === "kitchen@aryscafe.com" &&
-                password === "kitchen123"
-            ) {
-
-                localStorage.setItem(
-                    "arysCafeLoggedIn",
-                    "true"
-                );
-
-                localStorage.setItem(
-                    "arysCafeRole",
-                    "kitchen"
-                );
-
-                localStorage.setItem(
-                    "arysCafeUser",
-                    JSON.stringify({
-                        name: "Kitchen Staff",
-                        email: email,
-                        role: "kitchen"
-                    })
-                );
-
-                window.location.href = "kitchen.html";
-
-                return;
-            }
-
-
-            /* REGISTERED CUSTOMER */
-
-            const savedUser =
-                localStorage.getItem("arysCafeUser");
-
-            if (savedUser) {
-
-                try {
-
-                    const user =
-                        JSON.parse(savedUser);
-
-                    if (
-                        user.email &&
-                        user.email.toLowerCase() ===
-                        email.toLowerCase()
-                    ) {
-
-                        if (user.password === password) {
-
-                            localStorage.setItem(
-                                "arysCafeLoggedIn",
-                                "true"
-                            );
-
-                            localStorage.setItem(
-                                "arysCafeRole",
-                                "customer"
-                            );
-
-                            window.location.href =
-                                "menu.html";
-
-                            return;
-
-                        } else {
-
-                            showMessage(
-                                "Incorrect password. Please try again.",
-                                "error"
-                            );
-
-                            return;
-                        }
-                    }
-
-                } catch (error) {
-
-                    console.log(error);
-
                 }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Invalid email or password."
+                );
             }
 
+            if (data.token) {
+                localStorage.setItem(
+                    "arysCafeToken",
+                    data.token
+                );
+            }
+
+            if (data.user) {
+                localStorage.setItem(
+                    "arysCafeUser",
+                    JSON.stringify(data.user)
+                );
+            }
+
+            localStorage.setItem(
+                "arysCafeLoggedIn",
+                "true"
+            );
+
+            const role = data.user?.role || "customer";
+
+            localStorage.setItem(
+                "arysCafeRole",
+                role
+            );
 
             showMessage(
-                "Account not found. Please check your email and password or create a new account.",
+                "Login successful. Redirecting...",
+                "success"
+            );
+
+            setTimeout(function () {
+
+                if (
+                    role === "admin" ||
+                    role === "manager"
+                ) {
+                    window.location.href = "admin.html";
+
+                } else if (
+                    role === "kitchen" ||
+                    role === "chef"
+                ) {
+                    window.location.href = "kitchen.html";
+
+                } else if (
+                    role === "waiter" ||
+                    role === "staff" ||
+                    role === "cashier"
+                ) {
+                    window.location.href = "staff.html";
+
+                } else {
+                    window.location.href = "menu.html";
+                }
+
+            }, 800);
+
+        } catch (error) {
+
+            console.error("Login Error:", error);
+
+            showMessage(
+                error.message ||
+                "Unable to connect to the server. Please try again.",
                 "error"
             );
 
-        });
-
-
-        /* FORGOT PASSWORD */
-
-        forgotPassword.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                showMessage(
-                    "Password recovery will be connected with the backend.",
-                    "success"
-                );
-
-            }
-        );
-
-    </script>
+            button.disabled = false;
+            button.textContent = "Login";
+        }
+    });
+</script>
 
 </body>
 </html>

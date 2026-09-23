@@ -842,193 +842,134 @@
     </main>
 
 
-    <script>
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const message = document.getElementById("message");
 
-        const registerForm =
-            document.getElementById("registerForm");
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "message show " + type;
+    }
 
-        const message =
-            document.getElementById("message");
+    registerForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const terms = document.getElementById("terms").checked;
 
-        function showMessage(text, type) {
-
-            message.textContent = text;
-
-            message.className =
-                "message show " + type;
+        if (!firstName || !lastName || !email || !phone || !password) {
+            showMessage("Please fill all required fields.", "error");
+            return;
         }
 
+        if (password !== confirmPassword) {
+            showMessage("Passwords do not match.", "error");
+            return;
+        }
 
-        registerForm.addEventListener(
-            "submit",
-            function(event) {
+        if (password.length < 6) {
+            showMessage("Password must be at least 6 characters.", "error");
+            return;
+        }
 
-                event.preventDefault();
+        if (!/^[0-9]{10}$/.test(phone)) {
+            showMessage("Please enter a valid 10-digit phone number.", "error");
+            return;
+        }
 
+        if (!terms) {
+            showMessage(
+                "Please accept the Terms & Conditions and Privacy Policy.",
+                "error"
+            );
+            return;
+        }
 
-                const firstName =
-                    document.getElementById("firstName")
-                    .value
-                    .trim();
+        const button = registerForm.querySelector(".register-button");
 
-                const lastName =
-                    document.getElementById("lastName")
-                    .value
-                    .trim();
+        button.disabled = true;
+        button.textContent = "Creating Account...";
 
-                const email =
-                    document.getElementById("email")
-                    .value
-                    .trim();
-
-                const phone =
-                    document.getElementById("phone")
-                    .value
-                    .trim();
-
-                const password =
-                    document.getElementById("password")
-                    .value;
-
-                const confirmPassword =
-                    document.getElementById("confirmPassword")
-                    .value;
-
-                const terms =
-                    document.getElementById("terms")
-                    .checked;
-
-
-                /* PASSWORD CHECK */
-
-                if (password !== confirmPassword) {
-
-                    showMessage(
-                        "Passwords do not match.",
-                        "error"
-                    );
-
-                    return;
-                }
-
-
-                /* TERMS CHECK */
-
-                if (!terms) {
-
-                    showMessage(
-                        "Please accept the Terms & Conditions and Privacy Policy.",
-                        "error"
-                    );
-
-                    return;
-                }
-
-
-                /* CHECK EXISTING USER */
-
-                const existingUser =
-                    localStorage.getItem("arysCafeUser");
-
-                if (existingUser) {
-
-                    try {
-
-                        const oldUser =
-                            JSON.parse(existingUser);
-
-                        if (
-                            oldUser.email &&
-                            oldUser.email.toLowerCase() ===
-                            email.toLowerCase()
-                        ) {
-
-                            showMessage(
-                                "An account with this email already exists.",
-                                "error"
-                            );
-
-                            return;
-                        }
-
-                    } catch (error) {
-
-                        console.log(error);
-
-                    }
-                }
-
-
-                /* CREATE USER */
-
-                const user = {
-
-                    id:
-                        "USR-" +
-                        Date.now(),
-
-                    firstName: firstName,
-
-                    lastName: lastName,
-
-                    name:
-                        firstName +
-                        " " +
+        try {
+            const response = await fetch(
+                "http://localhost:5000/api/auth/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        firstName,
                         lastName,
+                        email,
+                        phone,
+                        password,
+                        role: "customer"
+                    })
+                }
+            );
 
-                    email: email,
+            const data = await response.json();
 
-                    phone: phone,
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Registration failed."
+                );
+            }
 
-                    password: password,
+            if (data.token) {
+                localStorage.setItem(
+                    "arysCafeToken",
+                    data.token
+                );
+            }
 
-                    role: "customer",
-
-                    createdAt:
-                        new Date().toISOString()
-
-                };
-
-
+            if (data.user) {
                 localStorage.setItem(
                     "arysCafeUser",
-                    JSON.stringify(user)
+                    JSON.stringify(data.user)
                 );
-
-
-                localStorage.setItem(
-                    "arysCafeLoggedIn",
-                    "true"
-                );
-
-
-                localStorage.setItem(
-                    "arysCafeRole",
-                    "customer"
-                );
-
-
-                showMessage(
-                    "Account created successfully. Redirecting...",
-                    "success"
-                );
-
-
-                setTimeout(
-                    function() {
-
-                        window.location.href =
-                            "menu.html";
-
-                    },
-                    800
-                );
-
             }
-        );
 
-    </script>
+            localStorage.setItem(
+                "arysCafeLoggedIn",
+                "true"
+            );
+
+            localStorage.setItem(
+                "arysCafeRole",
+                "customer"
+            );
+
+            showMessage(
+                "Account created successfully. Redirecting...",
+                "success"
+            );
+
+            setTimeout(function () {
+                window.location.href = "menu.html";
+            }, 800);
+
+        } catch (error) {
+
+            console.error("Registration Error:", error);
+
+            showMessage(
+                error.message ||
+                "Unable to connect to the server. Please try again.",
+                "error"
+            );
+
+            button.disabled = false;
+            button.textContent = "Create Account";
+        }
+    });
+</script>
 
 </body>
 </html>

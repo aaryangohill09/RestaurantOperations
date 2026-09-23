@@ -1790,92 +1790,25 @@
         id="toast"
     ></div>
 
-
+    <script src="api.js"></script>
     <script>
-
         /* ==========================================
-           STORAGE
+           ARY'S CAFE - ADMIN BACKEND DASHBOARD
         ========================================== */
 
-        const ORDERS_KEY =
-            "arysCafeOrders";
+        const todayOrdersElement = document.getElementById("todayOrders");
+        const activeOrdersElement = document.getElementById("activeOrders");
+        const availableTablesElement = document.getElementById("availableTables");
+        const lowStockItemsElement = document.getElementById("lowStockItems");
+        const recentOrdersElement = document.getElementById("recentOrders");
+        const currentDateElement = document.getElementById("currentDate");
+        const toast = document.getElementById("toast");
 
-
-        /* ==========================================
-           ELEMENTS
-        ========================================== */
-
-        const todayOrdersElement =
-            document.getElementById(
-                "todayOrders"
-            );
-
-        const activeOrdersElement =
-            document.getElementById(
-                "activeOrders"
-            );
-
-        const availableTablesElement =
-            document.getElementById(
-                "availableTables"
-            );
-
-        const recentOrdersElement =
-            document.getElementById(
-                "recentOrders"
-            );
-
-        const currentDateElement =
-            document.getElementById(
-                "currentDate"
-            );
-
-        const toast =
-            document.getElementById(
-                "toast"
-            );
-
-
-        /* ==========================================
-           STORAGE HELPERS
-        ========================================== */
-
-        function getOrders() {
-
-            try {
-
-                const orders =
-                    JSON.parse(
-                        localStorage.getItem(
-                            ORDERS_KEY
-                        )
-                    );
-
-                return Array.isArray(orders)
-                    ? orders
-                    : [];
-
-            } catch (error) {
-
-                return [];
-            }
-        }
-
-
-        /* ==========================================
-           FORMAT
-        ========================================== */
-
-        function formatCurrency(amount) {
-
-            return "₹" +
-                Number(amount || 0)
-                    .toLocaleString("en-IN");
-        }
-
+        let dashboardOrders = [];
+        let dashboardTables = [];
+        let dashboardInventory = [];
 
         function escapeHtml(value) {
-
             return String(value ?? "")
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -1884,113 +1817,49 @@
                 .replace(/'/g, "&#039;");
         }
 
+        function formatCurrency(amount) {
+            return "₹" + Number(amount || 0).toLocaleString("en-IN");
+        }
 
         function normalizeStatus(status) {
-
-            return String(
-                status || "PLACED"
-            )
+            return String(status || "PLACED")
                 .toUpperCase()
                 .replace(/-/g, "_")
                 .replace(/\s+/g, "_");
         }
 
-
         function readableStatus(status) {
-
-            return String(
-                status || "PLACED"
-            )
+            return String(status || "PLACED")
                 .replace(/_/g, " ")
                 .toLowerCase()
-                .replace(
-                    /\b\w/g,
-                    letter =>
-                        letter.toUpperCase()
-                );
+                .replace(/\b\w/g, letter => letter.toUpperCase());
         }
-
 
         function formatDate(dateValue) {
+            if (!dateValue) return "Today";
+            const date = new Date(dateValue);
+            if (Number.isNaN(date.getTime())) return "Today";
 
-            const date =
-                new Date(dateValue);
-
-            if (
-                !dateValue ||
-                Number.isNaN(
-                    date.getTime()
-                )
-            ) {
-                return "Today";
-            }
-
-            return date.toLocaleDateString(
-                "en-IN",
-                {
-                    day: "2-digit",
-                    month: "short"
-                }
-            );
+            return date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short"
+            });
         }
-
-
-        /* ==========================================
-           DATE
-        ========================================== */
-
-        function updateDate() {
-
-            const now =
-                new Date();
-
-            currentDateElement.textContent =
-                now.toLocaleDateString(
-                    "en-IN",
-                    {
-                        weekday: "short",
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric"
-                    }
-                );
-        }
-
-
-        /* ==========================================
-           TODAY ORDERS
-        ========================================== */
 
         function isToday(dateValue) {
+            if (!dateValue) return false;
 
-            if (!dateValue) {
-                return false;
-            }
+            const date = new Date(dateValue);
+            const now = new Date();
 
-            const date =
-                new Date(dateValue);
-
-            const now =
-                new Date();
-
-            return (
-                date.getDate() ===
-                    now.getDate() &&
-                date.getMonth() ===
-                    now.getMonth() &&
-                date.getFullYear() ===
-                    now.getFullYear()
-            );
+            return !Number.isNaN(date.getTime()) &&
+                date.getDate() === now.getDate() &&
+                date.getMonth() === now.getMonth() &&
+                date.getFullYear() === now.getFullYear();
         }
 
-
-        /* ==========================================
-           ACTIVE STATUS
-        ========================================== */
-
         function isActiveStatus(status) {
-
-            const activeStatuses = [
+            return [
                 "PLACED",
                 "CONFIRMED",
                 "PREPARING",
@@ -1999,265 +1868,426 @@
                 "PICKED_UP",
                 "OUT_FOR_DELIVERY",
                 "DELIVERED"
-            ];
+            ].includes(normalizeStatus(status));
+        }
 
-            return activeStatuses.includes(
-                normalizeStatus(status)
+        function extractList(response, possibleKeys = []) {
+            if (Array.isArray(response)) return response;
+
+            if (response && Array.isArray(response.data)) return response.data;
+            if (response && Array.isArray(response.orders)) return response.orders;
+            if (response && Array.isArray(response.tables)) return response.tables;
+            if (response && Array.isArray(response.inventory)) return response.inventory;
+            if (response && Array.isArray(response.items)) return response.items;
+            if (response && Array.isArray(response.results)) return response.results;
+
+            for (const key of possibleKeys) {
+                if (response && Array.isArray(response[key])) {
+                    return response[key];
+                }
+            }
+
+            return [];
+        }
+
+        function showToast(message, type = "") {
+            toast.textContent = message;
+            toast.className = "toast show" + (type ? " " + type : "");
+
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2800);
+        }
+
+        function updateDate() {
+            currentDateElement.textContent = new Date().toLocaleDateString(
+                "en-IN",
+                {
+                    weekday: "short",
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
             );
         }
 
+        function getCustomerName(order) {
+            return order.customerName ||
+                order.customer?.name ||
+                `${order.customer?.firstName || ""} ${order.customer?.lastName || ""}`.trim() ||
+                "Customer";
+        }
+
+        function getOrderTotal(order) {
+            return order.total ??
+                order.pricing?.total ??
+                (
+                    Number(order.subtotal || 0) +
+                    Number(order.tax || order.gst || 0) +
+                    Number(order.deliveryFee || 0)
+                );
+        }
 
         /* ==========================================
-           DASHBOARD STATS
+           STATS
         ========================================== */
 
         function updateStats() {
+            const today = dashboardOrders.filter(order =>
+                isToday(order.createdAt || order.date)
+            );
 
-            const orders =
-                getOrders();
+            const active = dashboardOrders.filter(order =>
+                isActiveStatus(order.status)
+            );
 
+            const available = dashboardTables.filter(table =>
+                String(table.status || "").toUpperCase() === "AVAILABLE"
+            );
 
-            const todayOrders =
-                orders.filter(
-                    order =>
-                        isToday(
-                            order.createdAt ||
-                            order.date
-                        )
-                );
+            const lowStock = dashboardInventory.filter(item =>
+                Number(item.quantity || 0) <= Number(item.minimumStock || 0)
+            );
 
-
-            const activeOrders =
-                orders.filter(
-                    order =>
-                        isActiveStatus(
-                            order.status
-                        )
-                );
-
-
-            todayOrdersElement.textContent =
-                todayOrders.length;
-
-
-            activeOrdersElement.textContent =
-                activeOrders.length;
-
-
-            /*
-             * Current sample table layout:
-             * T01, T03, T06, T07, T09, T10
-             * are available = 6.
-             *
-             * Keep 7 as fallback for initial
-             * dashboard state if no orders exist.
-             */
-
-            availableTablesElement.textContent =
-                orders.length > 0
-                    ? "6"
-                    : "7";
+            todayOrdersElement.textContent = today.length;
+            activeOrdersElement.textContent = active.length;
+            availableTablesElement.textContent = available.length;
+            lowStockItemsElement.textContent = lowStock.length;
         }
-
 
         /* ==========================================
            RECENT ORDERS
         ========================================== */
 
         function renderRecentOrders() {
-
-            const orders =
-                getOrders();
-
-
-            if (orders.length === 0) {
-
+            if (!dashboardOrders.length) {
                 recentOrdersElement.innerHTML = `
-
                     <div style="
                         padding:35px 0;
                         text-align:center;
                         color:#796d63;
                         font-size:11px;
                     ">
-
-                        <div style="
-                            font-size:28px;
-                            margin-bottom:10px;
-                        ">
-                            🧾
-                        </div>
-
+                        <div style="font-size:28px;margin-bottom:10px;">🧾</div>
                         No orders yet.
-
-                        <div style="
-                            margin-top:6px;
-                            font-size:9px;
-                        ">
+                        <div style="margin-top:6px;font-size:9px;">
                             New customer orders will appear here.
                         </div>
-
                     </div>
-
                 `;
-
                 return;
             }
 
-
             recentOrdersElement.innerHTML = "";
 
-
-            orders
+            dashboardOrders
+                .slice()
+                .sort((a, b) =>
+                    new Date(b.createdAt || b.date || 0) -
+                    new Date(a.createdAt || a.date || 0)
+                )
                 .slice(0, 6)
-                .forEach(
-                    order => {
+                .forEach(order => {
+                    const status = normalizeStatus(order.status);
+                    const orderType = String(order.orderType || "DELIVERY");
 
-                        const status =
-                            normalizeStatus(
-                                order.status
-                            );
+                    let icon = "🛵";
+                    if (orderType === "DINE_IN" || orderType === "Dine-In") icon = "🍽️";
+                    if (orderType === "TAKEAWAY" || orderType === "Takeaway") icon = "🥡";
 
+                    const customer = getCustomerName(order);
+                    const orderNumber =
+                        order.orderNumber ||
+                        order._id ||
+                        order.id ||
+                        "ARY-ORDER";
 
-                        const customer =
-                            order.customer?.name ||
-                            (
-                                `${order.customer?.firstName || ""}
-                                ${order.customer?.lastName || ""}`
-                            ).trim() ||
-                            "Customer";
-
-
-                        const orderNumber =
-                            order.orderNumber ||
-                            order.id ||
-                            "ARY-ORDER";
-
-
-                        const total =
-                            order.total ??
-                            order.pricing?.total ??
-                            0;
-
-
-                        let icon =
-                            "🛵";
-
-                        if (
-                            order.orderType ===
-                            "Dine-In"
-                        ) {
-                            icon = "🍽️";
-                        }
-
-                        if (
-                            order.orderType ===
-                            "Takeaway"
-                        ) {
-                            icon = "🥡";
-                        }
-
-
-                        recentOrdersElement
-                            .insertAdjacentHTML(
-                                "beforeend",
-                                `
-
-                                    <div class="recent-order">
-
-                                        <div class="recent-order-main">
-
-                                            <div class="recent-order-icon">
-                                                ${icon}
-                                            </div>
-
-                                            <div>
-
-                                                <div class="recent-order-number">
-                                                    ${escapeHtml(
-                                                        orderNumber
-                                                    )}
-                                                </div>
-
-                                                <div class="recent-order-customer">
-                                                    ${escapeHtml(
-                                                        customer
-                                                    )}
-                                                    •
-                                                    ${formatDate(
-                                                        order.createdAt
-                                                    )}
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="recent-order-type">
-                                            ${escapeHtml(
-                                                order.orderType ||
-                                                "Delivery"
-                                            )}
-                                        </div>
-
-
-                                        <div style="
-                                            display:flex;
-                                            align-items:center;
-                                            gap:10px;
-                                        ">
-
-                                            <div class="recent-order-total">
-                                                ${formatCurrency(
-                                                    total
-                                                )}
-                                            </div>
-
-                                            <div class="
-                                                small-status
-                                                ${status.toLowerCase()}
-                                            ">
-                                                ${escapeHtml(
-                                                    readableStatus(
-                                                        status
-                                                    )
-                                                )}
-                                            </div>
-
-                                        </div>
-
+                    recentOrdersElement.insertAdjacentHTML("beforeend", `
+                        <div class="recent-order">
+                            <div class="recent-order-main">
+                                <div class="recent-order-icon">${icon}</div>
+                                <div>
+                                    <div class="recent-order-number">
+                                        ${escapeHtml(orderNumber)}
                                     </div>
+                                    <div class="recent-order-customer">
+                                        ${escapeHtml(customer)}
+                                        •
+                                        ${formatDate(order.createdAt || order.date)}
+                                    </div>
+                                </div>
+                            </div>
 
-                                `
-                            );
-                    }
-                );
+                            <div class="recent-order-type">
+                                ${escapeHtml(
+                                    orderType === "DINE_IN" ? "Dine-In" :
+                                    orderType === "TAKEAWAY" ? "Takeaway" :
+                                    "Delivery"
+                                )}
+                            </div>
+
+                            <div style="
+                                display:flex;
+                                align-items:center;
+                                gap:10px;
+                            ">
+                                <div class="recent-order-total">
+                                    ${formatCurrency(getOrderTotal(order))}
+                                </div>
+
+                                <div class="
+                                    small-status
+                                    ${status.toLowerCase()}
+                                ">
+                                    ${escapeHtml(readableStatus(status))}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
         }
-
 
         /* ==========================================
-           LOW STOCK
+           INVENTORY
         ========================================== */
 
-        function updateLowStockCount() {
+        function getStockPercent(item) {
+            const quantity = Number(item.quantity || 0);
+            const minimum = Number(item.minimumStock || 0);
 
-            /*
-             * Sample inventory currently contains
-             * two low-stock products.
-             *
-             * This will be connected to the backend
-             * inventory API later.
-             */
+            if (quantity <= 0) return 0;
 
-            const lowStock =
-                document.getElementById(
-                    "lowStockItems"
-                );
-
-            lowStock.textContent = "2";
+            const target = Math.max(minimum * 3, quantity);
+            return Math.max(5, Math.min(100, Math.round((quantity / target) * 100)));
         }
 
+        function getStockClass(item) {
+            const quantity = Number(item.quantity || 0);
+            const minimum = Number(item.minimumStock || 0);
+
+            if (quantity <= minimum) return "low";
+            if (quantity <= minimum * 2) return "medium";
+            return "good";
+        }
+
+        function getStockLabel(item) {
+            const cls = getStockClass(item);
+            if (cls === "low") return "Low Stock";
+            if (cls === "medium") return "Medium Stock";
+            return "Good Stock";
+        }
+
+        function renderInventory() {
+            const panelBody = document.querySelector(
+                ".content-grid .panel:nth-child(2) .panel-body"
+            );
+
+            if (!panelBody) return;
+
+            if (!dashboardInventory.length) {
+                panelBody.innerHTML = `
+                    <div style="
+                        padding:30px 0;
+                        text-align:center;
+                        color:#796d63;
+                        font-size:10px;
+                    ">
+                        No inventory records found.
+                    </div>
+                `;
+                return;
+            }
+
+            panelBody.innerHTML = dashboardInventory
+                .slice()
+                .sort((a, b) =>
+                    Number(a.quantity || 0) - Number(b.quantity || 0)
+                )
+                .slice(0, 5)
+                .map(item => {
+                    const cls = getStockClass(item);
+                    const percent = getStockPercent(item);
+
+                    return `
+                        <div class="inventory-row">
+                            <div class="inventory-top">
+                                <span class="inventory-name">
+                                    ${escapeHtml(item.name || "Ingredient")}
+                                </span>
+
+                                <span class="inventory-count">
+                                    ${Number(item.quantity || 0)}
+                                    ${escapeHtml(item.unit || "")}
+                                </span>
+                            </div>
+
+                            <div class="stock-bar">
+                                <div
+                                    class="stock-progress ${cls}"
+                                    style="width:${percent}%"
+                                ></div>
+                            </div>
+
+                            <div class="stock-status ${cls}">
+                                ${getStockLabel(item)}
+                            </div>
+                        </div>
+                    `;
+                })
+                .join("");
+        }
+
+        /* ==========================================
+           TABLES
+        ========================================== */
+
+        function renderTables() {
+            const grid = document.querySelector(".tables-grid");
+            if (!grid) return;
+
+            if (!dashboardTables.length) {
+                grid.innerHTML = `
+                    <div style="
+                        grid-column:1/-1;
+                        padding:30px;
+                        text-align:center;
+                        color:#796d63;
+                        font-size:10px;
+                    ">
+                        No tables found.
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = dashboardTables
+                .slice()
+                .sort((a, b) =>
+                    String(a.tableNumber || "").localeCompare(
+                        String(b.tableNumber || ""),
+                        undefined,
+                        { numeric: true }
+                    )
+                )
+                .map(table => {
+                    const status = String(
+                        table.status || "AVAILABLE"
+                    ).toUpperCase();
+
+                    const statusClass = [
+                        "AVAILABLE",
+                        "OCCUPIED",
+                        "RESERVED"
+                    ].includes(status)
+                        ? status.toLowerCase()
+                        : "available";
+
+                    return `
+                        <div class="table-card">
+                            <div class="table-number">
+                                ${escapeHtml(table.tableNumber || "T--")}
+                            </div>
+
+                            <div class="table-status ${statusClass}">
+                                ${escapeHtml(readableStatus(status))}
+                            </div>
+
+                            <div class="table-seats">
+                                ${Number(table.seats || 0)} Seats
+                            </div>
+                        </div>
+                    `;
+                })
+                .join("");
+        }
+
+        /* ==========================================
+           CURRENT ADMIN USER
+        ========================================== */
+
+        async function loadAdminProfile() {
+            try {
+                const response = await getMyProfile();
+                const user =
+                    response?.user ||
+                    response?.data ||
+                    response?.result ||
+                    response;
+
+                if (!user) return;
+
+                const name =
+                    `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+                    user.name ||
+                    "Admin";
+
+                const role =
+                    user.role ||
+                    "admin";
+
+                document.querySelector(".admin-user-name").textContent = name;
+                document.querySelector(".admin-user-role").textContent =
+                    role === "manager" ? "Manager" : "Administrator";
+
+                const avatar = document.querySelector(".admin-avatar");
+                avatar.textContent = name.charAt(0).toUpperCase();
+            } catch (error) {
+                console.warn("Profile could not be loaded:", error);
+            }
+        }
+
+        /* ==========================================
+           LOAD BACKEND DATA
+        ========================================== */
+
+        async function loadDashboard() {
+            try {
+                if (!getAuthToken()) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                const [ordersResponse, tablesResponse, inventoryResponse] =
+                    await Promise.all([
+                        getOrders(),
+                        getTables(),
+                        getInventory()
+                    ]);
+
+                dashboardOrders = extractList(ordersResponse, ["orders"]);
+                dashboardTables = extractList(tablesResponse, ["tables"]);
+                dashboardInventory = extractList(
+                    inventoryResponse,
+                    ["inventory", "items"]
+                );
+
+                updateStats();
+                renderRecentOrders();
+                renderInventory();
+                renderTables();
+            } catch (error) {
+                console.error("Admin dashboard load error:", error);
+
+                if (
+                    String(error.message || "")
+                        .toLowerCase()
+                        .includes("401") ||
+                    String(error.message || "")
+                        .toLowerCase()
+                        .includes("unauthorized")
+                ) {
+                    logoutUser();
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                showToast(
+                    error.message || "Unable to load dashboard data.",
+                    "error"
+                );
+            }
+        }
 
         /* ==========================================
            LOGOUT
@@ -2265,156 +2295,54 @@
 
         document
             .getElementById("logoutBtn")
-            .addEventListener(
-                "click",
-                function() {
+            .addEventListener("click", function () {
+                logoutUser();
 
-                    localStorage.removeItem(
-                        "arysCafeLoggedIn"
-                    );
+                showToast("Logged out successfully.");
 
-                    localStorage.removeItem(
-                        "arysCafeRole"
-                    );
-
-
-                    showToast(
-                        "Logged out successfully."
-                    );
-
-
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "login.html";
-
-                        },
-                        700
-                    );
-                }
-            );
-
-
-        /* ==========================================
-           TOAST
-        ========================================== */
-
-        function showToast(message) {
-
-            toast.textContent =
-                message;
-
-            toast.classList.add(
-                "show"
-            );
-
-            clearTimeout(
-                window.toastTimer
-            );
-
-            window.toastTimer =
-                setTimeout(
-                    () => {
-
-                        toast.classList.remove(
-                            "show"
-                        );
-
-                    },
-                    2800
-                );
-        }
-
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 500);
+            });
 
         /* ==========================================
            MOBILE MENU
         ========================================== */
 
         const mobileMenuBtn =
-            document.getElementById(
-                "mobileMenuBtn"
-            );
+            document.getElementById("mobileMenuBtn");
 
         const navContainer =
-            document.getElementById(
-                "navContainer"
-            );
+            document.getElementById("navContainer");
 
+        mobileMenuBtn.addEventListener("click", function () {
+            navContainer.classList.toggle("menu-open");
 
-        mobileMenuBtn.addEventListener(
-            "click",
-            function() {
-
-                navContainer.classList.toggle(
-                    "menu-open"
-                );
-
-                this.textContent =
-                    navContainer.classList.contains(
-                        "menu-open"
-                    )
-                        ? "✕"
-                        : "☰";
-            }
-        );
-
+            this.textContent =
+                navContainer.classList.contains("menu-open")
+                    ? "✕"
+                    : "☰";
+        });
 
         document
             .querySelectorAll(".admin-nav > a")
-            .forEach(
-                link => {
-
-                    link.addEventListener(
-                        "click",
-                        () => {
-
-                            navContainer.classList.remove(
-                                "menu-open"
-                            );
-
-                            mobileMenuBtn.textContent =
-                                "☰";
-                        }
-                    );
-
-                }
-            );
-
+            .forEach(link => {
+                link.addEventListener("click", () => {
+                    navContainer.classList.remove("menu-open");
+                    mobileMenuBtn.textContent = "☰";
+                });
+            });
 
         /* ==========================================
            INITIALIZE
         ========================================== */
 
         updateDate();
+        loadAdminProfile();
+        loadDashboard();
 
-        updateStats();
-
-        updateLowStockCount();
-
-        renderRecentOrders();
-
-
-        /* ==========================================
-           REFRESH DASHBOARD
-        ========================================== */
-
-        window.addEventListener(
-            "storage",
-            function(event) {
-
-                if (
-                    event.key ===
-                    ORDERS_KEY
-                ) {
-
-                    updateStats();
-
-                    renderRecentOrders();
-                }
-            }
-        );
-
+        /* Refresh real backend data */
+        setInterval(loadDashboard, 15000);
     </script>
 
 </body>

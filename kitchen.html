@@ -2708,48 +2708,660 @@
          JAVASCRIPT
     ========================================== -->
 
-    <script>
 
+    <script src="api.js"></script>
+    <script>
         /* ==========================================
-           ELEMENTS
+           ARY'S CAFE - KITCHEN BACKEND INTEGRATION
         ========================================== */
 
         const kitchenOrders =
-            document.getElementById(
-                "kitchenOrders"
-            );
-
+            document.getElementById("kitchenOrders");
 
         const filterEmpty =
-            document.getElementById(
-                "filterEmpty"
-            );
-
+            document.getElementById("filterEmpty");
 
         const toast =
-            document.getElementById(
-                "toast"
-            );
+            document.getElementById("toast");
 
+        let allOrders = [];
+        let currentFilter = "all";
+        let isLoading = false;
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function normalizeStatus(status) {
+            return String(status || "PLACED")
+                .toUpperCase()
+                .replace(/-/g, "_")
+                .replace(/\s+/g, "_");
+        }
+
+        function kitchenStatus(status) {
+            const value = normalizeStatus(status);
+
+            if (value === "PLACED" || value === "CONFIRMED") {
+                return "new";
+            }
+
+            if (value === "PREPARING") {
+                return "preparing";
+            }
+
+            if (value === "READY") {
+                return "ready";
+            }
+
+            if (
+                value === "SERVED" ||
+                value === "PICKED_UP" ||
+                value === "OUT_FOR_DELIVERY" ||
+                value === "DELIVERED" ||
+                value === "COMPLETED"
+            ) {
+                return "completed";
+            }
+
+            return "new";
+        }
+
+        function displayStatus(status) {
+            const value = kitchenStatus(status);
+
+            if (value === "new") return "New";
+            if (value === "preparing") return "Preparing";
+            if (value === "ready") return "Ready";
+            return "Completed";
+        }
+
+        function getOrdersArray(response) {
+            if (Array.isArray(response)) return response;
+            if (Array.isArray(response?.orders)) return response.orders;
+            if (Array.isArray(response?.data)) return response.data;
+            if (Array.isArray(response?.results)) return response.results;
+            return [];
+        }
+
+        function getCustomerName(order) {
+            if (order.customerName) return order.customerName;
+
+            if (order.customer) {
+                const name =
+                    `${order.customer.firstName || ""} ${order.customer.lastName || ""}`
+                        .trim();
+
+                if (name) return name;
+
+                if (order.customer.name) {
+                    return order.customer.name;
+                }
+            }
+
+            return "Customer";
+        }
+
+        function getOrderNumber(order) {
+            return order.orderNumber ||
+                order._id ||
+                "ARY-ORDER";
+        }
+
+        function formatTime(dateValue) {
+            if (!dateValue) return "--";
+
+            const date = new Date(dateValue);
+
+            if (Number.isNaN(date.getTime())) {
+                return "--";
+            }
+
+            return date.toLocaleTimeString("en-IN", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function getRelativeTime(dateValue) {
+            if (!dateValue) return "";
+
+            const date = new Date(dateValue);
+
+            if (Number.isNaN(date.getTime())) {
+                return "";
+            }
+
+            const seconds =
+                Math.floor((Date.now() - date.getTime()) / 1000);
+
+            if (seconds < 60) {
+                return `${Math.max(1, seconds)} sec ago`;
+            }
+
+            const minutes = Math.floor(seconds / 60);
+
+            if (minutes < 60) {
+                return `${minutes} min ago`;
+            }
+
+            const hours = Math.floor(minutes / 60);
+
+            if (hours < 24) {
+                return `${hours} hr ago`;
+            }
+
+            return date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short"
+            });
+        }
+
+        function formatOrderType(order) {
+            const type = String(order.orderType || "").toUpperCase();
+
+            if (type === "DINE_IN") {
+                return `Dine-In${order.tableNumber ? ` • Table ${order.tableNumber}` : ""}`;
+            }
+
+            if (type === "TAKEAWAY") {
+                return "Takeaway";
+            }
+
+            return "Delivery";
+        }
+
+        function getDetailBox(order) {
+            const type = String(order.orderType || "").toUpperCase();
+
+            if (type === "DINE_IN") {
+                return {
+                    label: "Guests",
+                    value: `${Number(order.guests || 1)} Guest${Number(order.guests || 1) === 1 ? "" : "s"}`
+                };
+            }
+
+            if (type === "TAKEAWAY") {
+                return {
+                    label: "Pickup",
+                    value: order.pickupTime
+                        ? formatTime(order.pickupTime)
+                        : "ASAP"
+                };
+            }
+
+            return {
+                label: "Delivery",
+                value: order.deliveryAddress
+                    ? String(order.deliveryAddress).split(",")[0]
+                    : "Delivery"
+            };
+        }
+
+        function getPriority(order) {
+            return order.priority ||
+                order.isPriority ? "Priority" : "Normal";
+        }
+
+        function formatItemPrice(item) {
+            const price =
+                Number(item.price || 0) *
+                Number(item.quantity || 1);
+
+            return `₹${price.toLocaleString("en-IN")}`;
+        }
+
+        function renderItems(items) {
+            if (!Array.isArray(items) || !items.length) {
+                return `
+                    <div class="order-item">
+                        <div>
+                            <div class="item-name">No items</div>
+                        </div>
+                        <div class="item-price">₹0</div>
+                    </div>
+                `;
+            }
+
+            return items.map(item => `
+                <div class="order-item">
+                    <div>
+                        <div class="item-name">
+                            ${escapeHtml(item.name || "Menu Item")}
+                        </div>
+
+                        <div class="item-quantity">
+                            Qty: ${Number(item.quantity || 1)}
+                        </div>
+                    </div>
+
+                    <div class="item-price">
+                        ${formatItemPrice(item)}
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function updateStats() {
+            let newCount = 0;
+            let preparingCount = 0;
+            let readyCount = 0;
+            let completedCount = 0;
+
+            allOrders.forEach(order => {
+                const status = kitchenStatus(order.status);
+
+                if (status === "new") newCount++;
+                if (status === "preparing") preparingCount++;
+                if (status === "ready") readyCount++;
+                if (status === "completed") completedCount++;
+            });
+
+            document.getElementById("newCount").textContent = newCount;
+            document.getElementById("preparingCount").textContent = preparingCount;
+            document.getElementById("readyCount").textContent = readyCount;
+            document.getElementById("completedCount").textContent = completedCount;
+        }
+
+        function getActionButton(order, status) {
+            const id = escapeHtml(order._id || order.id || "");
+
+            if (status === "new") {
+                return `
+                    <button
+                        type="button"
+                        class="action-button start-btn"
+                        data-action="start"
+                        data-order-id="${id}"
+                    >
+                        Start Preparing
+                    </button>
+                `;
+            }
+
+            if (status === "preparing") {
+                return `
+                    <button
+                        type="button"
+                        class="action-button ready-btn"
+                        data-action="ready"
+                        data-order-id="${id}"
+                    >
+                        Mark as Ready
+                    </button>
+                `;
+            }
+
+            if (status === "ready") {
+                return `
+                    <button
+                        type="button"
+                        class="action-button complete-btn"
+                        data-action="complete"
+                        data-order-id="${id}"
+                    >
+                        Complete Order
+                    </button>
+                `;
+            }
+
+            return `
+                <div class="completed-message">
+                    ✓ Order Completed
+                </div>
+            `;
+        }
+
+        function renderOrders() {
+            const sortedOrders = allOrders
+                .slice()
+                .sort((a, b) =>
+                    new Date(b.createdAt || 0) -
+                    new Date(a.createdAt || 0)
+                );
+
+            const filteredOrders =
+                currentFilter === "all"
+                    ? sortedOrders
+                    : sortedOrders.filter(
+                        order =>
+                            kitchenStatus(order.status) === currentFilter
+                    );
+
+            if (!filteredOrders.length) {
+                kitchenOrders
+                    .querySelectorAll(".kitchen-order-card")
+                    .forEach(card => card.remove());
+
+                filterEmpty.classList.add("show");
+                return;
+            }
+
+            filterEmpty.classList.remove("show");
+
+            kitchenOrders
+                .querySelectorAll(".kitchen-order-card")
+                .forEach(card => card.remove());
+
+            filteredOrders.forEach(order => {
+                const status = kitchenStatus(order.status);
+                const details = getDetailBox(order);
+                const orderId = order._id || order.id || "";
+                const createdAt =
+                    order.createdAt ||
+                    order.date ||
+                    new Date().toISOString();
+
+                const note =
+                    order.specialInstructions ||
+                    order.specialNote ||
+                    "";
+
+                const card = document.createElement("article");
+                card.className = "kitchen-order-card";
+                card.dataset.status = status;
+                card.dataset.orderId = orderId;
+
+                card.innerHTML = `
+                    <div class="kitchen-order-header">
+                        <div>
+                            <div class="order-number">
+                                #${escapeHtml(getOrderNumber(order))}
+                            </div>
+
+                            <div class="order-time">
+                                ${escapeHtml(getRelativeTime(createdAt))}
+                                • ${escapeHtml(formatTime(createdAt))}
+                            </div>
+                        </div>
+
+                        <div class="
+                            status-badge
+                            status-${status === "new" ? "new" : status}
+                            status-label
+                        ">
+                            ${escapeHtml(displayStatus(order.status))}
+                        </div>
+                    </div>
+
+                    <div class="kitchen-order-body">
+                        <div class="customer-row">
+                            <div class="customer-icon">
+                                👤
+                            </div>
+
+                            <div>
+                                <div class="customer-name">
+                                    ${escapeHtml(getCustomerName(order))}
+                                </div>
+
+                                <div class="customer-type">
+                                    ${escapeHtml(formatOrderType(order))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-details">
+                            <div class="detail-box">
+                                <div class="detail-label">
+                                    ${escapeHtml(details.label)}
+                                </div>
+
+                                <div class="detail-value">
+                                    ${escapeHtml(details.value)}
+                                </div>
+                            </div>
+
+                            <div class="detail-box">
+                                <div class="detail-label">
+                                    Priority
+                                </div>
+
+                                <div class="detail-value">
+                                    ${escapeHtml(getPriority(order))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="items-heading">
+                            Order Items
+                        </div>
+
+                        <div class="order-items">
+                            ${renderItems(order.items)}
+                        </div>
+
+                        ${
+                            note
+                                ? `
+                                    <div class="special-note">
+                                        <strong>Special Note:</strong>
+                                        ${escapeHtml(note)}
+                                    </div>
+                                `
+                                : ""
+                        }
+                    </div>
+
+                    <div class="kitchen-order-footer">
+                        ${getActionButton(order, status)}
+                    </div>
+                `;
+
+                kitchenOrders.insertBefore(
+                    card,
+                    filterEmpty
+                );
+            });
+        }
+
+        async function loadKitchenOrders(showError = true) {
+            if (isLoading) return;
+
+            isLoading = true;
+
+            try {
+                if (!getAuthToken()) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                const response = await getOrders();
+                allOrders = getOrdersArray(response);
+
+                updateStats();
+                renderOrders();
+            } catch (error) {
+                console.error(
+                    "Kitchen orders load error:",
+                    error
+                );
+
+                if (showError) {
+                    showToast(
+                        error.message ||
+                        "Unable to load kitchen orders."
+                    );
+                }
+
+                if (
+                    String(error.message || "")
+                        .toLowerCase()
+                        .includes("401") ||
+                    String(error.message || "")
+                        .toLowerCase()
+                        .includes("unauthorized")
+                ) {
+                    logoutUser();
+                    window.location.href = "login.html";
+                }
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        async function changeOrderStatus(orderId, nextStatus, button) {
+            if (!orderId) {
+                showToast("Order ID is missing.");
+                return;
+            }
+
+            if (button) {
+                button.disabled = true;
+                button.textContent = "Updating...";
+            }
+
+            try {
+                await updateOrderStatus(orderId, nextStatus);
+
+                showToast(
+                    `Order status updated to ${nextStatus.replace("_", " ").toLowerCase()}.`
+                );
+
+                await loadKitchenOrders(false);
+            } catch (error) {
+                console.error(
+                    "Kitchen status update error:",
+                    error
+                );
+
+                showToast(
+                    error.message ||
+                    "Unable to update order status."
+                );
+
+                if (button) {
+                    button.disabled = false;
+                }
+            }
+        }
+
+        window.startPreparing = function(button) {
+            const card =
+                button.closest(".kitchen-order-card");
+
+            if (!card) return;
+
+            changeOrderStatus(
+                card.dataset.orderId,
+                "PREPARING",
+                button
+            );
+        };
+
+        window.markReady = function(button) {
+            const card =
+                button.closest(".kitchen-order-card");
+
+            if (!card) return;
+
+            changeOrderStatus(
+                card.dataset.orderId,
+                "READY",
+                button
+            );
+        };
+
+        window.completeOrder = function(button) {
+            const card =
+                button.closest(".kitchen-order-card");
+
+            if (!card) return;
+
+            changeOrderStatus(
+                card.dataset.orderId,
+                "COMPLETED",
+                button
+            );
+        };
+
+        /* ==========================================
+           FILTERS
+        ========================================== */
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(button => {
+                button.addEventListener(
+                    "click",
+                    function() {
+                        document
+                            .querySelectorAll(".filter-btn")
+                            .forEach(btn =>
+                                btn.classList.remove("active")
+                            );
+
+                        this.classList.add("active");
+
+                        currentFilter =
+                            this.dataset.filter;
+
+                        renderOrders();
+                    }
+                );
+            });
+
+        /* ==========================================
+           EVENT DELEGATION
+        ========================================== */
+
+        kitchenOrders.addEventListener(
+            "click",
+            function(event) {
+                const button =
+                    event.target.closest(
+                        "[data-action]"
+                    );
+
+                if (!button) return;
+
+                const action =
+                    button.dataset.action;
+
+                const orderId =
+                    button.dataset.orderId;
+
+                if (action === "start") {
+                    changeOrderStatus(
+                        orderId,
+                        "PREPARING",
+                        button
+                    );
+                }
+
+                if (action === "ready") {
+                    changeOrderStatus(
+                        orderId,
+                        "READY",
+                        button
+                    );
+                }
+
+                if (action === "complete") {
+                    changeOrderStatus(
+                        orderId,
+                        "COMPLETED",
+                        button
+                    );
+                }
+            }
+        );
 
         /* ==========================================
            TIME
         ========================================== */
 
         function updateTime() {
-
             const timeElement =
-                document.getElementById(
-                    "currentTime"
-                );
-
-
-            const now =
-                new Date();
-
+                document.getElementById("currentTime");
 
             timeElement.textContent =
-                now.toLocaleTimeString(
+                new Date().toLocaleTimeString(
                     "en-IN",
                     {
                         hour: "2-digit",
@@ -2758,479 +3370,60 @@
                 );
         }
 
-
         updateTime();
-
-
-        setInterval(
-            updateTime,
-            30000
-        );
-
+        setInterval(updateTime, 30000);
 
         /* ==========================================
-           GET CARDS
+           USER PROFILE
         ========================================== */
 
-        function getOrderCards() {
-
-            return Array.from(
-                document.querySelectorAll(
-                    ".kitchen-order-card"
-                )
-            );
-        }
-
-
-        /* ==========================================
-           UPDATE STATS
-        ========================================== */
-
-        function updateStats() {
-
-            const cards =
-                getOrderCards();
-
-
-            let newOrders = 0;
-            let preparing = 0;
-            let ready = 0;
-            let completed = 0;
-
-
-            cards.forEach(
-                card => {
-
-                    const status =
-                        card.dataset.status;
-
-
-                    if (status === "new") {
-                        newOrders++;
-                    }
-
-
-                    if (
-                        status ===
-                        "preparing"
-                    ) {
-                        preparing++;
-                    }
-
-
-                    if (status === "ready") {
-                        ready++;
-                    }
-
-
-                    if (
-                        status ===
-                        "completed"
-                    ) {
-                        completed++;
-                    }
-
-                }
-            );
-
-
-            document.getElementById(
-                "newCount"
-            ).textContent =
-                newOrders;
-
-
-            document.getElementById(
-                "preparingCount"
-            ).textContent =
-                preparing;
-
-
-            document.getElementById(
-                "readyCount"
-            ).textContent =
-                ready;
-
-
-            document.getElementById(
-                "completedCount"
-            ).textContent =
-                completed;
-        }
-
-
-        /* ==========================================
-           UPDATE STATUS UI
-        ========================================== */
-
-        function updateStatusUI(
-            card,
-            status
-        ) {
-
-            const badge =
-                card.querySelector(
-                    ".status-label"
-                );
-
-
-            const footer =
-                card.querySelector(
-                    ".kitchen-order-footer"
-                );
-
-
-            card.dataset.status =
-                status;
-
-
-            badge.className =
-                "status-badge status-label";
-
-
-            if (status === "new") {
-
-                badge.classList.add(
-                    "status-new"
-                );
-
-                badge.textContent =
-                    "New";
-
-
-                footer.innerHTML = `
-
-                    <button
-                        type="button"
-                        class="action-button start-btn"
-                        onclick="startPreparing(this)"
-                    >
-                        Start Preparing
-                    </button>
-
-                `;
-
-            }
-
-
-            else if (
-                status ===
-                "preparing"
-            ) {
-
-                badge.classList.add(
-                    "status-preparing"
-                );
-
-                badge.textContent =
-                    "Preparing";
-
-
-                footer.innerHTML = `
-
-                    <button
-                        type="button"
-                        class="action-button ready-btn"
-                        onclick="markReady(this)"
-                    >
-                        Mark as Ready
-                    </button>
-
-                `;
-
-            }
-
-
-            else if (
-                status ===
-                "ready"
-            ) {
-
-                badge.classList.add(
-                    "status-ready"
-                );
-
-                badge.textContent =
-                    "Ready";
-
-
-                footer.innerHTML = `
-
-                    <button
-                        type="button"
-                        class="action-button complete-btn"
-                        onclick="completeOrder(this)"
-                    >
-                        Complete Order
-                    </button>
-
-                `;
-
-            }
-
-
-            else if (
-                status ===
-                "completed"
-            ) {
-
-                badge.classList.add(
-                    "status-completed"
-                );
-
-                badge.textContent =
-                    "Completed";
-
-
-                footer.innerHTML = `
-
-                    <div class="completed-message">
-                        ✓ Order Completed
-                    </div>
-
-                `;
-            }
-
-
-            updateStats();
-        }
-
-
-        /* ==========================================
-           START PREPARING
-        ========================================== */
-
-        function startPreparing(button) {
-
-            const card =
-                button.closest(
-                    ".kitchen-order-card"
-                );
-
-
-            if (!card) {
-                return;
-            }
-
-
-            updateStatusUI(
-                card,
-                "preparing"
-            );
-
-
-            showToast(
-                "Order moved to Preparing."
-            );
-
-
-            applyCurrentFilter();
-        }
-
-
-        /* ==========================================
-           MARK READY
-        ========================================== */
-
-        function markReady(button) {
-
-            const card =
-                button.closest(
-                    ".kitchen-order-card"
-                );
-
-
-            if (!card) {
-                return;
-            }
-
-
-            updateStatusUI(
-                card,
-                "ready"
-            );
-
-
-            showToast(
-                "Order marked as Ready."
-            );
-
-
-            applyCurrentFilter();
-        }
-
-
-        /* ==========================================
-           COMPLETE ORDER
-        ========================================== */
-
-        function completeOrder(button) {
-
-            const card =
-                button.closest(
-                    ".kitchen-order-card"
-                );
-
-
-            if (!card) {
-                return;
-            }
-
-
-            updateStatusUI(
-                card,
-                "completed"
-            );
-
-
-            showToast(
-                "Order completed successfully."
-            );
-
-
-            applyCurrentFilter();
-        }
-
-
-        /* ==========================================
-           FILTER
-        ========================================== */
-
-        let currentFilter =
-            "all";
-
-
-        function applyCurrentFilter() {
-
-            const cards =
-                getOrderCards();
-
-
-            let visibleCount = 0;
-
-
-            cards.forEach(
-                card => {
-
-                    const status =
-                        card.dataset.status;
-
-
-                    const shouldShow =
-                        currentFilter ===
-                            "all" ||
-                        status ===
-                            currentFilter;
-
-
-                    if (shouldShow) {
-
-                        card.classList.remove(
-                            "hidden"
-                        );
-
-                        visibleCount++;
-
-                    } else {
-
-                        card.classList.add(
-                            "hidden"
-                        );
-                    }
-
-                }
-            );
-
-
-            if (visibleCount === 0) {
-
-                filterEmpty.classList.add(
-                    "show"
-                );
-
-            } else {
-
-                filterEmpty.classList.remove(
-                    "show"
+        async function loadKitchenProfile() {
+            try {
+                const response =
+                    await getMyProfile();
+
+                const user =
+                    response?.user ||
+                    response?.data ||
+                    response?.result ||
+                    response;
+
+                if (!user) return;
+
+                const name =
+                    `${user.firstName || ""} ${user.lastName || ""}`
+                        .trim() ||
+                    user.name ||
+                    "Kitchen";
+
+                const role =
+                    user.role ||
+                    "kitchen";
+
+                document
+                    .querySelector(".admin-user-name")
+                    .textContent = name;
+
+                document
+                    .querySelector(".admin-user-role")
+                    .textContent =
+                        role === "chef"
+                            ? "Chef"
+                            : role === "kitchen"
+                                ? "Kitchen Staff"
+                                : "Staff";
+
+                document
+                    .querySelector(".admin-avatar")
+                    .textContent =
+                        name.charAt(0).toUpperCase();
+            } catch (error) {
+                console.warn(
+                    "Kitchen profile could not be loaded:",
+                    error
                 );
             }
         }
-
-
-        document
-            .querySelectorAll(
-                ".filter-btn"
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        function() {
-
-                            document
-                                .querySelectorAll(
-                                    ".filter-btn"
-                                )
-                                .forEach(
-                                    btn =>
-                                        btn.classList.remove(
-                                            "active"
-                                        )
-                                );
-
-
-                            this.classList.add(
-                                "active"
-                            );
-
-
-                            currentFilter =
-                                this.dataset.filter;
-
-
-                            applyCurrentFilter();
-
-                        }
-                    );
-
-                }
-            );
-
-
-        /* ==========================================
-           TOAST
-        ========================================== */
-
-        function showToast(message) {
-
-            toast.textContent =
-                message;
-
-
-            toast.classList.add(
-                "show"
-            );
-
-
-            clearTimeout(
-                window.toastTimer
-            );
-
-
-            window.toastTimer =
-                setTimeout(
-                    () => {
-
-                        toast.classList.remove(
-                            "show"
-                        );
-
-                    },
-                    2800
-                );
-        }
-
 
         /* ==========================================
            LOGOUT
@@ -3241,35 +3434,21 @@
             .addEventListener(
                 "click",
                 function() {
-
-                    localStorage.removeItem(
-                        "arysCafeLoggedIn"
-                    );
-
-
-                    localStorage.removeItem(
-                        "arysCafeRole"
-                    );
-
+                    logoutUser();
 
                     showToast(
                         "Logged out successfully."
                     );
 
-
                     setTimeout(
                         () => {
-
                             window.location.href =
                                 "login.html";
-
                         },
-                        700
+                        500
                     );
-
                 }
             );
-
 
         /* ==========================================
            MOBILE MENU
@@ -3280,21 +3459,17 @@
                 "mobileMenuBtn"
             );
 
-
         const navContainer =
             document.getElementById(
                 "navContainer"
             );
 
-
         mobileMenuBtn.addEventListener(
             "click",
             function() {
-
                 navContainer.classList.toggle(
                     "menu-open"
                 );
-
 
                 this.textContent =
                     navContainer.classList.contains(
@@ -3305,41 +3480,38 @@
             }
         );
 
-
         document
             .querySelectorAll(
                 ".admin-nav > a"
             )
-            .forEach(
-                link => {
+            .forEach(link => {
+                link.addEventListener(
+                    "click",
+                    function() {
+                        navContainer.classList.remove(
+                            "menu-open"
+                        );
 
-                    link.addEventListener(
-                        "click",
-                        function() {
-
-                            navContainer.classList.remove(
-                                "menu-open"
-                            );
-
-
-                            mobileMenuBtn.textContent =
-                                "☰";
-                        }
-                    );
-
-                }
-            );
-
+                        mobileMenuBtn.textContent =
+                            "☰";
+                    }
+                );
+            });
 
         /* ==========================================
            INITIALIZE
         ========================================== */
 
-        updateStats();
+        loadKitchenProfile();
+        loadKitchenOrders();
 
-        applyCurrentFilter();
-
+        /* Keep kitchen queue fresh */
+        setInterval(
+            () => loadKitchenOrders(false),
+            10000
+        );
     </script>
+
 
 </body>
 </html>

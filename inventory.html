@@ -1132,6 +1132,7 @@
 
         }
     </style>
+    <script src="api.js"></script>
 </head>
 
 <body>
@@ -1273,9 +1274,7 @@
                         Total Items
                     </span>
 
-                    <strong id="totalItems">
-                        12
-                    </strong>
+                    <strong id="totalItems">0</strong>
 
                 </div>
 
@@ -1294,9 +1293,7 @@
                         In Stock
                     </span>
 
-                    <strong id="inStockItems">
-                        8
-                    </strong>
+                    <strong id="inStockItems">0</strong>
 
                 </div>
 
@@ -1315,9 +1312,7 @@
                         Low Stock
                     </span>
 
-                    <strong id="lowStockItems">
-                        3
-                    </strong>
+                    <strong id="lowStockItems">0</strong>
 
                 </div>
 
@@ -1336,9 +1331,7 @@
                         Out of Stock
                     </span>
 
-                    <strong id="outStockItems">
-                        1
-                    </strong>
+                    <strong id="outStockItems">0</strong>
 
                 </div>
 
@@ -1467,1294 +1460,13 @@
 
 
                 <tbody id="inventoryBody">
-
-
-                    <!-- TOMATO -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Tomatoes"
-                        data-category="vegetables"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🍅
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Tomatoes
-                                    </div>
-
-                                    <div class="item-category">
-                                        Vegetables
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                18
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        72%
-                                    </span>
-
-                                    <span>
-                                        Min. 8 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:72%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 10:32 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Tomatoes')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- CHEESE -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Mozzarella Cheese"
-                        data-category="dairy"
-                        data-status="low"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🧀
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Mozzarella Cheese
-                                    </div>
-
-                                    <div class="item-category">
-                                        Dairy
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                4.5
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        30%
-                                    </span>
-
-                                    <span>
-                                        Min. 5 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill low"
-                                        style="width:30%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge low">
-                                Low Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 09:45 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn"
-                                onclick="reorderItem('Mozzarella Cheese')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- CHICKEN -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Chicken Breast"
-                        data-category="meat"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🍗
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Chicken Breast
-                                    </div>
-
-                                    <div class="item-category">
-                                        Meat
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                12
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        68%
-                                    </span>
-
-                                    <span>
-                                        Min. 6 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:68%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 09:20 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Chicken Breast')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- BURGER BUNS -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Burger Buns"
-                        data-category="bakery"
-                        data-status="low"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🍔
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Burger Buns
-                                    </div>
-
-                                    <div class="item-category">
-                                        Bakery
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                28
-                            </span>
-
-                            <span class="unit">
-                                pcs
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        28%
-                                    </span>
-
-                                    <span>
-                                        Min. 40 pcs
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill low"
-                                        style="width:28%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge low">
-                                Low Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Yesterday, 06:30 PM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn"
-                                onclick="reorderItem('Burger Buns')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- COFFEE BEANS -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Coffee Beans"
-                        data-category="beverages"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    ☕
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Coffee Beans
-                                    </div>
-
-                                    <div class="item-category">
-                                        Beverages
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                8.2
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        82%
-                                    </span>
-
-                                    <span>
-                                        Min. 3 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:82%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 08:15 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Coffee Beans')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- FLOUR -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="All Purpose Flour"
-                        data-category="grocery"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🌾
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        All Purpose Flour
-                                    </div>
-
-                                    <div class="item-category">
-                                        Grocery
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                24
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        80%
-                                    </span>
-
-                                    <span>
-                                        Min. 10 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:80%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Yesterday, 05:40 PM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('All Purpose Flour')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- LETTUCE -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Fresh Lettuce"
-                        data-category="vegetables"
-                        data-status="low"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🥬
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Fresh Lettuce
-                                    </div>
-
-                                    <div class="item-category">
-                                        Vegetables
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                3.2
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        24%
-                                    </span>
-
-                                    <span>
-                                        Min. 5 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill low"
-                                        style="width:24%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge low">
-                                Low Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 07:50 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn"
-                                onclick="reorderItem('Fresh Lettuce')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- OLIVE OIL -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Olive Oil"
-                        data-category="grocery"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🫒
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Olive Oil
-                                    </div>
-
-                                    <div class="item-category">
-                                        Grocery
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                9.5
-                            </span>
-
-                            <span class="unit">
-                                L
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        76%
-                                    </span>
-
-                                    <span>
-                                        Min. 4 L
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:76%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Yesterday, 04:20 PM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Olive Oil')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- MILK -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Fresh Milk"
-                        data-category="dairy"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🥛
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Fresh Milk
-                                    </div>
-
-                                    <div class="item-category">
-                                        Dairy
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                15
-                            </span>
-
-                            <span class="unit">
-                                L
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        75%
-                                    </span>
-
-                                    <span>
-                                        Min. 6 L
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:75%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 06:50 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Fresh Milk')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- BEEF -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Beef Patty"
-                        data-category="meat"
-                        data-status="out"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🥩
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Beef Patty
-                                    </div>
-
-                                    <div class="item-category">
-                                        Meat
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                0
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        0%
-                                    </span>
-
-                                    <span>
-                                        Min. 5 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill out"
-                                        style="width:0%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge out">
-                                Out of Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Today, 11:10 AM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn"
-                                onclick="reorderItem('Beef Patty')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- CHOCOLATE -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Dark Chocolate"
-                        data-category="grocery"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🍫
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Dark Chocolate
-                                    </div>
-
-                                    <div class="item-category">
-                                        Grocery
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                6.8
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        64%
-                                    </span>
-
-                                    <span>
-                                        Min. 3 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:64%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Yesterday, 03:30 PM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Dark Chocolate')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- SUGAR -->
-
-                    <tr
-                        class="inventory-row"
-                        data-name="Sugar"
-                        data-category="grocery"
-                        data-status="good"
-                    >
-
-                        <td>
-
-                            <div class="item-info">
-
-                                <div class="item-icon">
-                                    🍚
-                                </div>
-
-                                <div>
-
-                                    <div class="item-name">
-                                        Sugar
-                                    </div>
-
-                                    <div class="item-category">
-                                        Grocery
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="quantity">
-                                20
-                            </span>
-
-                            <span class="unit">
-                                kg
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="progress-area">
-
-                                <div class="progress-top">
-
-                                    <span>
-                                        78%
-                                    </span>
-
-                                    <span>
-                                        Min. 8 kg
-                                    </span>
-
-                                </div>
-
-                                <div class="progress-bar">
-
-                                    <div
-                                        class="progress-fill good"
-                                        style="width:78%"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="stock-badge good">
-                                In Stock
-                            </span>
-
-                        </td>
-
-
-                        <td>
-                            Yesterday, 02:10 PM
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="reorder-btn disabled"
-                                onclick="reorderItem('Sugar')"
-                            >
-                                Reorder
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- EMPTY -->
-
-                    <tr
-                        class="empty-row"
-                        id="emptyRow"
-                    >
-
+                    <tr class="empty-row" id="emptyRow">
                         <td colspan="6">
-
-                            <div class="empty-icon">
-                                📦
-                            </div>
-
-                            <h3>
-                                No inventory items found
-                            </h3>
-
-                            <p>
-                                Try changing your search or category filter.
-                            </p>
-
+                            <div class="empty-icon">📦</div>
+                            <h3>No inventory items found</h3>
+                            <p>Try changing your search or category filter.</p>
                         </td>
-
                     </tr>
-
-
                 </tbody>
 
             </table>
@@ -2780,94 +1492,7 @@
 
 
             <div class="alert-grid">
-
-
-                <div class="alert-card">
-
-                    <div class="alert-icon">
-                        🧀
-                    </div>
-
-                    <div class="alert-content">
-
-                        <strong>
-                            Mozzarella Cheese
-                        </strong>
-
-                        <p>
-                            Current stock is 4.5 kg. Recommended minimum
-                            level is 5 kg.
-                        </p>
-
-                        <button
-                            class="alert-action"
-                            onclick="reorderItem('Mozzarella Cheese')"
-                        >
-                            Reorder Now →
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="alert-card">
-
-                    <div class="alert-icon">
-                        🍔
-                    </div>
-
-                    <div class="alert-content">
-
-                        <strong>
-                            Burger Buns
-                        </strong>
-
-                        <p>
-                            Only 28 pieces are available. Current demand
-                            may require a fresh delivery.
-                        </p>
-
-                        <button
-                            class="alert-action"
-                            onclick="reorderItem('Burger Buns')"
-                        >
-                            Reorder Now →
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="alert-card">
-
-                    <div class="alert-icon">
-                        🥩
-                    </div>
-
-                    <div class="alert-content">
-
-                        <strong>
-                            Beef Patty
-                        </strong>
-
-                        <p>
-                            This item is currently out of stock and should
-                            be replenished before accepting related orders.
-                        </p>
-
-                        <button
-                            class="alert-action"
-                            onclick="reorderItem('Beef Patty')"
-                        >
-                            Reorder Now →
-                        </button>
-
-                    </div>
-
-                </div>
-
+                <div id="alertGridContent" style="display:contents;"></div>
             </div>
 
         </section>
@@ -3137,327 +1762,406 @@
 
 
     <script>
-
         /* =========================
-           MOBILE MENU
+           ARY'S CAFE INVENTORY
+           Backend-connected module
         ========================= */
 
-        const mobileMenuBtn =
-            document.getElementById("mobileMenuBtn");
-
-        const navLinks =
-            document.getElementById("navLinks");
-
-
-        if (mobileMenuBtn) {
-
-            mobileMenuBtn.addEventListener("click", function () {
-
-                navLinks.classList.toggle("open");
-
-            });
-
-        }
-
-
-        document.querySelectorAll(".nav-links a").forEach(link => {
-
-            link.addEventListener("click", function () {
-
-                navLinks.classList.remove("open");
-
-            });
-
-        });
-
-
-        /* =========================
-           TOAST
-        ========================= */
-
+        let inventoryItems = [];
         let toastTimer;
 
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const navLinks = document.getElementById("navLinks");
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener("click", () => {
+                navLinks.classList.toggle("open");
+            });
+        }
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", () => navLinks.classList.remove("open"));
+        });
 
         function showToast(message) {
-
-            const toast =
-                document.getElementById("toast");
-
+            const toast = document.getElementById("toast");
             toast.textContent = message;
-
             toast.classList.add("show");
-
             clearTimeout(toastTimer);
-
-            toastTimer = setTimeout(() => {
-
-                toast.classList.remove("show");
-
-            }, 2600);
-
+            toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
         }
 
-
-        /* =========================
-           SEARCH
-        ========================= */
-
-        function searchInventory() {
-
-            const searchValue =
-                document
-                    .getElementById("searchInput")
-                    .value
-                    .toLowerCase()
-                    .trim();
-
-            const category =
-                document
-                    .getElementById("categoryFilter")
-                    .value;
-
-            filterRows(searchValue, category);
-
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
-
-        /* =========================
-           CATEGORY FILTER
-        ========================= */
-
-        function filterInventory() {
-
-            const searchValue =
-                document
-                    .getElementById("searchInput")
-                    .value
-                    .toLowerCase()
-                    .trim();
-
-            const category =
-                document
-                    .getElementById("categoryFilter")
-                    .value;
-
-            filterRows(searchValue, category);
-
+        function formatCategory(category) {
+            return String(category || "")
+                .replace(/[-_]/g, " ")
+                .replace(/\b\w/g, char => char.toUpperCase());
         }
 
+        function getItemStatus(item) {
+            const quantity = Number(item.quantity) || 0;
+            const minimum = Number(item.minimumStock) || 0;
 
-        /* =========================
-           FILTER ROWS
-        ========================= */
+            if (quantity <= 0) return "out";
+            if (quantity <= minimum) return "low";
+            return "good";
+        }
 
-        function filterRows(searchValue, category) {
+        function getItemIcon(item) {
+            const name = String(item.name || "").toLowerCase();
+            const category = String(item.category || "").toLowerCase();
 
-            const rows =
-                document.querySelectorAll(".inventory-row");
+            const icons = {
+                tomato: "🍅",
+                cheese: "🧀",
+                chicken: "🍗",
+                beef: "🥩",
+                burger: "🍔",
+                bun: "🍔",
+                coffee: "☕",
+                flour: "🌾",
+                lettuce: "🥬",
+                olive: "🫒",
+                milk: "🥛",
+                chocolate: "🍫",
+                sugar: "🍚",
+                vegetable: "🥬",
+                dairy: "🥛",
+                meat: "🥩",
+                bakery: "🍞",
+                beverage: "🥤",
+                grocery: "📦"
+            };
 
-            let visibleCount = 0;
+            for (const key of Object.keys(icons)) {
+                if (name.includes(key)) return icons[key];
+            }
 
+            return icons[category] || "📦";
+        }
 
-            rows.forEach(row => {
+        function formatUpdated(dateValue) {
+            if (!dateValue) return "—";
+            const date = new Date(dateValue);
+            if (Number.isNaN(date.getTime())) return "—";
 
-                const name =
-                    row.dataset.name.toLowerCase();
+            return date.toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
 
-                const rowCategory =
-                    row.dataset.category;
+        function getProgress(item) {
+            const quantity = Number(item.quantity) || 0;
+            const minimum = Number(item.minimumStock) || 0;
 
-                const matchesSearch =
-                    name.includes(searchValue);
+            // Visual stock level: enough room above minimum looks fuller.
+            if (quantity <= 0) return 0;
+            const reference = Math.max(minimum * 2.5, quantity);
+            return Math.min(100, Math.max(0, (quantity / reference) * 100));
+        }
 
-                const matchesCategory =
-                    category === "all" ||
-                    rowCategory === category;
+        function renderInventory() {
+            const body = document.getElementById("inventoryBody");
+            const search = document.getElementById("searchInput").value.toLowerCase().trim();
+            const category = document.getElementById("categoryFilter").value;
 
-
-                if (
-                    matchesSearch &&
-                    matchesCategory
-                ) {
-
-                    row.style.display = "";
-
-                    visibleCount++;
-
-                } else {
-
-                    row.style.display = "none";
-
-                }
-
+            const filtered = inventoryItems.filter(item => {
+                const matchesSearch = String(item.name || "").toLowerCase().includes(search);
+                const matchesCategory = category === "all" || String(item.category || "").toLowerCase() === category;
+                return matchesSearch && matchesCategory;
             });
 
+            body.querySelectorAll(".inventory-row").forEach(row => row.remove());
 
-            const emptyRow =
-                document.getElementById("emptyRow");
+            filtered.forEach(item => {
+                const status = getItemStatus(item);
+                const progress = getProgress(item);
+                const row = document.createElement("tr");
+                row.className = "inventory-row";
+                row.dataset.name = item.name || "";
+                row.dataset.category = item.category || "";
+                row.dataset.status = status;
 
+                const statusText = {
+                    good: "In Stock",
+                    low: "Low Stock",
+                    out: "Out of Stock"
+                }[status];
 
-            if (visibleCount === 0) {
+                row.innerHTML = `
+                    <td>
+                        <div class="item-info">
+                            <div class="item-icon">${getItemIcon(item)}</div>
+                            <div>
+                                <div class="item-name">${escapeHtml(item.name)}</div>
+                                <div class="item-category">${escapeHtml(formatCategory(item.category))}</div>
+                            </div>
+                        </div>
+                    </td>
 
-                emptyRow.style.display = "table-row";
+                    <td>
+                        <span class="quantity">${Number(item.quantity || 0).toLocaleString("en-IN", {maximumFractionDigits: 2})}</span>
+                        <span class="unit">${escapeHtml(item.unit || "")}</span>
+                    </td>
 
-            } else {
+                    <td>
+                        <div class="progress-area">
+                            <div class="progress-top">
+                                <span>${Math.round(progress)}%</span>
+                                <span>Min. ${Number(item.minimumStock || 0).toLocaleString("en-IN", {maximumFractionDigits: 2})} ${escapeHtml(item.unit || "")}</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill ${status}" style="width:${progress}%"></div>
+                            </div>
+                        </div>
+                    </td>
 
-                emptyRow.style.display = "none";
+                    <td>
+                        <span class="stock-badge ${status}">
+                            ${statusText}
+                        </span>
+                    </td>
 
+                    <td>${formatUpdated(item.updatedAt)}</td>
+
+                    <td>
+                        <button class="reorder-btn ${status === "good" ? "disabled" : ""}"
+                            onclick="reorderItem('${String(item._id)}')">
+                            ${status === "good" ? "Healthy" : "Add Stock"}
+                        </button>
+                    </td>
+                `;
+
+                body.insertBefore(row, document.getElementById("emptyRow"));
+            });
+
+            document.getElementById("emptyRow").style.display =
+                filtered.length ? "none" : "table-row";
+
+            renderSummary();
+            renderAlerts();
+        }
+
+        function renderSummary() {
+            const total = inventoryItems.length;
+            const inStock = inventoryItems.filter(item => getItemStatus(item) === "good").length;
+            const low = inventoryItems.filter(item => getItemStatus(item) === "low").length;
+            const out = inventoryItems.filter(item => getItemStatus(item) === "out").length;
+
+            document.getElementById("totalItems").textContent = total;
+            document.getElementById("inStockItems").textContent = inStock;
+            document.getElementById("lowStockItems").textContent = low;
+            document.getElementById("outStockItems").textContent = out;
+        }
+
+        function renderAlerts() {
+            const container = document.getElementById("alertGridContent");
+            const lowItems = inventoryItems.filter(item => getItemStatus(item) !== "good").slice(0, 6);
+
+            if (!lowItems.length) {
+                container.innerHTML = `
+                    <div class="alert-card">
+                        <div class="alert-icon">✓</div>
+                        <div class="alert-content">
+                            <strong>All stock levels are healthy</strong>
+                            <p>No inventory items are currently at or below their minimum stock level.</p>
+                        </div>
+                    </div>
+                `;
+                return;
             }
 
+            container.innerHTML = lowItems.map(item => {
+                const status = getItemStatus(item);
+                const quantity = Number(item.quantity || 0);
+                const minimum = Number(item.minimumStock || 0);
+
+                return `
+                    <div class="alert-card">
+                        <div class="alert-icon">${getItemIcon(item)}</div>
+                        <div class="alert-content">
+                            <strong>${escapeHtml(item.name)}</strong>
+                            <p>
+                                Current stock is ${quantity.toLocaleString("en-IN", {maximumFractionDigits: 2})} ${escapeHtml(item.unit || "")}.
+                                Recommended minimum is ${minimum.toLocaleString("en-IN", {maximumFractionDigits: 2})} ${escapeHtml(item.unit || "")}.
+                            </p>
+                            <button class="alert-action" onclick="reorderItem('${String(item._id)}')">
+                                ${status === "out" ? "Add Stock Now →" : "Add Stock →"}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
         }
 
+        async function loadInventory(showMessage = false) {
+            try {
+                const response = await getInventory();
+                inventoryItems = response.items || response.data || response.result || [];
 
-        /* =========================
-           REORDER
-        ========================= */
+                renderInventory();
 
-        function reorderItem(itemName) {
+                if (showMessage) {
+                    showToast("Inventory synced successfully.");
+                }
+            } catch (error) {
+                console.error("Inventory load error:", error);
 
-            showToast(
-                "Reorder request created for " +
-                itemName
+                if (error.message && /401|403|token|authorization/i.test(error.message)) {
+                    showToast("Please login with an authorized account.");
+                } else {
+                    showToast(error.message || "Unable to load inventory.");
+                }
+            }
+        }
+
+        function searchInventory() {
+            renderInventory();
+        }
+
+        function filterInventory() {
+            renderInventory();
+        }
+
+        async function reorderItem(itemId) {
+            const item = inventoryItems.find(entry => String(entry._id) === String(itemId));
+            if (!item) return;
+
+            const amount = prompt(
+                `Add stock for ${item.name}\nCurrent: ${item.quantity} ${item.unit}\nEnter quantity to add:`,
+                ""
             );
 
+            if (amount === null) return;
+
+            const quantity = Number(amount);
+
+            if (!quantity || quantity <= 0) {
+                showToast("Enter a valid stock quantity.");
+                return;
+            }
+
+            try {
+                await apiRequest(`/inventory/${item._id}/add-stock`, {
+                    method: "PATCH",
+                    body: JSON.stringify({ quantity })
+                });
+
+                showToast(`${item.name} stock updated successfully.`);
+                await loadInventory();
+            } catch (error) {
+                showToast(error.message || "Unable to add stock.");
+            }
         }
-
-
-        /* =========================
-           MODAL
-        ========================= */
 
         function openModal() {
-
-            document
-                .getElementById("stockModal")
-                .classList.add("show");
-
-            document
-                .getElementById("itemName")
-                .focus();
-
+            document.getElementById("stockModal").classList.add("show");
+            document.getElementById("itemName").focus();
         }
-
 
         function closeModal() {
-
-            document
-                .getElementById("stockModal")
-                .classList.remove("show");
-
-            document
-                .getElementById("stockForm")
-                .reset();
-
+            document.getElementById("stockModal").classList.remove("show");
+            document.getElementById("stockForm").reset();
         }
-
 
         function closeModalOutside(event) {
-
-            if (
-                event.target ===
-                document.getElementById("stockModal")
-            ) {
-
+            if (event.target === document.getElementById("stockModal")) {
                 closeModal();
-
             }
-
         }
 
-
-        /* =========================
-           ADD STOCK
-        ========================= */
-
-        function addStock(event) {
-
+        async function addStock(event) {
             event.preventDefault();
 
+            const itemName = document.getElementById("itemName").value.trim();
+            const category = document.getElementById("itemCategory").value;
+            const quantity = Number(document.getElementById("itemQuantity").value);
+            const unit = document.getElementById("itemUnit").value;
+            const minimumStock = Number(document.getElementById("minimumStock").value);
 
-            const itemName =
-                document
-                    .getElementById("itemName")
-                    .value
-                    .trim();
-
-            const quantity =
-                document
-                    .getElementById("itemQuantity")
-                    .value;
-
-            const unit =
-                document
-                    .getElementById("itemUnit")
-                    .value;
-
-
-            if (!itemName || !quantity || !unit) {
-
-                showToast(
-                    "Please complete all required fields."
-                );
-
+            if (!itemName || !category || !unit || quantity < 0 || minimumStock < 0) {
+                showToast("Please complete all required fields.");
                 return;
-
             }
 
-
-            closeModal();
-
-
-            showToast(
-                itemName +
-                " stock added successfully."
+            const existing = inventoryItems.find(
+                item => String(item.name || "").toLowerCase() === itemName.toLowerCase()
             );
 
+            try {
+                if (existing) {
+                    await apiRequest(`/inventory/${existing._id}/add-stock`, {
+                        method: "PATCH",
+                        body: JSON.stringify({ quantity })
+                    });
+
+                    await apiRequest(`/inventory/${existing._id}`, {
+                        method: "PATCH",
+                        body: JSON.stringify({
+                            category,
+                            unit,
+                            minimumStock
+                        })
+                    });
+
+                    showToast(`${itemName} stock updated successfully.`);
+                } else {
+                    await apiRequest("/inventory", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            name: itemName,
+                            category,
+                            unit,
+                            quantity,
+                            minimumStock
+                        })
+                    });
+
+                    showToast(`${itemName} added to inventory.`);
+                }
+
+                closeModal();
+                await loadInventory();
+            } catch (error) {
+                showToast(error.message || "Unable to update inventory.");
+            }
         }
-
-
-        /* =========================
-           LOGOUT
-        ========================= */
 
         function logout() {
+            const confirmLogout = confirm("Are you sure you want to logout?");
+            if (!confirmLogout) return;
 
-            const confirmLogout =
-                confirm(
-                    "Are you sure you want to logout?"
-                );
+            if (typeof logoutUser === "function") {
+                logoutUser();
+            } else {
+                localStorage.removeItem("arysCafeLoggedIn");
+                localStorage.removeItem("arysCafeRole");
+            }
 
+            window.location.href = "login.html";
+        }
 
-            if (!confirmLogout) {
+        document.addEventListener("DOMContentLoaded", async () => {
+            if (typeof getAuthToken === "function" && !getAuthToken()) {
+                window.location.href = "login.html";
                 return;
             }
 
-
-            localStorage.removeItem(
-                "arysCafeLoggedIn"
-            );
-
-            localStorage.removeItem(
-                "arysCafeRole"
-            );
-
-
-            window.location.href =
-                "login.html";
-
-        }
-
-
-        /* =========================
-           INITIAL LOAD
-        ========================= */
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                filterInventory();
-
-            }
-        );
-
+            await loadInventory();
+            setInterval(() => loadInventory(false), 10000);
+        });
     </script>
 
 </body>

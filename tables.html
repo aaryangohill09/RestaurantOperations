@@ -1716,440 +1716,227 @@
         Table updated successfully.
     </div>
 
-
+    <script src="api.js"></script>
     <script>
+        let allTables = [];
+        let activeFilter = "all";
 
-        /* =========================
-           MOBILE MENU
-        ========================= */
+        const statusMap = {
+            AVAILABLE: "available",
+            OCCUPIED: "occupied",
+            RESERVED: "reserved",
+            CLEANING: "cleaning"
+        };
 
-        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-        const navLinks = document.getElementById("navLinks");
-
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener("click", function () {
-                navLinks.classList.toggle("open");
-            });
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, c => ({
+                "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+            }[c]));
         }
-
-
-        document.querySelectorAll(".nav-links a").forEach(link => {
-            link.addEventListener("click", function () {
-                navLinks.classList.remove("open");
-            });
-        });
-
-
-        /* =========================
-           TOAST
-        ========================= */
-
-        let toastTimer;
 
         function showToast(message) {
-
             const toast = document.getElementById("toast");
-
             toast.textContent = message;
             toast.classList.add("show");
-
-            clearTimeout(toastTimer);
-
-            toastTimer = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 2600);
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
         }
 
-
-        /* =========================
-           UPDATE SUMMARY
-        ========================= */
-
-        function updateSummary() {
-
-            const cards = document.querySelectorAll(".table-card");
-
-            let available = 0;
-            let occupied = 0;
-            let reserved = 0;
-            let cleaning = 0;
-
-            cards.forEach(card => {
-
-                const status = card.dataset.status;
-
-                if (status === "available") {
-                    available++;
-                }
-
-                if (status === "occupied") {
-                    occupied++;
-                }
-
-                if (status === "reserved") {
-                    reserved++;
-                }
-
-                if (status === "cleaning") {
-                    cleaning++;
-                }
-
-            });
-
-            document.getElementById("availableCount").textContent = available;
-            document.getElementById("occupiedCount").textContent = occupied;
-            document.getElementById("reservedCount").textContent = reserved;
-            document.getElementById("cleaningCount").textContent = cleaning;
+        function extractTables(response) {
+            if (Array.isArray(response)) return response;
+            if (Array.isArray(response?.tables)) return response.tables;
+            if (Array.isArray(response?.data)) return response.data;
+            if (Array.isArray(response?.results)) return response.results;
+            return [];
         }
 
+        function normalizeStatus(status) {
+            return String(status || "AVAILABLE").toUpperCase();
+        }
 
-        /* =========================
-           FILTER TABLES
-        ========================= */
-
-        function filterTables(status, button) {
-
-            document.querySelectorAll(".filter-btn").forEach(btn => {
-                btn.classList.remove("active");
+        function renderSummary() {
+            const counts = { AVAILABLE:0, OCCUPIED:0, RESERVED:0, CLEANING:0 };
+            allTables.forEach(t => {
+                const s = normalizeStatus(t.status);
+                if (counts[s] !== undefined) counts[s]++;
             });
+            document.getElementById("availableCount").textContent = counts.AVAILABLE;
+            document.getElementById("occupiedCount").textContent = counts.OCCUPIED;
+            document.getElementById("reservedCount").textContent = counts.RESERVED;
+            document.getElementById("cleaningCount").textContent = counts.CLEANING;
+        }
 
-            button.classList.add("active");
-
-            const cards = document.querySelectorAll(".table-card");
-
-            let visible = 0;
-
-            cards.forEach(card => {
-
-                if (status === "all" || card.dataset.status === status) {
-
-                    card.classList.remove("hidden");
-
-                    visible++;
-
-                } else {
-
-                    card.classList.add("hidden");
-
-                }
-
-            });
-
+        function renderTables() {
+            const grid = document.getElementById("tablesGrid");
             const noResults = document.getElementById("noResults");
 
-            if (visible === 0) {
-                noResults.classList.add("show");
-            } else {
-                noResults.classList.remove("show");
+            const filtered = activeFilter === "all"
+                ? allTables
+                : allTables.filter(t => statusMap[normalizeStatus(t.status)] === activeFilter);
+
+            grid.querySelectorAll(".table-card").forEach(card => card.remove());
+
+            filtered.forEach(table => {
+                const status = normalizeStatus(table.status);
+                const cls = statusMap[status] || "available";
+                const number = table.tableNumber || table.number || "T--";
+                const seats = Number(table.seats || 0);
+                const guests = table.guests || 0;
+                const customer = table.customerName || "";
+                const orderId = table.order?._id || table.order || "";
+                const reservation = table.reservationTime
+                    ? new Date(table.reservationTime).toLocaleString("en-IN", {
+                        day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit"
+                    })
+                    : "";
+
+                let info = "";
+                if (status === "AVAILABLE") {
+                    info = `
+                        <div class="info-row"><span class="info-label">Capacity</span><span class="info-value">${seats} Guests</span></div>
+                        <div class="info-row"><span class="info-label">Current Order</span><span class="info-value">—</span></div>`;
+                } else if (status === "OCCUPIED") {
+                    info = `
+                        <div class="info-row"><span class="info-label">Guests</span><span class="info-value">${guests || "—"} Guests</span></div>
+                        <div class="info-row"><span class="info-label">Order</span><span class="info-value order-link">${escapeHtml(orderId || "Active Order")}</span></div>`;
+                } else if (status === "RESERVED") {
+                    info = `
+                        <div class="reservation-box">
+                            <strong>${escapeHtml(customer || "Reserved Guest")}</strong>
+                            <span>${guests || 0} Guests${reservation ? " · " + reservation : ""}</span>
+                        </div>`;
+                } else {
+                    info = `
+                        <div class="info-row"><span class="info-label">Status</span><span class="info-value">Cleaning required</span></div>
+                        <div class="info-row"><span class="info-label">Next Step</span><span class="info-value">Clean table</span></div>`;
+                }
+
+                let actions = "";
+                if (status === "AVAILABLE") {
+                    actions = `<button class="action-btn primary" onclick="seatGuests('${escapeHtml(number)}')">Seat Guests</button>`;
+                } else if (status === "OCCUPIED") {
+                    actions = `<button class="action-btn warning" onclick="releaseTable('${escapeHtml(number)}')">Release Table</button>`;
+                } else if (status === "RESERVED") {
+                    actions = `
+                        <button class="action-btn" onclick="confirmReservation('${escapeHtml(number)}')">Confirm</button>
+                        <button class="action-btn warning" onclick="cancelReservation('${escapeHtml(number)}')">Cancel</button>`;
+                } else {
+                    actions = `<button class="action-btn success" onclick="markAvailable('${escapeHtml(number)}')">Mark Available</button>`;
+                }
+
+                grid.insertAdjacentHTML("beforeend", `
+                    <article class="table-card" data-status="${cls}">
+                        <div class="table-top">
+                            <div>
+                                <div class="table-number">${escapeHtml(number)}</div>
+                                <div class="table-seat">${seats} Seats</div>
+                            </div>
+                            <span class="status-badge ${cls}">${escapeHtml(status.replace("_"," "))}</span>
+                        </div>
+                        <div class="table-body">
+                            <div class="table-info">${info}</div>
+                            <div class="table-actions">${actions}</div>
+                        </div>
+                    </article>
+                `);
+            });
+
+            noResults.classList.toggle("show", filtered.length === 0);
+        }
+
+        function filterTables(status, button) {
+            activeFilter = status;
+            document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+            button.classList.add("active");
+            renderTables();
+        }
+
+        async function updateTableStatus(tableNumber, action) {
+            try {
+                let response;
+                if (action === "seat") {
+                    response = await seatTable(tableNumber, { guests: 2 });
+                } else if (action === "release") {
+                    response = await releaseTable(tableNumber);
+                } else if (action === "reserve") {
+                    response = await reserveTable(tableNumber, {
+                        customerName: "Reserved Guest",
+                        guests: 2
+                    });
+                } else if (action === "available") {
+                    response = await updateTable(tableNumber, { status: "AVAILABLE" });
+                }
+
+                const updated = response?.table || response?.data || response;
+                const index = allTables.findIndex(t => String(t.tableNumber) === String(tableNumber));
+                if (updated && index >= 0) allTables[index] = updated;
+
+                await loadTables();
+                showToast(`${tableNumber} updated successfully.`);
+            } catch (error) {
+                console.error(error);
+                showToast(error.message || `Unable to update ${tableNumber}.`);
             }
         }
 
-
-        /* =========================
-           SEAT GUESTS
-        ========================= */
-
-        function seatGuests(button) {
-
-            const card = button.closest(".table-card");
-
-            const tableNumber =
-                card.querySelector(".table-number").textContent;
-
-            card.dataset.status = "occupied";
-
-            const statusBadge =
-                card.querySelector(".status-badge");
-
-            statusBadge.className =
-                "status-badge occupied";
-
-            statusBadge.textContent =
-                "Occupied";
-
-            const tableInfo =
-                card.querySelector(".table-info");
-
-            tableInfo.innerHTML = `
-                <div class="info-row">
-                    <span class="info-label">Guests</span>
-                    <span class="info-value">2 Guests</span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Order</span>
-                    <span class="info-value order-link">
-                        New Order
-                    </span>
-                </div>
-            `;
-
-            button.className = "action-btn warning";
-            button.textContent = "Release Table";
-            button.onclick = function () {
-                releaseTable(this);
-            };
-
-            updateSummary();
-
-            showToast(
-                tableNumber + " is now occupied."
-            );
+        function seatGuests(tableNumber) {
+            updateTableStatus(tableNumber, "seat");
         }
 
-
-        /* =========================
-           RELEASE TABLE
-        ========================= */
-
-        function releaseTable(button) {
-
-            const card = button.closest(".table-card");
-
-            const tableNumber =
-                card.querySelector(".table-number").textContent;
-
-            card.dataset.status = "cleaning";
-
-            const statusBadge =
-                card.querySelector(".status-badge");
-
-            statusBadge.className =
-                "status-badge cleaning";
-
-            statusBadge.textContent =
-                "Cleaning";
-
-            const tableInfo =
-                card.querySelector(".table-info");
-
-            tableInfo.innerHTML = `
-                <div class="info-row">
-                    <span class="info-label">Status</span>
-                    <span class="info-value">
-                        Cleaning required
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Next Step</span>
-                    <span class="info-value">
-                        Clean table
-                    </span>
-                </div>
-            `;
-
-            button.className = "action-btn success";
-            button.textContent = "Mark Available";
-            button.onclick = function () {
-                markAvailable(this);
-            };
-
-            updateSummary();
-
-            showToast(
-                tableNumber + " moved to cleaning."
-            );
+        function releaseTable(tableNumber) {
+            updateTableStatus(tableNumber, "release");
         }
 
-
-        /* =========================
-           MARK AVAILABLE
-        ========================= */
-
-        function markAvailable(button) {
-
-            const card = button.closest(".table-card");
-
-            const tableNumber =
-                card.querySelector(".table-number").textContent;
-
-            card.dataset.status = "available";
-
-            const statusBadge =
-                card.querySelector(".status-badge");
-
-            statusBadge.className =
-                "status-badge available";
-
-            statusBadge.textContent =
-                "Available";
-
-            const tableInfo =
-                card.querySelector(".table-info");
-
-            tableInfo.innerHTML = `
-                <div class="info-row">
-                    <span class="info-label">Capacity</span>
-                    <span class="info-value">4 Guests</span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Current Order</span>
-                    <span class="info-value">—</span>
-                </div>
-            `;
-
-            button.className = "action-btn primary";
-            button.textContent = "Seat Guests";
-            button.onclick = function () {
-                seatGuests(this);
-            };
-
-            updateSummary();
-
-            showToast(
-                tableNumber + " is now available."
-            );
+        function markAvailable(tableNumber) {
+            updateTableStatus(tableNumber, "available");
         }
 
-
-        /* =========================
-           RESERVATION CONFIRM
-        ========================= */
-
-        function confirmReservation(button) {
-
-            const card = button.closest(".table-card");
-
-            const tableNumber =
-                card.querySelector(".table-number").textContent;
-
-            card.dataset.status = "occupied";
-
-            const statusBadge =
-                card.querySelector(".status-badge");
-
-            statusBadge.className =
-                "status-badge occupied";
-
-            statusBadge.textContent =
-                "Occupied";
-
-            const tableInfo =
-                card.querySelector(".table-info");
-
-            tableInfo.innerHTML = `
-                <div class="info-row">
-                    <span class="info-label">Guests</span>
-                    <span class="info-value">5 Guests</span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Order</span>
-                    <span class="info-value order-link">
-                        Reservation
-                    </span>
-                </div>
-            `;
-
-            const actions =
-                card.querySelector(".table-actions");
-
-            actions.innerHTML = `
-                <button
-                    class="action-btn warning"
-                    onclick="releaseTable(this)"
-                >
-                    Release Table
-                </button>
-            `;
-
-            updateSummary();
-
-            showToast(
-                tableNumber + " reservation confirmed."
-            );
+        function confirmReservation(tableNumber) {
+            updateTableStatus(tableNumber, "seat");
         }
 
-
-        /* =========================
-           RESERVATION CANCEL
-        ========================= */
-
-        function cancelReservation(button) {
-
-            const card = button.closest(".table-card");
-
-            const tableNumber =
-                card.querySelector(".table-number").textContent;
-
-            card.dataset.status = "available";
-
-            const statusBadge =
-                card.querySelector(".status-badge");
-
-            statusBadge.className =
-                "status-badge available";
-
-            statusBadge.textContent =
-                "Available";
-
-            const tableInfo =
-                card.querySelector(".table-info");
-
-            tableInfo.innerHTML = `
-                <div class="info-row">
-                    <span class="info-label">Capacity</span>
-                    <span class="info-value">6 Guests</span>
-                </div>
-
-                <div class="info-row">
-                    <span class="info-label">Current Order</span>
-                    <span class="info-value">—</span>
-                </div>
-            `;
-
-            const actions =
-                card.querySelector(".table-actions");
-
-            actions.innerHTML = `
-                <button
-                    class="action-btn primary"
-                    onclick="seatGuests(this)"
-                >
-                    Seat Guests
-                </button>
-            `;
-
-            updateSummary();
-
-            showToast(
-                tableNumber + " reservation cancelled."
-            );
+        function cancelReservation(tableNumber) {
+            updateTableStatus(tableNumber, "available");
         }
 
+        async function loadTables() {
+            try {
+                if (!getAuthToken()) {
+                    window.location.href = "login.html";
+                    return;
+                }
 
-        /* =========================
-           LOGOUT
-        ========================= */
+                const response = await getTables();
+                allTables = extractTables(response);
+                renderSummary();
+                renderTables();
+            } catch (error) {
+                console.error("Tables load error:", error);
+                showToast(error.message || "Unable to load tables.");
+            }
+        }
 
         function logout() {
-
-            const confirmLogout =
-                confirm("Are you sure you want to logout?");
-
-            if (!confirmLogout) {
-                return;
-            }
-
-            localStorage.removeItem("arysCafeLoggedIn");
-            localStorage.removeItem("arysCafeRole");
-
+            if (!confirm("Are you sure you want to logout?")) return;
+            logoutUser();
             window.location.href = "login.html";
         }
 
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            const navLinks = document.getElementById("navLinks");
 
-        /* =========================
-           INITIAL LOAD
-        ========================= */
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener("click", () => navLinks.classList.toggle("open"));
+            }
 
-        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".nav-links a").forEach(link => {
+                link.addEventListener("click", () => navLinks.classList.remove("open"));
+            });
 
-            updateSummary();
-
+            loadTables();
+            setInterval(loadTables, 10000);
         });
-
     </script>
 
 </body>
