@@ -2710,6 +2710,7 @@
 
 
     <script src="api.js"></script>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
     <script>
         /* ==========================================
            ARY'S CAFE - KITCHEN BACKEND INTEGRATION
@@ -3498,12 +3499,66 @@
                 );
             });
 
+
+        /* ==========================================
+           REAL-TIME KITCHEN UPDATES
+        ========================================== */
+
+        let kitchenSocket = null;
+
+        function connectKitchenRealtime() {
+            if (typeof io !== "function") {
+                console.warn("Socket.IO client is not available.");
+                return;
+            }
+
+            kitchenSocket = io("http://localhost:5000", {
+                transports: ["websocket", "polling"]
+            });
+
+            kitchenSocket.on("connect", function() {
+                console.log("Kitchen real-time connection established.");
+            });
+
+            kitchenSocket.on("newOrder", function() {
+                if (getAuthToken()) {
+                    loadKitchenOrders(false);
+                    showToast("New order received in the kitchen.");
+                }
+            });
+
+            kitchenSocket.on("kitchenNewOrder", function() {
+                if (getAuthToken()) {
+                    loadKitchenOrders(false);
+                    showToast("New kitchen order received.");
+                }
+            });
+
+            kitchenSocket.on("orderStatusUpdated", function() {
+                if (getAuthToken()) {
+                    loadKitchenOrders(false);
+                }
+            });
+
+            kitchenSocket.on("orderCancelled", function() {
+                if (getAuthToken()) {
+                    loadKitchenOrders(false);
+                    showToast("An order was cancelled.");
+                }
+            });
+
+            kitchenSocket.on("disconnect", function() {
+                console.warn("Kitchen real-time connection disconnected.");
+            });
+        }
+
         /* ==========================================
            INITIALIZE
         ========================================== */
 
         loadKitchenProfile();
         loadKitchenOrders();
+        connectKitchenRealtime();
 
         /* Keep kitchen queue fresh */
         setInterval(

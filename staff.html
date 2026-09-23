@@ -1473,6 +1473,8 @@
         }
 
     </style>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+
     <script src="api.js"></script>
 </head>
 
@@ -2698,6 +2700,58 @@
             }
         }
 
+        /* ==========================================
+           REAL-TIME STAFF UPDATES
+        ========================================== */
+
+        function connectStaffRealtime() {
+            if (typeof io !== "function") {
+                console.warn("Socket.IO client is not available.");
+                return;
+            }
+
+            const socket = io("http://localhost:5000", {
+                transports: ["websocket", "polling"]
+            });
+
+            socket.on("connect", () => {
+                console.log("Staff real-time connected:", socket.id);
+            });
+
+            socket.on("connect_error", error => {
+                console.warn("Staff real-time connection error:", error.message);
+            });
+
+            const refreshStaff = async (message) => {
+                await loadStaff();
+                if (message) showToast(message);
+            };
+
+            socket.on("staffCreated", () => {
+                refreshStaff("New staff member added.");
+            });
+
+            socket.on("staffAdded", () => {
+                refreshStaff("New staff member added.");
+            });
+
+            socket.on("staffUpdated", () => {
+                refreshStaff("Staff information updated.");
+            });
+
+            socket.on("staffStatusUpdated", () => {
+                refreshStaff("Staff status updated.");
+            });
+
+            socket.on("staffDeleted", () => {
+                refreshStaff("Staff member removed.");
+            });
+
+            socket.on("staffRemoved", () => {
+                refreshStaff("Staff member removed.");
+            });
+        }
+
         function logout() {
             const confirmLogout = confirm(
                 "Are you sure you want to logout?"
@@ -2727,8 +2781,10 @@
             }
 
             await loadStaff();
+            connectStaffRealtime();
 
-            setInterval(loadStaff, 10000);
+            // Fallback refresh in case the real-time connection is unavailable.
+            setInterval(loadStaff, 30000);
         });
 </script>
 

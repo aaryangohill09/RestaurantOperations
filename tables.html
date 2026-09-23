@@ -1669,10 +1669,8 @@
 
             <p>
                 <strong>Live operations:</strong>
-                Table status is currently managed on the frontend for
-                demonstration. In the final backend implementation, table
-                changes will sync across Admin, Kitchen and Customer screens
-                using Socket.IO in real time.
+                Table status is connected to the backend and refreshes
+                across ARY’S CAFE operations screens using Socket.IO in real time.
             </p>
 
         </div>
@@ -1716,6 +1714,7 @@
         Table updated successfully.
     </div>
 
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
     <script src="api.js"></script>
     <script>
         let allTables = [];
@@ -1916,6 +1915,67 @@
             }
         }
 
+
+        /* ==========================================
+           REAL-TIME TABLE OPERATIONS
+        ========================================== */
+
+        let tablesSocket = null;
+
+        function connectTablesRealtime() {
+            if (typeof io !== "function") {
+                console.warn("Socket.IO client is not available.");
+                return;
+            }
+
+            tablesSocket = io("http://localhost:5000", {
+                transports: ["websocket", "polling"]
+            });
+
+            tablesSocket.on("connect", function () {
+                console.log("Tables real-time connection established.");
+            });
+
+            function refreshTablesRealtime(message) {
+                if (getAuthToken()) {
+                    loadTables();
+                    if (message) showToast(message);
+                }
+            }
+
+            tablesSocket.on("tableUpdated", function () {
+                refreshTablesRealtime("Table status updated.");
+            });
+
+            tablesSocket.on("tableStatusUpdated", function () {
+                refreshTablesRealtime("Table status updated.");
+            });
+
+            tablesSocket.on("tableCreated", function () {
+                refreshTablesRealtime("New table added.");
+            });
+
+            tablesSocket.on("tableDeleted", function () {
+                refreshTablesRealtime("Table removed.");
+            });
+
+            tablesSocket.on("tableSeated", function () {
+                refreshTablesRealtime("Guests seated at a table.");
+            });
+
+            tablesSocket.on("tableReleased", function () {
+                refreshTablesRealtime("Table released.");
+            });
+
+            tablesSocket.on("tableReserved", function () {
+                refreshTablesRealtime("Table reservation updated.");
+            });
+
+            tablesSocket.on("disconnect", function () {
+                console.warn("Tables real-time connection disconnected.");
+            });
+        }
+
         function logout() {
             if (!confirm("Are you sure you want to logout?")) return;
             logoutUser();
@@ -1935,7 +1995,10 @@
             });
 
             loadTables();
-            setInterval(loadTables, 10000);
+            connectTablesRealtime();
+
+            /* Refresh backend data as fallback */
+            setInterval(loadTables, 30000);
         });
     </script>
 

@@ -1791,6 +1791,7 @@
     ></div>
 
     <script src="api.js"></script>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
     <script>
         /* ==========================================
            ARY'S CAFE - ADMIN BACKEND DASHBOARD
@@ -2289,6 +2290,67 @@
             }
         }
 
+
+        /* ==========================================
+           REAL-TIME ADMIN DASHBOARD
+        ========================================== */
+
+        let adminSocket = null;
+
+        function connectAdminRealtime() {
+            if (typeof io !== "function") {
+                console.warn("Socket.IO client is not available.");
+                return;
+            }
+
+            adminSocket = io("http://localhost:5000", {
+                transports: ["websocket", "polling"]
+            });
+
+            adminSocket.on("connect", function () {
+                console.log("Admin real-time connection established.");
+            });
+
+            adminSocket.on("newOrder", function () {
+                if (getAuthToken()) {
+                    loadDashboard();
+                    showToast("New order received.");
+                }
+            });
+
+            adminSocket.on("adminNewOrder", function () {
+                if (getAuthToken()) {
+                    loadDashboard();
+                    showToast("New order received.");
+                }
+            });
+
+            adminSocket.on("orderStatusUpdated", function () {
+                if (getAuthToken()) {
+                    loadDashboard();
+                    showToast("Order status updated.");
+                }
+            });
+
+            adminSocket.on("paymentStatusUpdated", function () {
+                if (getAuthToken()) {
+                    loadDashboard();
+                    showToast("Payment status updated.");
+                }
+            });
+
+            adminSocket.on("orderCancelled", function () {
+                if (getAuthToken()) {
+                    loadDashboard();
+                    showToast("An order was cancelled.");
+                }
+            });
+
+            adminSocket.on("disconnect", function () {
+                console.warn("Admin real-time connection disconnected.");
+            });
+        }
+
         /* ==========================================
            LOGOUT
         ========================================== */
@@ -2340,9 +2402,10 @@
         updateDate();
         loadAdminProfile();
         loadDashboard();
+        connectAdminRealtime();
 
-        /* Refresh real backend data */
-        setInterval(loadDashboard, 15000);
+        /* Refresh real backend data as fallback */
+        setInterval(loadDashboard, 30000);
     </script>
 
 </body>

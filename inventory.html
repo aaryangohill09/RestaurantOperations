@@ -1132,6 +1132,7 @@
 
         }
     </style>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
     <script src="api.js"></script>
 </head>
 
@@ -2153,6 +2154,60 @@
             window.location.href = "login.html";
         }
 
+        function connectInventoryRealtime() {
+            if (typeof io !== "function") {
+                console.warn("Socket.IO client is not available. Polling fallback remains active.");
+                return;
+            }
+
+            const socket = io("http://localhost:5000", {
+                transports: ["websocket", "polling"]
+            });
+
+            socket.on("connect", () => {
+                console.log("⚡ Inventory real-time connection established.");
+            });
+
+            const refreshInventory = async (message) => {
+                try {
+                    await loadInventory();
+                    if (message) showToast(message);
+                } catch (error) {
+                    console.error("Inventory real-time refresh error:", error);
+                }
+            };
+
+            socket.on("inventoryUpdated", () => {
+                refreshInventory("Inventory updated in real time.");
+            });
+
+            socket.on("inventoryCreated", () => {
+                refreshInventory("New inventory item added.");
+            });
+
+            socket.on("inventoryDeleted", () => {
+                refreshInventory("Inventory item removed.");
+            });
+
+            socket.on("stockAdded", () => {
+                refreshInventory("Stock updated in real time.");
+            });
+
+            socket.on("stockRemoved", () => {
+                refreshInventory("Stock updated in real time.");
+            });
+
+            socket.on("disconnect", () => {
+                console.warn("Inventory real-time connection disconnected. Polling fallback is active.");
+            });
+
+            socket.on("connect_error", error => {
+                console.warn("Inventory Socket.IO connection error:", error.message);
+            });
+
+            return socket;
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             if (typeof getAuthToken === "function" && !getAuthToken()) {
                 window.location.href = "login.html";
@@ -2160,7 +2215,8 @@
             }
 
             await loadInventory();
-            setInterval(() => loadInventory(false), 10000);
+            connectInventoryRealtime();
+            setInterval(() => loadInventory(false), 30000);
         });
     </script>
 

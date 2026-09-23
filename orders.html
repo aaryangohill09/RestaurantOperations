@@ -6,6 +6,7 @@
 
     <title>My Orders | ARY’S CAFE</title>
     <script src="api.js"></script>
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2224,10 +2225,63 @@
 
 
         /* ==========================================
+           REAL-TIME SOCKET.IO
+        ========================================== */
+
+        let ordersSocket = null;
+
+        function connectOrdersRealtime() {
+            if (typeof io !== "function") {
+                console.warn("Socket.IO client is not available.");
+                return;
+            }
+
+            ordersSocket = io("http://localhost:5000", {
+                transports: ["websocket", "polling"]
+            });
+
+            ordersSocket.on("connect", () => {
+                console.log("Orders real-time connection established.");
+            });
+
+            ordersSocket.on("newOrder", () => {
+                if (getAuthToken()) {
+                    renderOrders();
+                    showToast("A new order update is available.");
+                }
+            });
+
+            ordersSocket.on("orderStatusUpdated", () => {
+                if (getAuthToken()) {
+                    renderOrders();
+                    showToast("Your order status was updated.");
+                }
+            });
+
+            ordersSocket.on("paymentStatusUpdated", () => {
+                if (getAuthToken()) {
+                    renderOrders();
+                }
+            });
+
+            ordersSocket.on("orderCancelled", () => {
+                if (getAuthToken()) {
+                    renderOrders();
+                    showToast("An order status was updated.");
+                }
+            });
+
+            ordersSocket.on("disconnect", () => {
+                console.warn("Orders real-time connection disconnected.");
+            });
+        }
+
+        /* ==========================================
            INITIALIZE
         ========================================== */
 
         renderOrders();
+        connectOrdersRealtime();
 
         setInterval(() => {
             if (document.visibilityState === "visible" && getAuthToken()) {
